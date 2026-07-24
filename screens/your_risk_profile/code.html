@@ -1,0 +1,156 @@
+<!DOCTYPE html><html lang="en"><head>
+<meta charset="utf-8">
+<meta content="width=device-width, initial-scale=1.0" name="viewport">
+<title>Risk Profile Result - SahaVest</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "surface-container-highest": "#e1e3e4",
+                        "tertiary-fixed": "#ffddb8",
+                        "secondary": "#006d42",
+                        "tertiary-fixed-dim": "#ffb95f",
+                        "error-container": "#ffdad6",
+                        "outline-variant": "#c4c6d0",
+                        "on-surface": "#191c1d",
+                        "surface-container-high": "#e7e8e9",
+                        "on-error-container": "#93000a",
+                        "inverse-on-surface": "#f0f1f2",
+                        "primary-fixed": "#d7e3ff",
+                        "surface": "#f8f9fa",
+                        "secondary-container": "#9af6be",
+                        "tertiary-container": "#573500",
+                        "surface-container-lowest": "#ffffff",
+                        "primary-container": "#1a3c6e",
+                        "on-secondary": "#ffffff",
+                        "surface-container": "#edeeef",
+                        "secondary-fixed-dim": "#7ed9a3",
+                        "on-primary-fixed-variant": "#264679",
+                        "surface-container-low": "#f3f4f5",
+                        "on-primary-container": "#8aa8e0",
+                        "error": "#ba1a1a",
+                        "secondary-fixed": "#9af6be",
+                        "on-surface-variant": "#43474f",
+                        "inverse-surface": "#2e3132",
+                        "on-secondary-fixed-variant": "#005230",
+                        "primary-fixed-dim": "#abc7ff",
+                        "outline": "#747780",
+                        "on-tertiary": "#ffffff",
+                        "on-background": "#191c1d",
+                        "on-secondary-container": "#087347",
+                        "on-secondary-fixed": "#002110",
+                        "surface-bright": "#f8f9fa",
+                        "on-tertiary-fixed-variant": "#653e00",
+                        "inverse-primary": "#abc7ff",
+                        "tertiary": "#3a2100",
+                        "surface-tint": "#405e92",
+                        "primary": "#002653",
+                        "on-tertiary-container": "#e89500",
+                        "on-primary": "#ffffff",
+                        "surface-variant": "#e1e3e4",
+                        "background": "#f8f9fa",
+                        "on-error": "#ffffff",
+                        "surface-dim": "#d9dadb",
+                        "on-tertiary-fixed": "#2a1700",
+                        "on-primary-fixed": "#001b3f"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "lg": "24px",
+                        "xs": "8px",
+                        "xl": "32px",
+                        "md": "16px",
+                        "margin-mobile": "16px",
+                        "tap-target-min": "44px",
+                        "gutter-mobile": "12px",
+                        "sm": "12px",
+                        "base": "4px"
+                    },
+                    "fontFamily": {
+                        "display-lg-mobile": ["Inter"],
+                        "body-lg": ["Inter"],
+                        "label-sm": ["Inter"],
+                        "label-md": ["Inter"],
+                        "headline-sm": ["Inter"],
+                        "headline-md": ["Inter"],
+                        "display-lg": ["Inter"],
+                        "body-md": ["Inter"]
+                    },
+                    "fontSize": {
+                        "display-lg-mobile": ["28px", { "lineHeight": "36px", "letterSpacing": "-0.02em", "fontWeight": "700" }],
+                        "body-lg": ["18px", { "lineHeight": "28px", "fontWeight": "400" }],
+                        "label-sm": ["12px", { "lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "600" }],
+                        "label-md": ["14px", { "lineHeight": "20px", "letterSpacing": "0.01em", "fontWeight": "500" }],
+                        "headline-sm": ["20px", { "lineHeight": "28px", "fontWeight": "600" }],
+                        "headline-md": ["24px", { "lineHeight": "32px", "fontWeight": "600" }],
+                        "display-lg": ["32px", { "lineHeight": "40px", "letterSpacing": "-0.02em", "fontWeight": "700" }],
+                        "body-md": ["16px", { "lineHeight": "24px", "fontWeight": "400" }]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background text-on-background min-h-screen flex flex-col font-sans">
+<!-- TopAppBar -->
+<header class="w-full sticky top-0 z-50 bg-surface border-b border-outline-variant">
+<div class="flex items-center justify-between px-margin-mobile py-sm w-full max-w-7xl mx-auto">
+<div class="w-10 h-10 flex items-center justify-center rounded-full hover:bg-surface-container-low transition-colors active:scale-95 duration-100 cursor-pointer">
+<span class="material-symbols-outlined text-primary" data-icon="close">close</span>
+</div>
+<h1 class="font-headline-md text-headline-md text-primary tracking-tight">SahaVest</h1>
+<div class="w-10 h-10"></div> <!-- Placeholder to balance header -->
+</div>
+</header>
+<!-- Main Content -->
+<main class="flex-grow flex flex-col items-center justify-center px-margin-mobile py-xl max-w-7xl mx-auto w-full relative overflow-hidden">
+<!-- Abstract Background Element for 'Zen' feel -->
+<div class="absolute inset-0 z-0 pointer-events-none opacity-20 bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-secondary-container via-surface to-background"></div>
+<div class="relative z-10 w-full max-w-lg flex flex-col items-center text-center space-y-xl">
+<!-- Result Badge -->
+<div class="flex flex-col items-center space-y-sm">
+<div class="w-24 h-24 rounded-full bg-secondary-container flex items-center justify-center shadow-sm">
+<span class="material-symbols-outlined text-[48px] text-on-secondary-container" data-icon="balance">balance</span>
+</div>
+<h2 class="font-display-lg-mobile text-display-lg-mobile md:font-display-lg md:text-display-lg text-primary">MODERATE RISK</h2>
+</div>
+<!-- Explanation Card -->
+<div class="bg-surface-container-lowest rounded-xl p-lg border border-outline-variant shadow-sm w-full">
+<p class="font-body-lg text-body-lg text-on-surface">
+                    You prefer a balance of growth and safety, accepting some market fluctuations.
+                </p>
+<div class="mt-lg pt-md border-t border-surface-container-highest">
+<p class="font-body-md text-body-md text-on-surface-variant flex items-center justify-center gap-xs">
+<span class="material-symbols-outlined text-sm" data-icon="update">update</span>
+                        Your profile should be retaken in 12 months
+                    </p>
+</div>
+</div>
+<!-- Actions -->
+<div class="w-full flex flex-col space-y-md pt-lg">
+<button class="w-full h-[56px] rounded-lg bg-primary text-on-primary font-label-md text-label-md hover:bg-on-primary-fixed-variant transition-colors active:scale-[0.98]">
+                    Continue
+                </button>
+<button class="w-full h-[48px] rounded-lg bg-surface text-primary border border-outline-variant font-label-md text-label-md hover:bg-surface-container-low transition-colors active:scale-[0.98]">
+                    Retake Test
+                </button>
+</div>
+</div>
+</main>
+</body></html>

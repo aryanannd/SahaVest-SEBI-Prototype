@@ -1,0 +1,380 @@
+<!DOCTYPE html><html class="light" lang="en"><head>
+<meta charset="utf-8">
+<meta content="width=device-width, initial-scale=1.0" name="viewport">
+<title>SahaVest - Dashboard</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<script id="tailwind-config">
+        tailwind.config = {
+          darkMode: "class",
+          theme: {
+            extend: {
+              "colors": {
+                      "surface-variant": "#e1e3e4",
+                      "surface": "#f8f9fa",
+                      "surface-dim": "#d9dadb",
+                      "surface-bright": "#f8f9fa",
+                      "surface-container": "#edeeef",
+                      "on-secondary-container": "#087347",
+                      "on-surface": "#191c1d",
+                      "surface-container-low": "#f3f4f5",
+                      "tertiary-fixed-dim": "#ffb95f",
+                      "on-primary-fixed": "#001b3f",
+                      "inverse-surface": "#2e3132",
+                      "inverse-primary": "#abc7ff",
+                      "error-container": "#ffdad6",
+                      "on-error-container": "#93000a",
+                      "tertiary-fixed": "#ffddb8",
+                      "background": "#f8f9fa",
+                      "on-tertiary-fixed": "#2a1700",
+                      "on-surface-variant": "#43474f",
+                      "on-error": "#ffffff",
+                      "on-primary-container": "#8aa8e0",
+                      "primary-fixed": "#d7e3ff",
+                      "on-secondary-fixed": "#002110",
+                      "on-background": "#191c1d",
+                      "primary": "#002653",
+                      "secondary": "#006d42",
+                      "tertiary-container": "#573500",
+                      "on-secondary-fixed-variant": "#005230",
+                      "error": "#ba1a1a",
+                      "outline": "#747780",
+                      "surface-tint": "#405e92",
+                      "primary-fixed-dim": "#abc7ff",
+                      "tertiary": "#3a2100",
+                      "primary-container": "#1a3c6e",
+                      "inverse-on-surface": "#f0f1f2",
+                      "on-primary": "#ffffff",
+                      "secondary-container": "#9af6be",
+                      "secondary-fixed-dim": "#7ed9a3",
+                      "on-tertiary-fixed-variant": "#653e00",
+                      "on-primary-fixed-variant": "#264679",
+                      "on-secondary": "#ffffff",
+                      "outline-variant": "#c4c6d0",
+                      "surface-container-high": "#e7e8e9",
+                      "secondary-fixed": "#9af6be",
+                      "on-tertiary": "#ffffff",
+                      "surface-container-lowest": "#ffffff",
+                      "surface-container-highest": "#e1e3e4",
+                      "on-tertiary-container": "#e89500"
+              },
+              "borderRadius": {
+                      "DEFAULT": "0.25rem",
+                      "lg": "0.5rem",
+                      "xl": "0.75rem",
+                      "full": "9999px"
+              },
+              "spacing": {
+                      "md": "16px",
+                      "base": "4px",
+                      "tap-target-min": "44px",
+                      "xl": "32px",
+                      "margin-mobile": "16px",
+                      "sm": "12px",
+                      "gutter-mobile": "12px",
+                      "xs": "8px",
+                      "lg": "24px",
+                      "safe": "env(safe-area-inset-bottom)"
+              },
+              "fontFamily": {
+                      "display-lg": [
+                              "Inter"
+                      ],
+                      "display-lg-mobile": [
+                              "Inter"
+                      ],
+                      "label-md": [
+                              "Inter"
+                      ],
+                      "headline-sm": [
+                              "Inter"
+                      ],
+                      "headline-md": [
+                              "Inter"
+                      ],
+                      "label-sm": [
+                              "Inter"
+                      ],
+                      "body-lg": [
+                              "Inter"
+                      ],
+                      "body-md": [
+                              "Inter"
+                      ]
+              },
+              "fontSize": {
+                      "display-lg": [
+                              "32px",
+                              {
+                                      "lineHeight": "40px",
+                                      "letterSpacing": "-0.02em",
+                                      "fontWeight": "700"
+                              }
+                      ],
+                      "display-lg-mobile": [
+                              "28px",
+                              {
+                                      "lineHeight": "36px",
+                                      "letterSpacing": "-0.02em",
+                                      "fontWeight": "700"
+                              }
+                      ],
+                      "label-md": [
+                              "14px",
+                              {
+                                      "lineHeight": "20px",
+                                      "letterSpacing": "0.01em",
+                                      "fontWeight": "500"
+                              }
+                      ],
+                      "headline-sm": [
+                              "20px",
+                              {
+                                      "lineHeight": "28px",
+                                      "fontWeight": "600"
+                              }
+                      ],
+                      "headline-md": [
+                              "24px",
+                              {
+                                      "lineHeight": "32px",
+                                      "fontWeight": "600"
+                              }
+                      ],
+                      "label-sm": [
+                              "12px",
+                              {
+                                      "lineHeight": "16px",
+                                      "letterSpacing": "0.05em",
+                                      "fontWeight": "600"
+                              }
+                      ],
+                      "body-lg": [
+                              "18px",
+                              {
+                                      "lineHeight": "28px",
+                                      "fontWeight": "400"
+                              }
+                      ],
+                      "body-md": [
+                              "16px",
+                              {
+                                      "lineHeight": "24px",
+                                      "fontWeight": "400"
+                              }
+                      ]
+              }
+            },
+          }
+        }
+      </script>
+<style>
+        body {
+            background-color: #f8f9fa;
+            color: #191c1d;
+            font-family: 'Inter', sans-serif;
+            -webkit-font-smoothing: antialiased;
+        }
+        
+        /* Ambient shadows for "Flat-Plus" approach */
+        .ambient-shadow {
+            box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.04);
+        }
+
+        /* SVG Donut Chart Animation */
+        .donut-segment {
+            transition: stroke-dasharray 1s ease-out;
+        }
+      </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-surface text-on-surface pb-[80px] md:pb-0">
+<!-- TopAppBar -->
+<header class="w-full sticky top-0 z-50 bg-surface dark:bg-surface-dim border-b border-outline-variant dark:border-outline">
+<div class="flex items-center justify-between px-margin-mobile py-sm w-full max-w-7xl mx-auto">
+<button class="h-tap-target-min w-tap-target-min flex items-center justify-center text-on-surface-variant dark:text-on-surface-variant hover:bg-surface-container-low dark:hover:bg-surface-container-highest transition-colors active:scale-95 duration-100 rounded-full">
+<span class="material-symbols-outlined" data-icon="search">search</span>
+</button>
+<div class="font-headline-md text-headline-md text-primary dark:text-primary-fixed tracking-tight">SahaVest</div>
+<button class="h-tap-target-min w-tap-target-min flex items-center justify-center text-on-surface-variant dark:text-on-surface-variant hover:bg-surface-container-low dark:hover:bg-surface-container-highest transition-colors active:scale-95 duration-100 rounded-full">
+<span class="material-symbols-outlined" data-icon="account_circle">account_circle</span>
+</button>
+</div>
+</header>
+<main class="max-w-7xl mx-auto px-margin-mobile md:px-xl py-lg space-y-xl">
+<!-- Net Worth Header Area -->
+<section class="text-center space-y-xs pt-md">
+<h2 class="font-label-md text-label-md text-on-surface-variant">Total Net Worth</h2>
+<div class="font-display-lg-mobile md:font-display-lg text-display-lg-mobile md:text-display-lg text-primary">₹14,50,000</div>
+<div class="flex items-center justify-center gap-base text-secondary font-label-md text-label-md">
+<span class="material-symbols-outlined text-[16px]">trending_up</span>
+<span>+2.4% (1M)</span>
+</div>
+<div class="font-label-sm text-label-sm text-outline pt-sm">Last updated: 5 mins ago</div>
+</section>
+<!-- Donut Chart & Legend Bento -->
+<section class="grid grid-cols-1 md:grid-cols-2 gap-md">
+<!-- Chart Card -->
+<div class="bg-surface-container-lowest rounded-xl ambient-shadow border border-outline-variant p-md flex flex-col items-center justify-center aspect-square md:aspect-auto">
+<div class="relative w-48 h-48">
+<svg class="w-full h-full transform -rotate-90" viewBox="0 0 100 100">
+<!-- Background Circle -->
+<circle cx="50" cy="50" fill="transparent" r="40" stroke="#f3f4f5" stroke-width="12"></circle>
+<!-- Equity Segment (50%) -->
+<circle class="donut-segment" cx="50" cy="50" fill="transparent" r="40" stroke="#002653" stroke-dasharray="125.6 251.2" stroke-dashoffset="0" stroke-width="12"></circle>
+<!-- Debt Segment (30%) -->
+<circle class="donut-segment" cx="50" cy="50" fill="transparent" r="40" stroke="#006d42" stroke-dasharray="75.36 251.2" stroke-dashoffset="-125.6" stroke-width="12"></circle>
+<!-- Gold Segment (15%) -->
+<circle class="donut-segment" cx="50" cy="50" fill="transparent" r="40" stroke="#e89500" stroke-dasharray="37.68 251.2" stroke-dashoffset="-200.96" stroke-width="12"></circle>
+<!-- Cash Segment (5%) -->
+<circle class="donut-segment" cx="50" cy="50" fill="transparent" r="40" stroke="#abc7ff" stroke-dasharray="12.56 251.2" stroke-dashoffset="-238.64" stroke-width="12"></circle>
+</svg>
+<!-- Center Content -->
+<div class="absolute inset-0 flex flex-col items-center justify-center pointer-events-none">
+<span class="font-headline-sm text-headline-sm text-primary">4</span>
+<span class="font-label-sm text-label-sm text-on-surface-variant">Asset Classes</span>
+</div>
+</div>
+</div>
+<!-- Legend/Details -->
+<div class="flex flex-col gap-sm justify-center">
+<div class="bg-surface-container-lowest rounded-lg p-sm border border-outline-variant flex items-center justify-between">
+<div class="flex items-center gap-sm">
+<div class="w-3 h-3 rounded-full bg-primary"></div>
+<span class="font-body-md text-body-md text-on-surface">Equity</span>
+</div>
+<div class="text-right">
+<div class="font-headline-sm text-headline-sm text-primary">50%</div>
+<div class="font-label-sm text-label-sm text-on-surface-variant">₹7,25,000</div>
+</div>
+</div>
+<div class="bg-surface-container-lowest rounded-lg p-sm border border-outline-variant flex items-center justify-between">
+<div class="flex items-center gap-sm">
+<div class="w-3 h-3 rounded-full bg-secondary"></div>
+<span class="font-body-md text-body-md text-on-surface">Debt</span>
+</div>
+<div class="text-right">
+<div class="font-headline-sm text-headline-sm text-primary">30%</div>
+<div class="font-label-sm text-label-sm text-on-surface-variant">₹4,35,000</div>
+</div>
+</div>
+<div class="bg-surface-container-lowest rounded-lg p-sm border border-outline-variant flex items-center justify-between">
+<div class="flex items-center gap-sm">
+<div class="w-3 h-3 rounded-full bg-tertiary-container"></div>
+<span class="font-body-md text-body-md text-on-surface">Gold</span>
+</div>
+<div class="text-right">
+<div class="font-headline-sm text-headline-sm text-primary">15%</div>
+<div class="font-label-sm text-label-sm text-on-surface-variant">₹2,17,500</div>
+</div>
+</div>
+</div>
+</section>
+<!-- Quick Actions Row -->
+<section class="flex flex-wrap justify-center gap-md py-sm">
+<button class="flex flex-col items-center gap-xs p-sm bg-surface-container-lowest rounded-xl border border-outline-variant ambient-shadow min-w-[100px] active:scale-95 transition-transform">
+<div class="w-10 h-10 rounded-full bg-error-container text-on-error-container flex items-center justify-center">
+<span class="material-symbols-outlined" data-icon="policy">policy</span>
+</div>
+<span class="font-label-sm text-label-sm text-on-surface">Scam Checker</span>
+</button>
+<button class="flex flex-col items-center gap-xs p-sm bg-surface-container-lowest rounded-xl border border-outline-variant ambient-shadow min-w-[100px] active:scale-95 transition-transform">
+<div class="w-10 h-10 rounded-full bg-secondary-container text-on-secondary-container flex items-center justify-center">
+<span class="material-symbols-outlined" data-icon="verified_user">verified_user</span>
+</div>
+<span class="font-label-sm text-label-sm text-on-surface">Trust Score</span>
+</button>
+<button class="flex flex-col items-center gap-xs p-sm bg-surface-container-lowest rounded-xl border border-outline-variant ambient-shadow min-w-[100px] active:scale-95 transition-transform">
+<div class="w-10 h-10 rounded-full bg-primary-fixed text-on-primary-fixed flex items-center justify-center">
+<span class="material-symbols-outlined" data-icon="explore">explore</span>
+</div>
+<span class="font-label-sm text-label-sm text-on-surface">Simulator</span>
+</button>
+</section>
+<!-- Detailed Summary Cards -->
+<section class="space-y-md">
+<h3 class="font-headline-sm text-headline-sm text-primary">Asset Details</h3>
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-md">
+<!-- Equity Card -->
+<div class="bg-surface-container-lowest rounded-xl p-md border border-outline-variant ambient-shadow flex flex-col gap-sm">
+<div class="flex items-center gap-sm">
+<span class="material-symbols-outlined text-primary bg-primary-fixed p-xs rounded-full">trending_up</span>
+<h4 class="font-headline-sm text-headline-sm text-on-surface">Equity</h4>
+<span class="ml-auto bg-surface-container-low px-2 py-1 rounded font-label-sm text-label-sm text-on-surface-variant">50%</span>
+</div>
+<div class="font-display-lg-mobile text-display-lg-mobile text-primary">₹7,25,000</div>
+<div class="flex items-center gap-xs text-secondary font-label-sm text-label-sm">
+<span class="material-symbols-outlined text-[14px]">arrow_upward</span>
+<span>+4.2% Total Returns</span>
+</div>
+</div>
+<!-- Debt Card -->
+<div class="bg-surface-container-lowest rounded-xl p-md border border-outline-variant ambient-shadow flex flex-col gap-sm">
+<div class="flex items-center gap-sm">
+<span class="material-symbols-outlined text-secondary bg-secondary-fixed p-xs rounded-full">account_balance</span>
+<h4 class="font-headline-sm text-headline-sm text-on-surface">Debt</h4>
+<span class="ml-auto bg-surface-container-low px-2 py-1 rounded font-label-sm text-label-sm text-on-surface-variant">30%</span>
+</div>
+<div class="font-display-lg-mobile text-display-lg-mobile text-primary">₹4,35,000</div>
+<div class="flex items-center gap-xs text-secondary font-label-sm text-label-sm">
+<span class="material-symbols-outlined text-[14px]">arrow_upward</span>
+<span>+6.5% Yield</span>
+</div>
+</div>
+<!-- Gold Card -->
+<div class="bg-surface-container-lowest rounded-xl p-md border border-outline-variant ambient-shadow flex flex-col gap-sm">
+<div class="flex items-center gap-sm">
+<span class="material-symbols-outlined text-tertiary-container bg-tertiary-fixed p-xs rounded-full">diamond</span>
+<h4 class="font-headline-sm text-headline-sm text-on-surface">Gold</h4>
+<span class="ml-auto bg-surface-container-low px-2 py-1 rounded font-label-sm text-label-sm text-on-surface-variant">15%</span>
+</div>
+<div class="font-display-lg-mobile text-display-lg-mobile text-primary">₹2,17,500</div>
+<div class="flex items-center gap-xs text-on-surface-variant font-label-sm text-label-sm">
+<span class="material-symbols-outlined text-[14px]">horizontal_rule</span>
+<span>Stable</span>
+</div>
+</div>
+</div>
+</section>
+</main>
+<!-- BottomNavBar (Mobile Only) -->
+<nav class="md:hidden fixed bottom-0 w-full z-50 border-t border-outline-variant dark:border-outline bg-surface dark:bg-surface-dim pb-safe h-[64px]">
+<div class="flex justify-around items-center w-full h-full px-2">
+<!-- Active Tab: Dashboard -->
+<button class="flex flex-col items-center justify-center bg-secondary-container dark:bg-on-secondary-fixed-variant text-on-secondary-container dark:text-secondary-fixed rounded-full px-4 py-1 active:scale-90 duration-200 ease-in-out min-w-tap-target-min min-h-tap-target-min">
+<span class="material-symbols-outlined" data-icon="dashboard" data-weight="fill">dashboard</span>
+<span class="font-label-sm text-label-sm mt-1">Dashboard</span>
+</button>
+<button class="flex flex-col items-center justify-center text-on-surface-variant dark:text-outline p-2 hover:bg-surface-container-high dark:hover:bg-surface-container-highest rounded-full active:scale-90 duration-200 ease-in-out min-w-tap-target-min min-h-tap-target-min">
+<span class="material-symbols-outlined" data-icon="account_balance_wallet">account_balance_wallet</span>
+<span class="font-label-sm text-label-sm mt-1">Portfolio</span>
+</button>
+<button class="flex flex-col items-center justify-center text-on-surface-variant dark:text-outline p-2 hover:bg-surface-container-high dark:hover:bg-surface-container-highest rounded-full active:scale-90 duration-200 ease-in-out min-w-tap-target-min min-h-tap-target-min">
+<span class="material-symbols-outlined" data-icon="shield">shield</span>
+<span class="font-label-sm text-label-sm mt-1">Protection</span>
+</button>
+<button class="flex flex-col items-center justify-center text-on-surface-variant dark:text-outline p-2 hover:bg-surface-container-high dark:hover:bg-surface-container-highest rounded-full active:scale-90 duration-200 ease-in-out min-w-tap-target-min min-h-tap-target-min">
+<span class="material-symbols-outlined" data-icon="person">person</span>
+<span class="font-label-sm text-label-sm mt-1">Profile</span>
+</button>
+</div>
+</nav>
+<script>
+        // Simple script to ensure material icons load correctly if needed, though they are font-based.
+        // Animation for the donut chart is handled by CSS transitions.
+        window.addEventListener('DOMContentLoaded', (event) => {
+            // Trigger reflow for SVG animation if necessary, currently relying on default load state.
+            const segments = document.querySelectorAll('.donut-segment');
+            segments.forEach(seg => {
+                // To animate on load, one might set dashoffset to total length initially, then to the target value.
+                // For this static demo, they are pre-calculated and static in HTML.
+            });
+        });
+    </script>
+</body></html>

@@ -1,0 +1,215 @@
+<!DOCTYPE html><html lang="en"><head>
+<meta charset="utf-8">
+<meta content="width=device-width, initial-scale=1.0" name="viewport">
+<title>SahaVest - Data Privacy Center</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<script id="tailwind-config">
+        tailwind.config = {
+          darkMode: "class",
+          theme: {
+            extend: {
+              "colors": {
+                      "surface-container-high": "#e7e8e9",
+                      "on-secondary-fixed": "#002110",
+                      "error-container": "#ffdad6",
+                      "surface-container-low": "#f3f4f5",
+                      "tertiary-container": "#573500",
+                      "surface-variant": "#e1e3e4",
+                      "on-secondary-fixed-variant": "#005230",
+                      "secondary-fixed-dim": "#7ed9a3",
+                      "on-tertiary": "#ffffff",
+                      "on-primary-fixed": "#001b3f",
+                      "error": "#ba1a1a",
+                      "tertiary-fixed-dim": "#ffb95f",
+                      "on-surface": "#191c1d",
+                      "surface-container-highest": "#e1e3e4",
+                      "surface-dim": "#d9dadb",
+                      "outline": "#747780",
+                      "on-tertiary-fixed": "#2a1700",
+                      "tertiary": "#3a2100",
+                      "inverse-primary": "#abc7ff",
+                      "background": "#f8f9fa",
+                      "surface-bright": "#f8f9fa",
+                      "on-primary-container": "#8aa8e0",
+                      "outline-variant": "#c4c6d0",
+                      "on-primary-fixed-variant": "#264679",
+                      "on-error": "#ffffff",
+                      "on-background": "#191c1d",
+                      "tertiary-fixed": "#ffddb8",
+                      "secondary": "#006d42",
+                      "surface-container": "#edeeef",
+                      "on-surface-variant": "#43474f",
+                      "on-tertiary-fixed-variant": "#653e00",
+                      "surface-tint": "#405e92",
+                      "primary": "#002653",
+                      "primary-fixed": "#d7e3ff",
+                      "secondary-fixed": "#9af6be",
+                      "on-tertiary-container": "#e89500",
+                      "on-secondary-container": "#087347",
+                      "primary-fixed-dim": "#abc7ff",
+                      "inverse-on-surface": "#f0f1f2",
+                      "primary-container": "#1a3c6e",
+                      "on-error-container": "#93000a",
+                      "surface-container-lowest": "#ffffff",
+                      "surface": "#f8f9fa",
+                      "secondary-container": "#9af6be",
+                      "on-primary": "#ffffff",
+                      "on-secondary": "#ffffff",
+                      "inverse-surface": "#2e3132"
+              },
+              "borderRadius": {
+                      "DEFAULT": "0.25rem",
+                      "lg": "0.5rem",
+                      "xl": "0.75rem",
+                      "full": "9999px"
+              },
+              "spacing": {
+                      "tap-target-min": "44px",
+                      "sm": "12px",
+                      "gutter-mobile": "12px",
+                      "xs": "8px",
+                      "md": "16px",
+                      "margin-mobile": "16px",
+                      "base": "4px",
+                      "lg": "24px",
+                      "xl": "32px"
+              },
+              "fontFamily": {
+                      "display-lg-mobile": ["Inter"],
+                      "display-lg": ["Inter"],
+                      "body-md": ["Inter"],
+                      "headline-sm": ["Inter"],
+                      "label-sm": ["Inter"],
+                      "body-lg": ["Inter"],
+                      "label-md": ["Inter"],
+                      "headline-md": ["Inter"]
+              },
+              "fontSize": {
+                      "display-lg-mobile": ["28px", {"lineHeight": "36px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                      "display-lg": ["32px", {"lineHeight": "40px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                      "body-md": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                      "headline-sm": ["20px", {"lineHeight": "28px", "fontWeight": "600"}],
+                      "label-sm": ["12px", {"lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "600"}],
+                      "body-lg": ["18px", {"lineHeight": "28px", "fontWeight": "400"}],
+                      "label-md": ["14px", {"lineHeight": "20px", "letterSpacing": "0.01em", "fontWeight": "500"}],
+                      "headline-md": ["24px", {"lineHeight": "32px", "fontWeight": "600"}]
+              }
+            }
+          }
+        }
+    </script>
+<style>
+        body { background-color: #f8f9fa; }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background text-on-background min-h-screen flex flex-col font-body-md">
+<!-- TopAppBar -->
+<header class="bg-surface dark:bg-surface-dim w-full sticky top-0 z-50 border-b border-outline-variant dark:border-outline">
+<div class="flex items-center justify-between px-margin-mobile py-sm w-full max-w-7xl mx-auto">
+<button class="text-on-surface-variant hover:bg-surface-container-low transition-colors active:scale-95 duration-100 p-2 rounded-full flex items-center justify-center min-w-[44px] min-h-[44px]">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 0;">arrow_back</span>
+</button>
+<h1 class="font-headline-md text-headline-md text-primary dark:text-primary-fixed tracking-tight">Data Privacy Center</h1>
+<div class="w-[44px]"></div> <!-- Spacer for centering -->
+</div>
+</header>
+<!-- Main Content Canvas -->
+<main class="flex-grow w-full max-w-7xl mx-auto px-margin-mobile py-lg grid grid-cols-4 md:grid-cols-8 gap-gutter-mobile md:gap-lg pb-32">
+<div class="col-span-4 md:col-span-8 mb-4">
+<h2 class="font-headline-sm text-headline-sm text-on-surface mb-xs">Your Data, Your Control</h2>
+<p class="font-body-md text-body-md text-on-surface-variant">Review the information SahaVest uses to provide you with secure financial services. We believe in complete transparency and give you full control over your data footprint.</p>
+</div>
+<!-- Data Categories List -->
+<section class="col-span-4 md:col-span-5 flex flex-col gap-sm">
+<div class="bg-surface-container-lowest rounded-lg border border-outline-variant p-md flex flex-col sm:flex-row items-start sm:items-center justify-between gap-md shadow-sm">
+<div class="flex items-center gap-md">
+<div class="bg-primary-container text-on-primary-container p-sm rounded-full flex items-center justify-center">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">person</span>
+</div>
+<div>
+<h3 class="font-headline-sm text-headline-sm text-on-surface">Personal Information</h3>
+<p class="font-body-md text-body-md text-on-surface-variant">Name, Date of Birth, PAN, KYC details.</p>
+</div>
+</div>
+<button class="font-label-md text-label-md text-primary bg-surface-container-low hover:bg-surface-container-high px-md py-xs rounded-full transition-colors min-h-[44px]">Manage</button>
+</div>
+<div class="bg-surface-container-lowest rounded-lg border border-outline-variant p-md flex flex-col sm:flex-row items-start sm:items-center justify-between gap-md shadow-sm">
+<div class="flex items-center gap-md">
+<div class="bg-primary-container text-on-primary-container p-sm rounded-full flex items-center justify-center">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">account_balance</span>
+</div>
+<div>
+<h3 class="font-headline-sm text-headline-sm text-on-surface">Financial Data</h3>
+<p class="font-body-md text-body-md text-on-surface-variant">Linked bank accounts, transaction history, portfolio holdings.</p>
+</div>
+</div>
+<button class="font-label-md text-label-md text-primary bg-surface-container-low hover:bg-surface-container-high px-md py-xs rounded-full transition-colors min-h-[44px]">Manage</button>
+</div>
+<div class="bg-surface-container-lowest rounded-lg border border-outline-variant p-md flex flex-col sm:flex-row items-start sm:items-center justify-between gap-md shadow-sm">
+<div class="flex items-center gap-md">
+<div class="bg-primary-container text-on-primary-container p-sm rounded-full flex items-center justify-center">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">devices</span>
+</div>
+<div>
+<h3 class="font-headline-sm text-headline-sm text-on-surface">Device &amp; Usage</h3>
+<p class="font-body-md text-body-md text-on-surface-variant">App usage patterns, device type, IP address for security.</p>
+</div>
+</div>
+<button class="font-label-md text-label-md text-primary bg-surface-container-low hover:bg-surface-container-high px-md py-xs rounded-full transition-colors min-h-[44px]">Manage</button>
+</div>
+<div class="bg-surface-container-lowest rounded-lg border border-outline-variant p-md flex flex-col sm:flex-row items-start sm:items-center justify-between gap-md shadow-sm">
+<div class="flex items-center gap-md">
+<div class="bg-primary-container text-on-primary-container p-sm rounded-full flex items-center justify-center">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">notifications</span>
+</div>
+<div>
+<h3 class="font-headline-sm text-headline-sm text-on-surface">Communication Preferences</h3>
+<p class="font-body-md text-body-md text-on-surface-variant">Marketing emails, push notifications, alerts.</p>
+</div>
+</div>
+<button class="font-label-md text-label-md text-primary bg-surface-container-low hover:bg-surface-container-high px-md py-xs rounded-full transition-colors min-h-[44px]">Manage</button>
+</div>
+</section>
+<!-- Actions Sidebar -->
+<section class="col-span-4 md:col-span-3 flex flex-col gap-lg">
+<div class="bg-surface-container-lowest rounded-xl border border-outline-variant p-lg shadow-sm flex flex-col gap-md">
+<div>
+<h3 class="font-headline-sm text-headline-sm text-on-surface mb-xs">Data Portability</h3>
+<p class="font-body-md text-body-md text-on-surface-variant text-sm">Request a copy of your personal and financial data stored with us. The export will be available in a secure format.</p>
+</div>
+<button class="w-full flex items-center justify-center gap-xs bg-primary text-on-primary font-label-md text-label-md rounded-full h-[48px] hover:bg-primary/90 transition-colors">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 0;">download</span>
+                    Download My Data
+                </button>
+</div>
+<div class="bg-surface-container-lowest rounded-xl border border-error-container p-lg shadow-sm flex flex-col gap-md">
+<div>
+<h3 class="font-headline-sm text-headline-sm text-error mb-xs flex items-center gap-xs">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">warning</span>
+                        Danger Zone
+                    </h3>
+<p class="font-body-md text-body-md text-on-surface-variant text-sm">Deleting your data or account is irreversible. Please proceed with caution.</p>
+</div>
+<button class="w-full flex items-center justify-center gap-xs border border-outline-variant text-on-surface bg-transparent font-label-md text-label-md rounded-full h-[48px] hover:bg-surface-container-low transition-colors">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 0;">delete</span>
+                    Delete Specific Data
+                </button>
+<div class="mt-xs pt-md border-t border-error-container">
+<p class="font-body-md text-body-md text-error text-sm mb-md font-medium">This will permanently delete your profile and revoke all active data sharing consents.</p>
+<button class="w-full flex items-center justify-center gap-xs bg-error text-on-error font-label-md text-label-md rounded-full h-[48px] hover:bg-error/90 transition-colors">
+                        Delete Account
+                    </button>
+</div>
+</div>
+</section>
+</main>
+<!-- Navigation Suppressed as this is a focused settings/transactional screen (Data Privacy) per guidelines -->
+</body></html>

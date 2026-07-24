@@ -1,0 +1,273 @@
+<!DOCTYPE html><html class="light" lang="en"><head>
+<meta charset="utf-8">
+<meta content="width=device-width, initial-scale=1.0" name="viewport">
+<title>SahaVest - Audit Trail Viewer</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "on-error-container": "#93000a",
+                    "inverse-on-surface": "#f0f1f2",
+                    "surface-bright": "#f8f9fa",
+                    "on-primary": "#ffffff",
+                    "background": "#f8f9fa",
+                    "inverse-surface": "#2e3132",
+                    "on-primary-container": "#8aa8e0",
+                    "tertiary-fixed-dim": "#ffb95f",
+                    "error": "#ba1a1a",
+                    "surface-tint": "#405e92",
+                    "surface-dim": "#d9dadb",
+                    "secondary-fixed": "#9af6be",
+                    "on-primary-fixed-variant": "#264679",
+                    "tertiary-container": "#573500",
+                    "secondary": "#006d42",
+                    "surface-container-lowest": "#ffffff",
+                    "surface": "#f8f9fa",
+                    "secondary-fixed-dim": "#7ed9a3",
+                    "surface-variant": "#e1e3e4",
+                    "primary-fixed": "#d7e3ff",
+                    "on-tertiary-container": "#e89500",
+                    "surface-container-high": "#e7e8e9",
+                    "secondary-container": "#9af6be",
+                    "on-tertiary": "#ffffff",
+                    "surface-container-highest": "#e1e3e4",
+                    "surface-container": "#edeeef",
+                    "primary-container": "#1a3c6e",
+                    "inverse-primary": "#abc7ff",
+                    "on-background": "#191c1d",
+                    "on-error": "#ffffff",
+                    "on-primary-fixed": "#001b3f",
+                    "on-secondary-fixed": "#002110",
+                    "outline-variant": "#c4c6d0",
+                    "on-secondary": "#ffffff",
+                    "tertiary": "#3a2100",
+                    "on-secondary-fixed-variant": "#005230",
+                    "tertiary-fixed": "#ffddb8",
+                    "error-container": "#ffdad6",
+                    "primary-fixed-dim": "#abc7ff",
+                    "on-surface-variant": "#43474f",
+                    "outline": "#747780",
+                    "on-tertiary-fixed-variant": "#653e00",
+                    "surface-container-low": "#f3f4f5",
+                    "primary": "#002653",
+                    "on-surface": "#191c1d",
+                    "on-secondary-container": "#087347",
+                    "on-tertiary-fixed": "#2a1700"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.25rem",
+                    "lg": "0.5rem",
+                    "xl": "0.75rem",
+                    "full": "9999px"
+            },
+            "spacing": {
+                    "sm": "12px",
+                    "gutter-mobile": "12px",
+                    "base": "4px",
+                    "tap-target-min": "44px",
+                    "lg": "24px",
+                    "margin-mobile": "16px",
+                    "xs": "8px",
+                    "xl": "32px",
+                    "md": "16px"
+            },
+            "fontFamily": {
+                    "label-sm": ["Inter"],
+                    "label-md": ["Inter"],
+                    "display-lg": ["Inter"],
+                    "headline-sm": ["Inter"],
+                    "headline-md": ["Inter"],
+                    "body-lg": ["Inter"],
+                    "body-md": ["Inter"],
+                    "display-lg-mobile": ["Inter"]
+            },
+            "fontSize": {
+                    "label-sm": ["12px", {"lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "600"}],
+                    "label-md": ["14px", {"lineHeight": "20px", "letterSpacing": "0.01em", "fontWeight": "500"}],
+                    "display-lg": ["32px", {"lineHeight": "40px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                    "headline-sm": ["20px", {"lineHeight": "28px", "fontWeight": "600"}],
+                    "headline-md": ["24px", {"lineHeight": "32px", "fontWeight": "600"}],
+                    "body-lg": ["18px", {"lineHeight": "28px", "fontWeight": "400"}],
+                    "body-md": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                    "display-lg-mobile": ["28px", {"lineHeight": "36px", "letterSpacing": "-0.02em", "fontWeight": "700"}]
+            }
+          }
+        }
+      }
+    </script>
+<style>
+        body { font-family: 'Inter', sans-serif; }
+        .material-symbols-outlined { font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24; }
+        .material-symbols-outlined.fill { font-variation-settings: 'FILL' 1; }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background text-on-background min-h-screen pt-[56px] pb-[80px] md:pb-0">
+<!-- TopAppBar -->
+<header class="fixed top-0 left-0 w-full z-50 flex justify-between items-center px-margin-mobile h-[56px] bg-surface dark:bg-on-background border-b border-outline-variant dark:border-outline shadow-sm">
+<div class="flex items-center">
+<button aria-label="Menu" class="w-tap-target-min h-tap-target-min flex items-center justify-center text-on-surface-variant dark:text-outline hover:bg-surface-container-low dark:hover:bg-surface-variant rounded-full transition-transform duration-150 active:scale-95">
+<span class="material-symbols-outlined">menu</span>
+</button>
+<h1 class="ml-2 font-headline-md text-headline-md font-bold text-primary dark:text-primary-fixed-dim">SahaVest</h1>
+</div>
+<div>
+<button aria-label="Notifications" class="w-tap-target-min h-tap-target-min flex items-center justify-center text-on-surface-variant dark:text-outline hover:bg-surface-container-low dark:hover:bg-surface-variant rounded-full transition-transform duration-150 active:scale-95">
+<span class="material-symbols-outlined">notifications</span>
+</button>
+</div>
+</header>
+<main class="max-w-4xl mx-auto px-margin-mobile md:px-lg py-lg">
+<div class="mb-lg">
+<h2 class="font-display-lg-mobile md:font-display-lg text-display-lg-mobile md:text-display-lg text-primary mb-xs">Audit Trail</h2>
+<p class="font-body-md text-body-md text-on-surface-variant">A verifiable log of your AI-generated recommendations and advisory interactions, securely hashed.</p>
+</div>
+<!-- Filter/Controls (Optional) -->
+<div class="flex flex-wrap gap-sm mb-lg">
+<button class="px-md py-sm rounded-full bg-surface-container-low text-on-surface border border-outline-variant font-label-md text-label-md flex items-center gap-xs hover:bg-surface-variant transition-colors">
+<span class="material-symbols-outlined" style="font-size: 18px;">filter_list</span> Filter
+            </button>
+<button class="px-md py-sm rounded-full bg-primary-container text-on-primary-container font-label-md text-label-md flex items-center gap-xs hover:opacity-90 transition-opacity">
+                All Activity
+            </button>
+<button class="px-md py-sm rounded-full bg-surface-container-low text-on-surface border border-outline-variant font-label-md text-label-md flex items-center gap-xs hover:bg-surface-variant transition-colors">
+                Scam Checks
+            </button>
+</div>
+<!-- Audit Log List -->
+<div class="space-y-md">
+<!-- Entry 1 -->
+<div class="bg-surface-container-lowest rounded-xl border border-outline-variant shadow-sm overflow-hidden group">
+<div class="p-md md:p-lg cursor-pointer hover:bg-surface-bright transition-colors" onclick="this.nextElementSibling.classList.toggle('hidden'); this.querySelector('.expand-icon').textContent = this.querySelector('.expand-icon').textContent === 'expand_more' ? 'expand_less' : 'expand_more';">
+<div class="flex items-start justify-between">
+<div class="flex items-start gap-md">
+<div class="w-10 h-10 rounded-full bg-secondary-container text-on-secondary-container flex items-center justify-center shrink-0">
+<span class="material-symbols-outlined fill">verified_user</span>
+</div>
+<div>
+<div class="flex items-center gap-sm mb-1">
+<h3 class="font-headline-sm text-headline-sm text-primary">Scam Check: Mutual Fund Offer</h3>
+<span class="px-2 py-0.5 rounded text-[10px] font-bold bg-surface-variant text-on-surface-variant">Oct 24, 2023 - 14:32</span>
+</div>
+<p class="font-body-md text-body-md text-on-surface-variant line-clamp-1">Analyzed 'Guaranteed 20% Returns Fund' and flagged as high risk due to unrealistic promises.</p>
+</div>
+</div>
+<span class="material-symbols-outlined text-outline expand-icon transition-transform">expand_more</span>
+</div>
+</div>
+<!-- Expanded Detail -->
+<div class="hidden border-t border-surface-variant bg-surface p-md md:p-lg">
+<div class="grid grid-cols-1 md:grid-cols-2 gap-lg mb-md">
+<div>
+<h4 class="font-label-md text-label-md text-on-surface-variant mb-xs uppercase tracking-wider">Input Data</h4>
+<p class="font-body-md text-body-md bg-surface-container-low p-sm rounded-lg border border-outline-variant text-on-surface">"I received a WhatsApp message offering a guaranteed 20% monthly return on a new mutual fund called 'Prime Wealth Growth'. Is this safe?"</p>
+</div>
+<div>
+<h4 class="font-label-md text-label-md text-on-surface-variant mb-xs uppercase tracking-wider">AI Analysis Result</h4>
+<p class="font-body-md text-body-md text-on-error-container bg-error-container p-sm rounded-lg border border-error"><strong>HIGH RISK.</strong> SEBI regulations prohibit guaranteed returns on mutual funds. This exhibits classic signs of a Ponzi scheme or phishing attempt. Do not engage.</p>
+</div>
+</div>
+<div class="flex items-center gap-sm mt-md pt-md border-t border-surface-variant">
+<span class="material-symbols-outlined text-outline" style="font-size: 16px;">link</span>
+<code class="font-mono text-xs text-outline select-all">Hash: 0x7a2f9b3e1c4d5a6b7c8d9e0f1a2b3c4d5e6f7a8b9c0d1e2f3a4b5c6d7e8f9a0</code>
+</div>
+</div>
+</div>
+<!-- Entry 2 -->
+<div class="bg-surface-container-lowest rounded-xl border border-outline-variant shadow-sm overflow-hidden group">
+<div class="p-md md:p-lg cursor-pointer hover:bg-surface-bright transition-colors" onclick="this.nextElementSibling.classList.toggle('hidden'); this.querySelector('.expand-icon').textContent = this.querySelector('.expand-icon').textContent === 'expand_more' ? 'expand_less' : 'expand_more';">
+<div class="flex items-start justify-between">
+<div class="flex items-start gap-md">
+<div class="w-10 h-10 rounded-full bg-primary-container text-on-primary-container flex items-center justify-center shrink-0">
+<span class="material-symbols-outlined fill">trending_up</span>
+</div>
+<div>
+<div class="flex items-center gap-sm mb-1">
+<h3 class="font-headline-sm text-headline-sm text-primary">Portfolio Rebalancing Advice</h3>
+<span class="px-2 py-0.5 rounded text-[10px] font-bold bg-surface-variant text-on-surface-variant">Oct 20, 2023 - 09:15</span>
+</div>
+<p class="font-body-md text-body-md text-on-surface-variant line-clamp-1">Suggested shifting 5% from Mid-Cap Equities to Sovereign Gold Bonds for risk mitigation.</p>
+</div>
+</div>
+<span class="material-symbols-outlined text-outline expand-icon transition-transform">expand_more</span>
+</div>
+</div>
+<!-- Expanded Detail -->
+<div class="hidden border-t border-surface-variant bg-surface p-md md:p-lg">
+<p class="font-body-md text-body-md text-on-surface mb-md">Based on current market volatility and your stated 'Moderate' risk profile, the AI recommended increasing defensive assets.</p>
+<div class="flex items-center gap-sm pt-md border-t border-surface-variant">
+<span class="material-symbols-outlined text-outline" style="font-size: 16px;">link</span>
+<code class="font-mono text-xs text-outline select-all">Hash: 0xb4c3d2e1f0a9b8c7d6e5f4a3b2c1d0e9f8a7b6c5d4e3f2a1b0c9d8e7f6a5b4</code>
+</div>
+</div>
+</div>
+<!-- Entry 3 -->
+<div class="bg-surface-container-lowest rounded-xl border border-outline-variant shadow-sm overflow-hidden group">
+<div class="p-md md:p-lg cursor-pointer hover:bg-surface-bright transition-colors" onclick="this.nextElementSibling.classList.toggle('hidden'); this.querySelector('.expand-icon').textContent = this.querySelector('.expand-icon').textContent === 'expand_more' ? 'expand_less' : 'expand_more';">
+<div class="flex items-start justify-between">
+<div class="flex items-start gap-md">
+<div class="w-10 h-10 rounded-full bg-surface-variant text-on-surface-variant flex items-center justify-center shrink-0">
+<span class="material-symbols-outlined fill">policy</span>
+</div>
+<div>
+<div class="flex items-center gap-sm mb-1">
+<h3 class="font-headline-sm text-headline-sm text-primary">Advisor Verification</h3>
+<span class="px-2 py-0.5 rounded text-[10px] font-bold bg-surface-variant text-on-surface-variant">Oct 15, 2023 - 11:45</span>
+</div>
+<p class="font-body-md text-body-md text-on-surface-variant line-clamp-1">Verified SEBI registration number for 'Rahul Desai Financial Services'.</p>
+</div>
+</div>
+<span class="material-symbols-outlined text-outline expand-icon transition-transform">expand_more</span>
+</div>
+</div>
+<!-- Expanded Detail -->
+<div class="hidden border-t border-surface-variant bg-surface p-md md:p-lg">
+<p class="font-body-md text-body-md text-on-surface mb-md">Status: <span class="text-secondary font-bold">Verified Active</span>. Registration #INA000012345.</p>
+<div class="flex items-center gap-sm pt-md border-t border-surface-variant">
+<span class="material-symbols-outlined text-outline" style="font-size: 16px;">link</span>
+<code class="font-mono text-xs text-outline select-all">Hash: 0xf1e2d3c4b5a69788796a5b4c3d2e1f0a9b8c7d6e5f4a3b2c1d0e9f8a7b6c5</code>
+</div>
+</div>
+</div>
+</div>
+<!-- Pagination -->
+<div class="mt-lg flex justify-center items-center gap-sm">
+<button class="w-10 h-10 flex items-center justify-center rounded border border-outline-variant text-on-surface-variant hover:bg-surface-variant transition-colors disabled:opacity-50" disabled="">
+<span class="material-symbols-outlined">chevron_left</span>
+</button>
+<span class="font-label-md text-label-md text-primary">Page 1 of 12</span>
+<button class="w-10 h-10 flex items-center justify-center rounded border border-outline-variant text-on-surface-variant hover:bg-surface-variant transition-colors">
+<span class="material-symbols-outlined">chevron_right</span>
+</button>
+</div>
+</main>
+<!-- BottomNavBar -->
+<nav class="fixed bottom-0 left-0 w-full z-50 flex justify-around items-center px-2 pb-safe h-[80px] bg-surface-container dark:bg-on-background shadow-[0_-4px_12px_rgba(0,0,0,0.04)] rounded-t-xl md:hidden">
+<a class="flex flex-col items-center justify-center text-on-surface-variant dark:text-outline px-5 py-1 hover:bg-surface-variant dark:hover:bg-inverse-surface rounded-full transition-all duration-200" href="#">
+<span class="material-symbols-outlined mb-1">grid_view</span>
+<span class="font-label-sm text-label-sm">Dashboard</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant dark:text-outline px-5 py-1 hover:bg-surface-variant dark:hover:bg-inverse-surface rounded-full transition-all duration-200" href="#">
+<span class="material-symbols-outlined mb-1">account_balance_wallet</span>
+<span class="font-label-sm text-label-sm">Portfolio</span>
+</a>
+<a class="flex flex-col items-center justify-center bg-primary-container dark:bg-primary text-on-primary-container dark:text-on-primary rounded-full px-5 py-1 scale-90 transition-all duration-200" href="#">
+<span class="material-symbols-outlined mb-1 fill">shield</span>
+<span class="font-label-sm text-label-sm">Protection</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant dark:text-outline px-5 py-1 hover:bg-surface-variant dark:hover:bg-inverse-surface rounded-full transition-all duration-200" href="#">
+<span class="material-symbols-outlined mb-1">person</span>
+<span class="font-label-sm text-label-sm">Profile</span>
+</a>
+</nav>
+</body></html>

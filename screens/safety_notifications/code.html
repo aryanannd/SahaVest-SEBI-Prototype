@@ -1,0 +1,311 @@
+<!DOCTYPE html><html class="light" lang="en"><head>
+<meta charset="utf-8">
+<meta content="width=device-width, initial-scale=1.0" name="viewport">
+<title>SahaVest - Trust &amp; Safety Notifications</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<script id="tailwind-config">
+        tailwind.config = {
+          darkMode: "class",
+          theme: {
+            extend: {
+              "colors": {
+                      "secondary": "#006d42",
+                      "outline-variant": "#c4c6d0",
+                      "background": "#f8f9fa",
+                      "surface-container": "#edeeef",
+                      "surface-container-low": "#f3f4f5",
+                      "on-surface-variant": "#43474f",
+                      "on-tertiary-fixed": "#2a1700",
+                      "inverse-primary": "#abc7ff",
+                      "secondary-container": "#9af6be",
+                      "on-secondary": "#ffffff",
+                      "primary-fixed-dim": "#abc7ff",
+                      "primary": "#002653",
+                      "surface-container-highest": "#e1e3e4",
+                      "on-secondary-fixed-variant": "#005230",
+                      "on-secondary-container": "#087347",
+                      "on-primary-fixed": "#001b3f",
+                      "on-tertiary-container": "#e89500",
+                      "on-error": "#ffffff",
+                      "surface-bright": "#f8f9fa",
+                      "inverse-surface": "#2e3132",
+                      "outline": "#747780",
+                      "inverse-on-surface": "#f0f1f2",
+                      "primary-container": "#1a3c6e",
+                      "on-tertiary": "#ffffff",
+                      "on-secondary-fixed": "#002110",
+                      "on-primary": "#ffffff",
+                      "surface-tint": "#405e92",
+                      "secondary-fixed": "#9af6be",
+                      "on-error-container": "#93000a",
+                      "on-background": "#191c1d",
+                      "surface-container-lowest": "#ffffff",
+                      "surface-container-high": "#e7e8e9",
+                      "on-primary-container": "#8aa8e0",
+                      "error": "#ba1a1a",
+                      "on-primary-fixed-variant": "#264679",
+                      "secondary-fixed-dim": "#7ed9a3",
+                      "tertiary-fixed": "#ffddb8",
+                      "error-container": "#ffdad6",
+                      "tertiary-fixed-dim": "#ffb95f",
+                      "surface-variant": "#e1e3e4",
+                      "surface-dim": "#d9dadb",
+                      "on-surface": "#191c1d",
+                      "tertiary-container": "#573500",
+                      "on-tertiary-fixed-variant": "#653e00",
+                      "primary-fixed": "#d7e3ff",
+                      "surface": "#f8f9fa",
+                      "tertiary": "#3a2100"
+              },
+              "borderRadius": {
+                      "DEFAULT": "0.25rem",
+                      "lg": "0.5rem",
+                      "xl": "0.75rem",
+                      "full": "9999px"
+              },
+              "spacing": {
+                      "md": "16px",
+                      "sm": "12px",
+                      "base": "4px",
+                      "gutter-mobile": "12px",
+                      "xl": "32px",
+                      "tap-target-min": "44px",
+                      "xs": "8px",
+                      "margin-mobile": "16px",
+                      "lg": "24px"
+              },
+              "fontFamily": {
+                      "label-md": [
+                              "Inter"
+                      ],
+                      "label-sm": [
+                              "Inter"
+                      ],
+                      "body-md": [
+                              "Inter"
+                      ],
+                      "headline-md": [
+                              "Inter"
+                      ],
+                      "display-lg-mobile": [
+                              "Inter"
+                      ],
+                      "display-lg": [
+                              "Inter"
+                      ],
+                      "headline-sm": [
+                              "Inter"
+                      ],
+                      "body-lg": [
+                              "Inter"
+                      ]
+              },
+              "fontSize": {
+                      "label-md": [
+                              "14px",
+                              {
+                                      "lineHeight": "20px",
+                                      "letterSpacing": "0.01em",
+                                      "fontWeight": "500"
+                              }
+                      ],
+                      "label-sm": [
+                              "12px",
+                              {
+                                      "lineHeight": "16px",
+                                      "letterSpacing": "0.05em",
+                                      "fontWeight": "600"
+                              }
+                      ],
+                      "body-md": [
+                              "16px",
+                              {
+                                      "lineHeight": "24px",
+                                      "fontWeight": "400"
+                              }
+                      ],
+                      "headline-md": [
+                              "24px",
+                              {
+                                      "lineHeight": "32px",
+                                      "fontWeight": "600"
+                              }
+                      ],
+                      "display-lg-mobile": [
+                              "28px",
+                              {
+                                      "lineHeight": "36px",
+                                      "letterSpacing": "-0.02em",
+                                      "fontWeight": "700"
+                              }
+                      ],
+                      "display-lg": [
+                              "32px",
+                              {
+                                      "lineHeight": "40px",
+                                      "letterSpacing": "-0.02em",
+                                      "fontWeight": "700"
+                              }
+                      ],
+                      "headline-sm": [
+                              "20px",
+                              {
+                                      "lineHeight": "28px",
+                                      "fontWeight": "600"
+                              }
+                      ],
+                      "body-lg": [
+                              "18px",
+                              {
+                                      "lineHeight": "28px",
+                                      "fontWeight": "400"
+                              }
+                      ]
+              }
+      },
+          },
+        }
+    </script>
+<style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f8f9fa;
+        }
+        .pb-safe {
+            padding-bottom: env(safe-area-inset-bottom, 16px);
+        }
+        /* Very subtle ambient shadow for cards */
+        .shadow-ambient {
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.04);
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background text-on-background antialiased min-h-screen flex flex-col">
+<!-- TopAppBar -->
+<header class="w-full top-0 sticky bg-surface dark:bg-surface-dim border-b border-outline-variant dark:border-outline shadow-sm dark:shadow-none z-40">
+<div class="flex justify-between items-center h-14 px-margin-mobile">
+<!-- Leading Avatar -->
+<div class="flex-shrink-0">
+<img alt="User profile" class="h-8 w-8 rounded-full object-cover border border-outline-variant" data-alt="A clean, modern portrait of an Indian professional in business casual attire against a solid light grey background. The lighting is soft and corporate, matching the crisp white and deep blue theme of the SahaVest app." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDYqo0JZP7HGQByt1GRVj6qdn635tUuAS2F04eDamPP0lt2j1C4frhRmdY3fstqmYMOeRLjM4TqzjOhETytzxjpGXYwfkF-pIBA_QQwyYlt2eK3C1SfF0hywhE-jmJAR5LnlDV7T8MRZClY7lVAoJODu1YSPReXl8aNZXgLfqcWLZUStJZwfgc9BtY0VQRPvXBvzs5xWNhum7qQFljnLR1XyoDYo3L6hyEbWer7g0TEHhyqIjp4VT6WMGD6WauB_BJ2Q4Kkyfzc4xI">
+</div>
+<!-- Headline/Brand -->
+<h1 class="font-display-lg-mobile text-display-lg-mobile font-bold text-primary dark:text-primary-fixed-dim tracking-tight">SahaVest</h1>
+<!-- Trailing Icon -->
+<button aria-label="notifications" class="h-tap-target-min w-tap-target-min flex items-center justify-center text-primary dark:text-primary-fixed-dim hover:bg-surface-container dark:hover:bg-surface-container-high transition-colors duration-200 rounded-full">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 0;">notifications</span>
+</button>
+</div>
+</header>
+<!-- Main Content Canvas -->
+<main class="flex-1 w-full max-w-3xl mx-auto px-margin-mobile pt-lg pb-[96px] md:pb-lg flex flex-col gap-md">
+<!-- Page Header -->
+<div class="mb-sm">
+<h2 class="font-headline-md text-headline-md text-on-background mb-base">Trust &amp; Safety</h2>
+<p class="font-body-md text-body-md text-on-surface-variant">Important alerts and security updates for your protection.</p>
+</div>
+<!-- Filter Chips -->
+<div class="flex gap-sm overflow-x-auto pb-2 -mx-margin-mobile px-margin-mobile no-scrollbar">
+<button class="flex-shrink-0 h-[44px] px-lg rounded-full bg-primary text-on-primary font-label-md text-label-md flex items-center justify-center border border-primary transition-all">All Alerts</button>
+<button class="flex-shrink-0 h-[44px] px-lg rounded-full bg-surface-container-lowest text-on-surface-variant font-label-md text-label-md flex items-center justify-center border border-outline-variant hover:bg-surface-container transition-all">Regulatory</button>
+<button class="flex-shrink-0 h-[44px] px-lg rounded-full bg-surface-container-lowest text-on-surface-variant font-label-md text-label-md flex items-center justify-center border border-outline-variant hover:bg-surface-container transition-all">Security</button>
+<button class="flex-shrink-0 h-[44px] px-lg rounded-full bg-surface-container-lowest text-on-surface-variant font-label-md text-label-md flex items-center justify-center border border-outline-variant hover:bg-surface-container transition-all">Account</button>
+</div>
+<!-- Notifications List (Bento-ish Stack) -->
+<div class="flex flex-col gap-sm">
+<!-- High Priority Alert Card (Unread) -->
+<div class="relative bg-surface-container-lowest border border-error/30 rounded-xl p-md shadow-ambient flex flex-col gap-sm cursor-pointer hover:bg-surface-container-low transition-colors group">
+<!-- Unread Dot -->
+<div class="absolute top-md right-md w-3 h-3 bg-primary rounded-full"></div>
+<div class="flex items-start gap-md">
+<div class="flex-shrink-0 h-10 w-10 rounded-full bg-error-container text-on-error-container flex items-center justify-center">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">warning</span>
+</div>
+<div class="flex-1 pr-lg">
+<div class="flex justify-between items-center mb-1">
+<span class="font-label-sm text-label-sm text-error uppercase tracking-wider">Urgent Alert</span>
+<span class="font-label-sm text-label-sm text-on-surface-variant">2 hours ago</span>
+</div>
+<h3 class="font-headline-sm text-headline-sm text-on-background mb-1 group-hover:text-primary transition-colors">Advisor Flagged by SEBI</h3>
+<p class="font-body-md text-body-md text-on-surface-variant leading-relaxed">
+                            A financial advisor you interacted with recently has been flagged by the Securities and Exchange Board of India for non-compliance.
+                        </p>
+</div>
+</div>
+<div class="mt-2 flex justify-end">
+<button class="font-label-md text-label-md text-primary hover:text-primary-container transition-colors flex items-center gap-1 h-tap-target-min px-4 rounded-lg">Read Details <span class="material-symbols-outlined text-sm">arrow_forward</span></button>
+</div>
+</div>
+<!-- Security Tip Card (Unread) -->
+<div class="relative bg-surface-container-lowest border border-outline-variant rounded-xl p-md shadow-ambient flex flex-col gap-sm cursor-pointer hover:bg-surface-container-low transition-colors group">
+<!-- Unread Dot -->
+<div class="absolute top-md right-md w-3 h-3 bg-primary rounded-full"></div>
+<div class="flex items-start gap-md">
+<div class="flex-shrink-0 h-10 w-10 rounded-full bg-secondary-container text-on-secondary-container flex items-center justify-center">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">security</span>
+</div>
+<div class="flex-1 pr-lg">
+<div class="flex justify-between items-center mb-1">
+<span class="font-label-sm text-label-sm text-secondary uppercase tracking-wider">Security Tip</span>
+<span class="font-label-sm text-label-sm text-on-surface-variant">Yesterday</span>
+</div>
+<h3 class="font-headline-sm text-headline-sm text-on-background mb-1 group-hover:text-primary transition-colors">New Phishing Scam Detected</h3>
+<p class="font-body-md text-body-md text-on-surface-variant leading-relaxed">
+                            Be aware of emails claiming to be from SahaVest Support asking for your portfolio recovery phrase. We will never ask for this information.
+                        </p>
+</div>
+</div>
+</div>
+<!-- Standard Update Card (Read) -->
+<div class="relative bg-surface-bright border border-outline-variant/50 rounded-xl p-md flex flex-col gap-sm opacity-80 cursor-pointer hover:bg-surface-container-lowest hover:opacity-100 transition-all group">
+<div class="flex items-start gap-md">
+<div class="flex-shrink-0 h-10 w-10 rounded-full bg-surface-container-high text-on-surface-variant flex items-center justify-center">
+<span class="material-symbols-outlined">policy</span>
+</div>
+<div class="flex-1">
+<div class="flex justify-between items-center mb-1">
+<span class="font-label-sm text-label-sm text-on-surface-variant uppercase tracking-wider">Policy Update</span>
+<span class="font-label-sm text-label-sm text-on-surface-variant">Oct 12</span>
+</div>
+<h3 class="font-headline-sm text-headline-sm text-on-background mb-1 group-hover:text-primary transition-colors">Updated Data Privacy Guidelines</h3>
+<p class="font-body-md text-body-md text-on-surface-variant leading-relaxed">
+                            We have updated our terms of service to reflect the new Digital Personal Data Protection Act requirements.
+                        </p>
+</div>
+</div>
+</div>
+</div>
+</main>
+<!-- BottomNavBar -->
+<nav class="md:hidden fixed bottom-0 w-full z-50 bg-surface-container-lowest dark:bg-inverse-surface border-t border-outline-variant dark:border-outline shadow-lg dark:shadow-none">
+<div class="flex justify-around items-center h-16 w-full px-2 pb-safe">
+<!-- Portfolio (Inactive) -->
+<button aria-label="Portfolio" class="flex flex-col items-center justify-center text-on-surface-variant dark:text-on-surface-variant px-4 py-1 hover:bg-surface-container dark:hover:bg-surface-container-highest active:scale-95 transition-transform duration-150 h-tap-target-min min-w-[64px]">
+<span class="material-symbols-outlined mb-1" style="font-variation-settings: 'FILL' 0;">pie_chart</span>
+<span class="font-label-sm text-label-sm">Portfolio</span>
+</button>
+<!-- Explore (Inactive) -->
+<button aria-label="Explore" class="flex flex-col items-center justify-center text-on-surface-variant dark:text-on-surface-variant px-4 py-1 hover:bg-surface-container dark:hover:bg-surface-container-highest active:scale-95 transition-transform duration-150 h-tap-target-min min-w-[64px]">
+<span class="material-symbols-outlined mb-1" style="font-variation-settings: 'FILL' 0;">search</span>
+<span class="font-label-sm text-label-sm">Explore</span>
+</button>
+<!-- Shield (Active) -->
+<button aria-label="Shield" class="flex flex-col items-center justify-center bg-secondary-container dark:bg-secondary text-on-secondary-container dark:text-on-secondary rounded-full px-4 py-1 active:scale-95 transition-transform duration-150 h-tap-target-min min-w-[64px]">
+<span class="material-symbols-outlined mb-1" style="font-variation-settings: 'FILL' 1;">security</span>
+<span class="font-label-sm text-label-sm">Shield</span>
+</button>
+<!-- Profile (Inactive) -->
+<button aria-label="Profile" class="flex flex-col items-center justify-center text-on-surface-variant dark:text-on-surface-variant px-4 py-1 hover:bg-surface-container dark:hover:bg-surface-container-highest active:scale-95 transition-transform duration-150 h-tap-target-min min-w-[64px]">
+<span class="material-symbols-outlined mb-1" style="font-variation-settings: 'FILL' 0;">person</span>
+<span class="font-label-sm text-label-sm">Profile</span>
+</button>
+</div>
+</nav>
+</body></html>

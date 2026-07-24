@@ -1,0 +1,305 @@
+<!DOCTYPE html><html lang="en"><head>
+<meta charset="utf-8">
+<meta content="width=device-width, initial-scale=1.0" name="viewport">
+<title>Investor Twin Simulator</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "inverse-primary": "#abc7ff",
+                        "on-tertiary-fixed-variant": "#653e00",
+                        "on-secondary": "#ffffff",
+                        "on-primary-fixed": "#001b3f",
+                        "surface-container-high": "#e7e8e9",
+                        "surface-container": "#edeeef",
+                        "primary": "#002653",
+                        "inverse-surface": "#2e3132",
+                        "surface-container-lowest": "#ffffff",
+                        "surface-bright": "#f8f9fa",
+                        "on-secondary-fixed-variant": "#005230",
+                        "surface-container-highest": "#e1e3e4",
+                        "surface-container-low": "#f3f4f5",
+                        "on-error": "#ffffff",
+                        "surface-tint": "#405e92",
+                        "on-tertiary-container": "#e89500",
+                        "on-primary": "#ffffff",
+                        "tertiary": "#3a2100",
+                        "secondary-fixed": "#9af6be",
+                        "secondary": "#006d42",
+                        "tertiary-container": "#573500",
+                        "error-container": "#ffdad6",
+                        "on-tertiary": "#ffffff",
+                        "primary-fixed": "#d7e3ff",
+                        "primary-container": "#1a3c6e",
+                        "on-tertiary-fixed": "#2a1700",
+                        "inverse-on-surface": "#f0f1f2",
+                        "outline": "#747780",
+                        "on-surface-variant": "#43474f",
+                        "on-surface": "#191c1d",
+                        "on-background": "#191c1d",
+                        "error": "#ba1a1a",
+                        "tertiary-fixed": "#ffddb8",
+                        "surface": "#f8f9fa",
+                        "on-secondary-fixed": "#002110",
+                        "tertiary-fixed-dim": "#ffb95f",
+                        "on-secondary-container": "#087347",
+                        "on-primary-fixed-variant": "#264679",
+                        "on-error-container": "#93000a",
+                        "outline-variant": "#c4c6d0",
+                        "surface-dim": "#d9dadb",
+                        "secondary-container": "#9af6be",
+                        "background": "#f8f9fa",
+                        "primary-fixed-dim": "#abc7ff",
+                        "on-primary-container": "#8aa8e0",
+                        "secondary-fixed-dim": "#7ed9a3",
+                        "surface-variant": "#e1e3e4"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "tap-target-min": "44px",
+                        "gutter-mobile": "12px",
+                        "xl": "32px",
+                        "sm": "12px",
+                        "margin-mobile": "16px",
+                        "lg": "24px",
+                        "xs": "8px",
+                        "base": "4px",
+                        "md": "16px"
+                    },
+                    "fontFamily": {
+                        "label-md": ["Inter"],
+                        "display-lg": ["Inter"],
+                        "label-sm": ["Inter"],
+                        "headline-sm": ["Inter"],
+                        "body-md": ["Inter"],
+                        "body-lg": ["Inter"],
+                        "headline-md": ["Inter"],
+                        "display-lg-mobile": ["Inter"]
+                    },
+                    "fontSize": {
+                        "label-md": ["14px", { "lineHeight": "20px", "letterSpacing": "0.01em", "fontWeight": "500" }],
+                        "display-lg": ["32px", { "lineHeight": "40px", "letterSpacing": "-0.02em", "fontWeight": "700" }],
+                        "label-sm": ["12px", { "lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "600" }],
+                        "headline-sm": ["20px", { "lineHeight": "28px", "fontWeight": "600" }],
+                        "body-md": ["16px", { "lineHeight": "24px", "fontWeight": "400" }],
+                        "body-lg": ["18px", { "lineHeight": "28px", "fontWeight": "400" }],
+                        "headline-md": ["24px", { "lineHeight": "32px", "fontWeight": "600" }],
+                        "display-lg-mobile": ["28px", { "lineHeight": "36px", "letterSpacing": "-0.02em", "fontWeight": "700" }]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        body {
+            background-color: theme('colors.background');
+            color: theme('colors.on-background');
+        }
+        
+        /* Custom range slider styling for a more premium look */
+        input[type=range] {
+            -webkit-appearance: none;
+            width: 100%;
+            background: transparent;
+        }
+
+        input[type=range]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            height: 24px;
+            width: 24px;
+            border-radius: 50%;
+            background: theme('colors.primary');
+            cursor: pointer;
+            margin-top: -10px; /* You need to specify a margin in Chrome, but in Firefox and IE it is automatic */
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        input[type=range]::-webkit-slider-runnable-track {
+            width: 100%;
+            height: 4px;
+            cursor: pointer;
+            background: theme('colors.surface-variant');
+            border-radius: 2px;
+        }
+        
+        input[type=range]:focus {
+            outline: none;
+        }
+        
+        input[type=range]:focus::-webkit-slider-thumb {
+            box-shadow: 0 0 0 4px theme('colors.primary-fixed');
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="antialiased min-h-screen flex flex-col">
+<!-- TopAppBar -->
+<header class="w-full sticky top-0 z-50 bg-surface text-primary border-b border-outline-variant flat no shadows">
+<div class="flex items-center justify-between px-margin-mobile py-sm w-full max-w-7xl mx-auto">
+<button aria-label="Search" class="h-tap-target-min w-tap-target-min flex items-center justify-center rounded-full hover:bg-surface-container-low transition-colors active:scale-95 duration-100 text-on-surface-variant">
+<span class="material-symbols-outlined">search</span>
+</button>
+<div class="font-headline-md text-headline-md text-primary tracking-tight">SahaVest</div>
+<button aria-label="Account" class="h-tap-target-min w-tap-target-min flex items-center justify-center rounded-full hover:bg-surface-container-low transition-colors active:scale-95 duration-100 text-on-surface-variant">
+<span class="material-symbols-outlined">account_circle</span>
+</button>
+</div>
+</header>
+<!-- Main Content Canvas -->
+<main class="flex-grow w-full max-w-7xl mx-auto px-margin-mobile md:px-lg py-lg md:py-xl pb-24 md:pb-lg">
+<div class="mb-lg">
+<h1 class="font-display-lg-mobile md:font-display-lg text-display-lg-mobile md:text-display-lg text-primary mb-base">Investor Twin Simulator</h1>
+<p class="font-body-md text-body-md text-on-surface-variant max-w-2xl">Model potential futures based on historical data. Adjust your inputs to see how your portfolio might evolve.</p>
+</div>
+<div class="grid grid-cols-1 lg:grid-cols-12 gap-lg">
+<!-- Context Side Card (Current Portfolio) -->
+<div class="lg:col-span-4 order-2 lg:order-1">
+<div class="bg-surface-container-lowest rounded-xl border border-outline-variant p-md flex flex-col h-full shadow-sm">
+<div class="flex items-center gap-sm mb-md pb-md border-b border-outline-variant">
+<span class="material-symbols-outlined text-primary">monitoring</span>
+<h2 class="font-headline-sm text-headline-sm text-on-surface">Current Context</h2>
+</div>
+<div class="space-y-md flex-grow">
+<div>
+<p class="font-label-sm text-label-sm text-on-surface-variant uppercase tracking-wider mb-base">Active SIPs</p>
+<p class="font-headline-md text-headline-md text-primary">₹25,000 <span class="font-body-md text-body-md text-on-surface-variant">/ mo</span></p>
+</div>
+<div>
+<p class="font-label-sm text-label-sm text-on-surface-variant uppercase tracking-wider mb-base">Current Portfolio Value</p>
+<p class="font-headline-sm text-headline-sm text-on-surface">₹14,50,000</p>
+</div>
+</div>
+<div class="mt-lg bg-surface-container p-sm rounded-lg flex items-start gap-sm">
+<span class="material-symbols-outlined text-secondary text-[20px] mt-xs">info</span>
+<p class="font-label-md text-label-md text-on-surface-variant">The simulation will build upon your existing portfolio value by default.</p>
+</div>
+</div>
+</div>
+<!-- Simulator Input Form -->
+<div class="lg:col-span-8 order-1 lg:order-2">
+<div class="bg-surface-container-lowest rounded-xl border border-outline-variant p-lg shadow-sm">
+<h2 class="font-headline-sm text-headline-sm text-on-surface mb-lg">Simulation Parameters</h2>
+<form class="space-y-xl">
+<!-- Slider 1: Monthly SIP -->
+<div>
+<div class="flex justify-between items-end mb-sm">
+<label class="font-label-md text-label-md text-on-surface" for="sipAmount">Monthly SIP Amount (₹)</label>
+<span class="font-headline-sm text-headline-sm text-primary" id="sipAmountDisplay">50,000</span>
+</div>
+<div class="relative pt-sm pb-md">
+<input class="w-full" id="sipAmount" max="200000" min="5000" step="1000" type="range" value="50000">
+<div class="flex justify-between mt-xs font-label-sm text-label-sm text-outline">
+<span>₹5K</span>
+<span>₹200K</span>
+</div>
+</div>
+</div>
+<!-- Slider 2: Duration -->
+<div>
+<div class="flex justify-between items-end mb-sm">
+<label class="font-label-md text-label-md text-on-surface" for="duration">Investment Duration (Years)</label>
+<span class="font-headline-sm text-headline-sm text-primary" id="durationDisplay">15</span>
+</div>
+<div class="relative pt-sm pb-md">
+<input class="w-full" id="duration" max="40" min="5" step="1" type="range" value="15">
+<div class="flex justify-between mt-xs font-label-sm text-label-sm text-outline">
+<span>5 Yrs</span>
+<span>40 Yrs</span>
+</div>
+</div>
+</div>
+<!-- Slider 3: Expected Return -->
+<div>
+<div class="flex justify-between items-end mb-sm">
+<label class="font-label-md text-label-md text-on-surface" for="returnRate">Expected Annual Return (%)</label>
+<span class="font-headline-sm text-headline-sm text-primary" id="returnRateDisplay">12.0%</span>
+</div>
+<div class="relative pt-sm pb-md">
+<input class="w-full" id="returnRate" max="20" min="6" step="0.5" type="range" value="12">
+<!-- Sane Historical Range Indicators -->
+<div class="absolute w-full h-[4px] bg-secondary-fixed-dim/30 top-[12px] rounded-full pointer-events-none" style="left: 0%; width: 100%;">
+<!-- Highlight 10-15% range -->
+<div class="absolute h-full bg-secondary-container rounded-full" style="left: 28.5%; width: 35.7%;"></div>
+</div>
+<div class="flex justify-between mt-xs font-label-sm text-label-sm text-outline relative">
+<span>6%</span>
+<span class="absolute left-[46%] -ml-[40px] text-secondary">Historical Avg (10-15%)</span>
+<span>20%</span>
+</div>
+</div>
+</div>
+<div class="pt-md border-t border-outline-variant flex justify-end">
+<button class="bg-primary text-on-primary font-label-md text-label-md h-[48px] px-lg rounded-full hover:bg-primary-container transition-colors active:scale-95 duration-100 flex items-center gap-xs" type="button">
+<span class="material-symbols-outlined text-[20px]">play_arrow</span>
+                                Run Simulation
+                            </button>
+</div>
+</form>
+</div>
+</div>
+</div>
+</main>
+<!-- BottomNavBar (Mobile Only) -->
+<nav class="md:hidden fixed bottom-0 w-full z-50 bg-surface border-t border-outline-variant flat no shadows">
+<div class="flex justify-around items-center w-full h-[64px] px-2 pb-safe">
+<!-- Explore (Active Intent for Simulator) -->
+<a class="flex flex-col items-center justify-center bg-secondary-container text-on-secondary-container rounded-full px-4 py-1 hover:bg-surface-container-high active:scale-90 duration-200 ease-in-out" href="#">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">dashboard</span>
+<span class="font-label-sm text-label-sm mt-1">Dashboard</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant p-2 hover:bg-surface-container-high rounded-full active:scale-90 duration-200 ease-in-out" href="#">
+<span class="material-symbols-outlined">account_balance_wallet</span>
+<span class="font-label-sm text-label-sm mt-1">Portfolio</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant p-2 hover:bg-surface-container-high rounded-full active:scale-90 duration-200 ease-in-out" href="#">
+<span class="material-symbols-outlined">shield</span>
+<span class="font-label-sm text-label-sm mt-1">Protection</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant p-2 hover:bg-surface-container-high rounded-full active:scale-90 duration-200 ease-in-out" href="#">
+<span class="material-symbols-outlined">person</span>
+<span class="font-label-sm text-label-sm mt-1">Profile</span>
+</a>
+</div>
+</nav>
+<script>
+        // Simple vanilla JS to update slider display values
+        document.addEventListener('DOMContentLoaded', () => {
+            const formatCurrency = (value) => {
+                return new Intl.NumberFormat('en-IN', { maximumSignificantDigits: 3 }).format(value);
+            };
+
+            const sipSlider = document.getElementById('sipAmount');
+            const sipDisplay = document.getElementById('sipAmountDisplay');
+            sipSlider.addEventListener('input', (e) => {
+                sipDisplay.textContent = formatCurrency(e.target.value);
+            });
+
+            const durationSlider = document.getElementById('duration');
+            const durationDisplay = document.getElementById('durationDisplay');
+            durationSlider.addEventListener('input', (e) => {
+                durationDisplay.textContent = e.target.value;
+            });
+
+            const returnSlider = document.getElementById('returnRate');
+            const returnDisplay = document.getElementById('returnRateDisplay');
+            returnSlider.addEventListener('input', (e) => {
+                returnDisplay.textContent = parseFloat(e.target.value).toFixed(1) + '%';
+            });
+        });
+    </script>
+</body></html>

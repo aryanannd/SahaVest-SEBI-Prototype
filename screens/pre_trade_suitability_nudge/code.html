@@ -1,0 +1,204 @@
+<!DOCTYPE html><html class="light" lang="en"><head>
+<meta charset="utf-8">
+<meta content="width=device-width, initial-scale=1.0" name="viewport">
+<title>Pre-Trade Suitability Nudge Modal</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "secondary": "#006d42",
+                        "outline-variant": "#c4c6d0",
+                        "background": "#f8f9fa",
+                        "surface-container": "#edeeef",
+                        "surface-container-low": "#f3f4f5",
+                        "on-surface-variant": "#43474f",
+                        "on-tertiary-fixed": "#2a1700",
+                        "inverse-primary": "#abc7ff",
+                        "secondary-container": "#9af6be",
+                        "on-secondary": "#ffffff",
+                        "primary-fixed-dim": "#abc7ff",
+                        "primary": "#002653",
+                        "surface-container-highest": "#e1e3e4",
+                        "on-secondary-fixed-variant": "#005230",
+                        "on-secondary-container": "#087347",
+                        "on-primary-fixed": "#001b3f",
+                        "on-tertiary-container": "#e89500",
+                        "on-error": "#ffffff",
+                        "surface-bright": "#f8f9fa",
+                        "inverse-surface": "#2e3132",
+                        "outline": "#747780",
+                        "inverse-on-surface": "#f0f1f2",
+                        "primary-container": "#1a3c6e",
+                        "on-tertiary": "#ffffff",
+                        "on-secondary-fixed": "#002110",
+                        "on-primary": "#ffffff",
+                        "surface-tint": "#405e92",
+                        "secondary-fixed": "#9af6be",
+                        "on-error-container": "#93000a",
+                        "on-background": "#191c1d",
+                        "surface-container-lowest": "#ffffff",
+                        "surface-container-high": "#e7e8e9",
+                        "on-primary-container": "#8aa8e0",
+                        "error": "#ba1a1a",
+                        "on-primary-fixed-variant": "#264679",
+                        "secondary-fixed-dim": "#7ed9a3",
+                        "tertiary-fixed": "#ffddb8",
+                        "error-container": "#ffdad6",
+                        "tertiary-fixed-dim": "#ffb95f",
+                        "surface-variant": "#e1e3e4",
+                        "surface-dim": "#d9dadb",
+                        "on-surface": "#191c1d",
+                        "tertiary-container": "#573500",
+                        "on-tertiary-fixed-variant": "#653e00",
+                        "primary-fixed": "#d7e3ff",
+                        "surface": "#f8f9fa",
+                        "tertiary": "#3a2100"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "md": "16px",
+                        "sm": "12px",
+                        "base": "4px",
+                        "gutter-mobile": "12px",
+                        "xl": "32px",
+                        "tap-target-min": "44px",
+                        "xs": "8px",
+                        "margin-mobile": "16px",
+                        "lg": "24px"
+                    },
+                    "fontFamily": {
+                        "label-md": ["Inter"],
+                        "label-sm": ["Inter"],
+                        "body-md": ["Inter"],
+                        "headline-md": ["Inter"],
+                        "display-lg-mobile": ["Inter"],
+                        "display-lg": ["Inter"],
+                        "headline-sm": ["Inter"],
+                        "body-lg": ["Inter"]
+                    },
+                    "fontSize": {
+                        "label-md": ["14px", { "lineHeight": "20px", "letterSpacing": "0.01em", "fontWeight": "500" }],
+                        "label-sm": ["12px", { "lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "600" }],
+                        "body-md": ["16px", { "lineHeight": "24px", "fontWeight": "400" }],
+                        "headline-md": ["24px", { "lineHeight": "32px", "fontWeight": "600" }],
+                        "display-lg-mobile": ["28px", { "lineHeight": "36px", "letterSpacing": "-0.02em", "fontWeight": "700" }],
+                        "display-lg": ["32px", { "lineHeight": "40px", "letterSpacing": "-0.02em", "fontWeight": "700" }],
+                        "headline-sm": ["20px", { "lineHeight": "28px", "fontWeight": "600" }],
+                        "body-lg": ["18px", { "lineHeight": "28px", "fontWeight": "400" }]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .material-symbols-outlined.fill {
+            font-variation-settings: 'FILL' 1;
+        }
+        
+        /* Modal Animation */
+        @keyframes modalFadeIn {
+            from { opacity: 0; transform: translateY(10px) scale(0.98); }
+            to { opacity: 1; transform: translateY(0) scale(1); }
+        }
+        .modal-animate {
+            animation: modalFadeIn 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background text-on-background min-h-screen font-body-md relative overflow-hidden flex flex-col">
+<!-- Blurred Background Context (Dashboard Simulation) -->
+<div class="absolute inset-0 z-0 pointer-events-none opacity-40 blur-sm flex flex-col">
+<!-- TopAppBar Placeholder -->
+<header class="w-full top-0 sticky bg-surface dark:bg-surface-dim border-b border-outline-variant dark:border-outline shadow-sm dark:shadow-none flex justify-between items-center h-14 px-margin-mobile">
+<div class="flex items-center gap-xs">
+<div class="w-8 h-8 rounded-full bg-surface-variant flex items-center justify-center">
+<span class="material-symbols-outlined text-on-surface-variant">person</span>
+</div>
+</div>
+<h1 class="font-display-lg-mobile text-display-lg-mobile font-bold text-primary dark:text-primary-fixed-dim">SahaVest</h1>
+<div class="flex items-center">
+<span class="material-symbols-outlined text-primary dark:text-primary-fixed-dim">notifications</span>
+</div>
+</header>
+<main class="flex-1 p-margin-mobile flex flex-col gap-md pt-lg">
+<!-- Simulated Dashboard Content -->
+<div class="h-32 bg-surface rounded-xl border border-outline-variant p-md">
+<div class="w-1/3 h-6 bg-surface-variant rounded mb-xs"></div>
+<div class="w-1/2 h-8 bg-surface-variant rounded"></div>
+</div>
+<div class="grid grid-cols-2 gap-md">
+<div class="h-24 bg-surface rounded-xl border border-outline-variant p-sm"></div>
+<div class="h-24 bg-surface rounded-xl border border-outline-variant p-sm"></div>
+</div>
+<div class="h-48 bg-surface rounded-xl border border-outline-variant p-md"></div>
+</main>
+</div>
+<!-- Overlay Scrim -->
+<div class="absolute inset-0 bg-on-background/40 z-40 backdrop-blur-[2px]"></div>
+<!-- Modal Container -->
+<div class="relative z-50 flex-1 flex items-center justify-center p-margin-mobile">
+<!-- The Modal Card -->
+<div class="bg-surface-container-lowest w-full max-w-sm rounded-[24px] shadow-lg flex flex-col items-center p-xl text-center modal-animate">
+<!-- Icon -->
+<div class="w-16 h-16 rounded-full bg-tertiary-fixed flex items-center justify-center mb-lg">
+<span class="material-symbols-outlined fill text-[32px] text-on-tertiary-container" data-icon="warning" data-weight="fill">warning</span>
+</div>
+<!-- Content -->
+<h2 class="font-headline-md text-headline-md text-on-background mb-sm">Risk Profile Mismatch</h2>
+<p class="font-body-md text-body-md text-on-surface-variant mb-xl">
+                This trade is categorized as High Risk, while your profile is set to Conservative. Proceeding may lead to higher volatility than your stated preference.
+            </p>
+<!-- Actions -->
+<div class="w-full flex flex-col gap-sm">
+<button class="w-full min-h-[48px] bg-primary text-on-primary font-label-md text-label-md rounded-full hover:bg-primary-container transition-colors duration-200 active:scale-[0.98]">
+                    Review Risk Profile
+                </button>
+<button class="w-full min-h-[48px] bg-transparent border border-outline text-primary font-label-md text-label-md rounded-full hover:bg-surface-container-low transition-colors duration-200 active:scale-[0.98]">
+                    Proceed Anyway
+                </button>
+</div>
+</div>
+</div>
+<!-- Bottom Navigation Shell (Mobile Only) -->
+<nav class="md:hidden fixed bottom-0 w-full z-30 bg-surface-container-lowest dark:bg-inverse-surface shadow-lg flex justify-around items-center h-16 px-2 pb-safe">
+<!-- Inactive Tab -->
+<button class="flex flex-col items-center justify-center text-on-surface-variant dark:text-on-surface-variant px-4 py-1 hover:bg-surface-container dark:hover:bg-surface-container-highest active:scale-95 transition-transform duration-150 min-h-[44px] min-w-[44px]">
+<span class="material-symbols-outlined mb-1" data-icon="pie_chart">pie_chart</span>
+<span class="font-label-sm text-label-sm">Portfolio</span>
+</button>
+<!-- Active Tab (Explore - contextualizing a pre-trade scenario) -->
+<button class="flex flex-col items-center justify-center bg-secondary-container dark:bg-secondary text-on-secondary-container dark:text-on-secondary rounded-full px-4 py-1 hover:bg-surface-container dark:hover:bg-surface-container-highest active:scale-95 transition-transform duration-150 min-h-[44px] min-w-[44px]">
+<span class="material-symbols-outlined mb-1 fill" data-icon="search" data-weight="fill">search</span>
+<span class="font-label-sm text-label-sm">Explore</span>
+</button>
+<!-- Inactive Tab -->
+<button class="flex flex-col items-center justify-center text-on-surface-variant dark:text-on-surface-variant px-4 py-1 hover:bg-surface-container dark:hover:bg-surface-container-highest active:scale-95 transition-transform duration-150 min-h-[44px] min-w-[44px]">
+<span class="material-symbols-outlined mb-1" data-icon="security">security</span>
+<span class="font-label-sm text-label-sm">Shield</span>
+</button>
+<!-- Inactive Tab -->
+<button class="flex flex-col items-center justify-center text-on-surface-variant dark:text-on-surface-variant px-4 py-1 hover:bg-surface-container dark:hover:bg-surface-container-highest active:scale-95 transition-transform duration-150 min-h-[44px] min-w-[44px]">
+<span class="material-symbols-outlined mb-1" data-icon="person">person</span>
+<span class="font-label-sm text-label-sm">Profile</span>
+</button>
+</nav>
+</body></html>

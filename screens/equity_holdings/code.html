@@ -1,0 +1,294 @@
+<!DOCTYPE html><html lang="en"><head>
+<meta charset="utf-8">
+<meta content="width=device-width, initial-scale=1.0" name="viewport">
+<title>SahaVest - Holdings</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "surface-variant": "#e1e3e4",
+                        "surface": "#f8f9fa",
+                        "surface-dim": "#d9dadb",
+                        "surface-bright": "#f8f9fa",
+                        "surface-container": "#edeeef",
+                        "on-secondary-container": "#087347",
+                        "on-surface": "#191c1d",
+                        "surface-container-low": "#f3f4f5",
+                        "tertiary-fixed-dim": "#ffb95f",
+                        "on-primary-fixed": "#001b3f",
+                        "inverse-surface": "#2e3132",
+                        "inverse-primary": "#abc7ff",
+                        "error-container": "#ffdad6",
+                        "on-error-container": "#93000a",
+                        "tertiary-fixed": "#ffddb8",
+                        "background": "#f8f9fa",
+                        "on-tertiary-fixed": "#2a1700",
+                        "on-surface-variant": "#43474f",
+                        "on-error": "#ffffff",
+                        "on-primary-container": "#8aa8e0",
+                        "primary-fixed": "#d7e3ff",
+                        "on-secondary-fixed": "#002110",
+                        "on-background": "#191c1d",
+                        "primary": "#002653",
+                        "secondary": "#006d42",
+                        "tertiary-container": "#573500",
+                        "on-secondary-fixed-variant": "#005230",
+                        "error": "#ba1a1a",
+                        "outline": "#747780",
+                        "surface-tint": "#405e92",
+                        "primary-fixed-dim": "#abc7ff",
+                        "tertiary": "#3a2100",
+                        "primary-container": "#1a3c6e",
+                        "inverse-on-surface": "#f0f1f2",
+                        "on-primary": "#ffffff",
+                        "secondary-container": "#9af6be",
+                        "secondary-fixed-dim": "#7ed9a3",
+                        "on-tertiary-fixed-variant": "#653e00",
+                        "on-primary-fixed-variant": "#264679",
+                        "on-secondary": "#ffffff",
+                        "outline-variant": "#c4c6d0",
+                        "surface-container-high": "#e7e8e9",
+                        "secondary-fixed": "#9af6be",
+                        "on-tertiary": "#ffffff",
+                        "surface-container-lowest": "#ffffff",
+                        "surface-container-highest": "#e1e3e4",
+                        "on-tertiary-container": "#e89500"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "md": "16px",
+                        "base": "4px",
+                        "tap-target-min": "44px",
+                        "xl": "32px",
+                        "margin-mobile": "16px",
+                        "sm": "12px",
+                        "gutter-mobile": "12px",
+                        "xs": "8px",
+                        "lg": "24px"
+                    },
+                    "fontFamily": {
+                        "display-lg": ["Inter"],
+                        "display-lg-mobile": ["Inter"],
+                        "label-md": ["Inter"],
+                        "headline-sm": ["Inter"],
+                        "headline-md": ["Inter"],
+                        "label-sm": ["Inter"],
+                        "body-lg": ["Inter"],
+                        "body-md": ["Inter"]
+                    },
+                    "fontSize": {
+                        "display-lg": ["32px", { "lineHeight": "40px", "letterSpacing": "-0.02em", "fontWeight": "700" }],
+                        "display-lg-mobile": ["28px", { "lineHeight": "36px", "letterSpacing": "-0.02em", "fontWeight": "700" }],
+                        "label-md": ["14px", { "lineHeight": "20px", "letterSpacing": "0.01em", "fontWeight": "500" }],
+                        "headline-sm": ["20px", { "lineHeight": "28px", "fontWeight": "600" }],
+                        "headline-md": ["24px", { "lineHeight": "32px", "fontWeight": "600" }],
+                        "label-sm": ["12px", { "lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "600" }],
+                        "body-lg": ["18px", { "lineHeight": "28px", "fontWeight": "400" }],
+                        "body-md": ["16px", { "lineHeight": "24px", "fontWeight": "400" }]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f8f9fa; /* bg-background */
+        }
+        /* Custom scrollbar for webkit */
+        ::-webkit-scrollbar {
+            width: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: transparent;
+        }
+        ::-webkit-scrollbar-thumb {
+            background-color: #c4c6d0; /* outline-variant */
+            border-radius: 9999px;
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background text-on-background min-h-screen flex flex-col antialiased">
+<!-- TopAppBar -->
+<header class="w-full sticky top-0 z-50 bg-surface dark:bg-surface-dim border-b border-outline-variant dark:border-outline">
+<div class="flex items-center justify-between px-margin-mobile py-sm w-full max-w-7xl mx-auto h-[64px]">
+<button aria-label="Go back" class="flex items-center justify-center min-w-tap-target-min min-h-tap-target-min text-primary dark:text-primary-fixed hover:bg-surface-container-low dark:hover:bg-surface-container-highest transition-colors rounded-full active:scale-95 duration-100">
+<span class="material-symbols-outlined text-[24px]">arrow_back</span>
+</button>
+<h1 class="font-headline-md text-headline-md text-primary dark:text-primary-fixed tracking-tight truncate flex-1 text-center px-4">
+                Equity Holdings
+            </h1>
+<button aria-label="Account" class="flex items-center justify-center min-w-tap-target-min min-h-tap-target-min text-primary dark:text-primary-fixed hover:bg-surface-container-low dark:hover:bg-surface-container-highest transition-colors rounded-full active:scale-95 duration-100">
+<span class="material-symbols-outlined text-[24px]">more_vert</span>
+</button>
+</div>
+</header>
+<!-- Main Content Canvas -->
+<main class="flex-1 w-full max-w-7xl mx-auto px-margin-mobile md:px-lg pb-24 md:pb-lg pt-4 md:pt-6 flex flex-col gap-6">
+<!-- Search and Filter Bar -->
+<div class="w-full relative sticky top-[72px] z-40 bg-background pt-2 pb-4">
+<div class="relative w-full">
+<span class="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-on-surface-variant">search</span>
+<input class="w-full h-12 pl-12 pr-4 bg-surface rounded-full border border-outline-variant text-body-md text-on-surface focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary transition-shadow placeholder-on-surface-variant" placeholder="Search instruments..." type="text">
+</div>
+<!-- Quick Filters -->
+<div class="flex gap-2 mt-4 overflow-x-auto pb-2 scrollbar-hide">
+<button class="px-4 py-2 min-h-[36px] bg-secondary-container text-on-secondary-container rounded-full font-label-md text-label-md whitespace-nowrap border border-transparent">
+                    All
+                </button>
+<button class="px-4 py-2 min-h-[36px] bg-surface text-on-surface-variant rounded-full font-label-md text-label-md whitespace-nowrap border border-outline-variant hover:bg-surface-container-low transition-colors">
+                    Large Cap
+                </button>
+<button class="px-4 py-2 min-h-[36px] bg-surface text-on-surface-variant rounded-full font-label-md text-label-md whitespace-nowrap border border-outline-variant hover:bg-surface-container-low transition-colors">
+                    Mid Cap
+                </button>
+<button class="px-4 py-2 min-h-[36px] bg-surface text-on-surface-variant rounded-full font-label-md text-label-md whitespace-nowrap border border-outline-variant hover:bg-surface-container-low transition-colors">
+                    Small Cap
+                </button>
+</div>
+</div>
+<!-- Portfolio Summary Card (Glassmorphism inspired) -->
+<div class="w-full bg-surface-container-low rounded-xl p-5 border border-outline-variant/50 relative overflow-hidden shadow-sm">
+<div class="absolute -right-10 -top-10 w-40 h-40 bg-primary-container/10 rounded-full blur-2xl"></div>
+<div class="absolute -left-10 -bottom-10 w-32 h-32 bg-secondary-container/20 rounded-full blur-xl"></div>
+<div class="relative z-10 flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+<div>
+<h2 class="font-body-md text-body-md text-on-surface-variant mb-1">Total Equity Value</h2>
+<p class="font-display-lg-mobile md:font-display-lg text-display-lg-mobile md:text-display-lg text-primary">₹14,85,230.50</p>
+</div>
+<div class="text-left md:text-right">
+<h2 class="font-body-md text-body-md text-on-surface-variant mb-1">Day's Change</h2>
+<p class="font-headline-sm text-headline-sm text-secondary flex items-center md:justify-end gap-1">
+<span class="material-symbols-outlined text-[20px]">trending_up</span>
+                        +₹12,450.00 (+0.85%)
+                    </p>
+</div>
+</div>
+</div>
+<!-- Holdings List -->
+<div class="w-full bg-surface rounded-xl border border-outline-variant/30 overflow-hidden shadow-sm">
+<!-- List Header (Desktop Only) -->
+<div class="hidden md:grid grid-cols-12 gap-4 p-4 border-b border-outline-variant/50 bg-surface-container-low/50">
+<div class="col-span-5 font-label-sm text-label-sm text-on-surface-variant uppercase tracking-wider">Instrument</div>
+<div class="col-span-3 text-right font-label-sm text-label-sm text-on-surface-variant uppercase tracking-wider">Qty &amp; Avg. Price</div>
+<div class="col-span-4 text-right font-label-sm text-label-sm text-on-surface-variant uppercase tracking-wider">Current Value &amp; Change</div>
+</div>
+<!-- Holding Item 1 -->
+<div class="group border-b border-outline-variant/30 last:border-0 hover:bg-surface-container-low transition-colors cursor-pointer">
+<div class="p-4 flex flex-col md:grid md:grid-cols-12 gap-3 md:gap-4 md:items-center">
+<div class="md:col-span-5 flex items-center justify-between md:justify-start">
+<div class="flex items-center gap-3">
+<div class="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center text-primary font-headline-sm">H</div>
+<div>
+<h3 class="font-headline-sm text-headline-sm text-on-surface">HDFC Bank Ltd.</h3>
+<p class="font-body-md text-body-md text-on-surface-variant md:hidden">150 Qty · Avg: ₹1,450.00</p>
+</div>
+</div>
+<span class="material-symbols-outlined text-outline md:hidden">chevron_right</span>
+</div>
+<div class="hidden md:block md:col-span-3 text-right">
+<p class="font-body-md text-body-md text-on-surface">150</p>
+<p class="font-label-sm text-label-sm text-on-surface-variant">Avg. ₹1,450.00</p>
+</div>
+<div class="flex justify-between md:col-span-4 md:text-right items-end md:items-center">
+<div class="md:hidden">
+<p class="font-label-sm text-label-sm text-on-surface-variant uppercase">Value &amp; Change</p>
+</div>
+<div class="text-right">
+<p class="font-headline-sm text-headline-sm text-on-surface">₹2,25,000.00</p>
+<p class="font-body-md text-body-md text-secondary flex items-center justify-end gap-1">
+<span class="material-symbols-outlined text-[16px]">arrow_upward</span>
+                                ₹1,200 (+0.54%)
+                            </p>
+</div>
+</div>
+</div>
+</div>
+<!-- Holding Item 2 -->
+<div class="group border-b border-outline-variant/30 last:border-0 hover:bg-surface-container-low transition-colors cursor-pointer">
+<div class="p-4 flex flex-col md:grid md:grid-cols-12 gap-3 md:gap-4 md:items-center">
+<div class="md:col-span-5 flex items-center justify-between md:justify-start">
+<div class="flex items-center gap-3">
+<div class="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center text-primary font-headline-sm">R</div>
+<div>
+<h3 class="font-headline-sm text-headline-sm text-on-surface">Reliance Industries</h3>
+<p class="font-body-md text-body-md text-on-surface-variant md:hidden">50 Qty · Avg: ₹2,100.50</p>
+</div>
+</div>
+<span class="material-symbols-outlined text-outline md:hidden">chevron_right</span>
+</div>
+<div class="hidden md:block md:col-span-3 text-right">
+<p class="font-body-md text-body-md text-on-surface">50</p>
+<p class="font-label-sm text-label-sm text-on-surface-variant">Avg. ₹2,100.50</p>
+</div>
+<div class="flex justify-between md:col-span-4 md:text-right items-end md:items-center">
+<div class="md:hidden">
+<p class="font-label-sm text-label-sm text-on-surface-variant uppercase">Value &amp; Change</p>
+</div>
+<div class="text-right">
+<p class="font-headline-sm text-headline-sm text-on-surface">₹1,05,025.00</p>
+<p class="font-body-md text-body-md text-error flex items-center justify-end gap-1">
+<span class="material-symbols-outlined text-[16px]">arrow_downward</span>
+                                -₹450 (-0.42%)
+                            </p>
+</div>
+</div>
+</div>
+</div>
+<!-- Holding Item 3 -->
+<div class="group border-b border-outline-variant/30 last:border-0 hover:bg-surface-container-low transition-colors cursor-pointer">
+<div class="p-4 flex flex-col md:grid md:grid-cols-12 gap-3 md:gap-4 md:items-center">
+<div class="md:col-span-5 flex items-center justify-between md:justify-start">
+<div class="flex items-center gap-3">
+<div class="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center text-primary font-headline-sm">I</div>
+<div>
+<h3 class="font-headline-sm text-headline-sm text-on-surface">Infosys Ltd.</h3>
+<p class="font-body-md text-body-md text-on-surface-variant md:hidden">200 Qty · Avg: ₹1,250.00</p>
+</div>
+</div>
+<span class="material-symbols-outlined text-outline md:hidden">chevron_right</span>
+</div>
+<div class="hidden md:block md:col-span-3 text-right">
+<p class="font-body-md text-body-md text-on-surface">200</p>
+<p class="font-label-sm text-label-sm text-on-surface-variant">Avg. ₹1,250.00</p>
+</div>
+<div class="flex justify-between md:col-span-4 md:text-right items-end md:items-center">
+<div class="md:hidden">
+<p class="font-label-sm text-label-sm text-on-surface-variant uppercase">Value &amp; Change</p>
+</div>
+<div class="text-right">
+<p class="font-headline-sm text-headline-sm text-on-surface">₹3,04,000.00</p>
+<p class="font-body-md text-body-md text-secondary flex items-center justify-end gap-1">
+<span class="material-symbols-outlined text-[16px]">arrow_upward</span>
+                                ₹5,200 (+1.74%)
+                            </p>
+</div>
+</div>
+</div>
+</div>
+<!-- Load More -->
+<div class="p-4 flex justify-center border-t border-outline-variant/30">
+<button class="text-primary font-label-md text-label-md hover:underline flex items-center gap-1 min-h-tap-target-min">
+                    Load More Holdings
+                    <span class="material-symbols-outlined text-[18px]">expand_more</span>
+</button>
+</div>
+</div>
+</main>
+</body></html>

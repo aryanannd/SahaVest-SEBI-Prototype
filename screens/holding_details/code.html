@@ -1,0 +1,292 @@
+<!DOCTYPE html><html lang="en"><head>
+<meta charset="utf-8">
+<meta content="width=device-width, initial-scale=1.0" name="viewport">
+<title>SahaVest - Instrument Detail</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<script id="tailwind-config">
+        tailwind.config = {
+          darkMode: "class",
+          theme: {
+            extend: {
+              "colors": {
+                      "surface-variant": "#e1e3e4",
+                      "surface": "#f8f9fa",
+                      "surface-dim": "#d9dadb",
+                      "surface-bright": "#f8f9fa",
+                      "surface-container": "#edeeef",
+                      "on-secondary-container": "#087347",
+                      "on-surface": "#191c1d",
+                      "surface-container-low": "#f3f4f5",
+                      "tertiary-fixed-dim": "#ffb95f",
+                      "on-primary-fixed": "#001b3f",
+                      "inverse-surface": "#2e3132",
+                      "inverse-primary": "#abc7ff",
+                      "error-container": "#ffdad6",
+                      "on-error-container": "#93000a",
+                      "tertiary-fixed": "#ffddb8",
+                      "background": "#f8f9fa",
+                      "on-tertiary-fixed": "#2a1700",
+                      "on-surface-variant": "#43474f",
+                      "on-error": "#ffffff",
+                      "on-primary-container": "#8aa8e0",
+                      "primary-fixed": "#d7e3ff",
+                      "on-secondary-fixed": "#002110",
+                      "on-background": "#191c1d",
+                      "primary": "#002653",
+                      "secondary": "#006d42",
+                      "tertiary-container": "#573500",
+                      "on-secondary-fixed-variant": "#005230",
+                      "error": "#ba1a1a",
+                      "outline": "#747780",
+                      "surface-tint": "#405e92",
+                      "primary-fixed-dim": "#abc7ff",
+                      "tertiary": "#3a2100",
+                      "primary-container": "#1a3c6e",
+                      "inverse-on-surface": "#f0f1f2",
+                      "on-primary": "#ffffff",
+                      "secondary-container": "#9af6be",
+                      "secondary-fixed-dim": "#7ed9a3",
+                      "on-tertiary-fixed-variant": "#653e00",
+                      "on-primary-fixed-variant": "#264679",
+                      "on-secondary": "#ffffff",
+                      "outline-variant": "#c4c6d0",
+                      "surface-container-high": "#e7e8e9",
+                      "secondary-fixed": "#9af6be",
+                      "on-tertiary": "#ffffff",
+                      "surface-container-lowest": "#ffffff",
+                      "surface-container-highest": "#e1e3e4",
+                      "on-tertiary-container": "#e89500"
+              },
+              "borderRadius": {
+                      "DEFAULT": "0.25rem",
+                      "lg": "0.5rem",
+                      "xl": "0.75rem",
+                      "full": "9999px"
+              },
+              "spacing": {
+                      "md": "16px",
+                      "base": "4px",
+                      "tap-target-min": "44px",
+                      "xl": "32px",
+                      "margin-mobile": "16px",
+                      "sm": "12px",
+                      "gutter-mobile": "12px",
+                      "xs": "8px",
+                      "lg": "24px"
+              },
+              "fontFamily": {
+                      "display-lg": [
+                              "Inter"
+                      ],
+                      "display-lg-mobile": [
+                              "Inter"
+                      ],
+                      "label-md": [
+                              "Inter"
+                      ],
+                      "headline-sm": [
+                              "Inter"
+                      ],
+                      "headline-md": [
+                              "Inter"
+                      ],
+                      "label-sm": [
+                              "Inter"
+                      ],
+                      "body-lg": [
+                              "Inter"
+                      ],
+                      "body-md": [
+                              "Inter"
+                      ]
+              },
+              "fontSize": {
+                      "display-lg": [
+                              "32px",
+                              {
+                                      "lineHeight": "40px",
+                                      "letterSpacing": "-0.02em",
+                                      "fontWeight": "700"
+                              }
+                      ],
+                      "display-lg-mobile": [
+                              "28px",
+                              {
+                                      "lineHeight": "36px",
+                                      "letterSpacing": "-0.02em",
+                                      "fontWeight": "700"
+                              }
+                      ],
+                      "label-md": [
+                              "14px",
+                              {
+                                      "lineHeight": "20px",
+                                      "letterSpacing": "0.01em",
+                                      "fontWeight": "500"
+                              }
+                      ],
+                      "headline-sm": [
+                              "20px",
+                              {
+                                      "lineHeight": "28px",
+                                      "fontWeight": "600"
+                              }
+                      ],
+                      "headline-md": [
+                              "24px",
+                              {
+                                      "lineHeight": "32px",
+                                      "fontWeight": "600"
+                              }
+                      ],
+                      "label-sm": [
+                              "12px",
+                              {
+                                      "lineHeight": "16px",
+                                      "letterSpacing": "0.05em",
+                                      "fontWeight": "600"
+                              }
+                      ],
+                      "body-lg": [
+                              "18px",
+                              {
+                                      "lineHeight": "28px",
+                                      "fontWeight": "400"
+                              }
+                      ],
+                      "body-md": [
+                              "16px",
+                              {
+                                      "lineHeight": "24px",
+                                      "fontWeight": "400"
+                              }
+                      ]
+              }
+      },
+          },
+        }
+      </script>
+<style>
+        .material-symbols-outlined {
+          font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .icon-fill {
+            font-variation-settings: 'FILL' 1;
+        }
+      </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background text-on-background min-h-screen flex flex-col font-body-md antialiased pb-[80px] md:pb-0">
+<!-- TopAppBar -->
+<header class="bg-surface dark:bg-surface-dim w-full sticky top-0 z-50">
+<div class="flex items-center justify-between px-margin-mobile py-sm w-full max-w-7xl mx-auto">
+<button aria-label="Go Back" class="w-[44px] h-[44px] flex items-center justify-center text-on-surface-variant dark:text-on-surface-variant hover:bg-surface-container-low dark:hover:bg-surface-container-highest transition-colors rounded-full active:scale-95 duration-100">
+<span class="material-symbols-outlined" data-icon="arrow_back">arrow_back</span>
+</button>
+<h1 class="font-headline-md text-headline-md text-primary dark:text-primary-fixed tracking-tight truncate px-2">Reliance Industries</h1>
+<div class="w-[44px] h-[44px]"></div> <!-- Spacer for alignment -->
+</div>
+</header>
+<!-- Main Content Canvas -->
+<main class="flex-grow w-full max-w-7xl mx-auto px-margin-mobile md:px-lg py-md md:py-xl grid grid-cols-4 md:grid-cols-8 gap-md md:gap-lg md:grid-flow-row-dense">
+<!-- Header Info Card -->
+<div class="col-span-4 md:col-span-8 bg-surface-container-lowest rounded-xl p-md md:p-lg border border-outline-variant shadow-sm flex flex-col md:flex-row md:items-end justify-between gap-md">
+<div>
+<div class="flex items-center gap-2 mb-xs">
+<span class="bg-primary-container text-on-primary-container font-label-sm text-label-sm px-2 py-1 rounded-full">EQ</span>
+<span class="text-on-surface-variant font-label-md text-label-md">RELIANCE</span>
+</div>
+<h2 class="font-display-lg-mobile md:font-display-lg text-display-lg-mobile md:text-display-lg text-primary mb-1">₹2,845.30</h2>
+<div class="flex items-center gap-2">
+<span class="text-secondary font-label-md text-label-md flex items-center">
+<span class="material-symbols-outlined text-[16px] mr-1" data-icon="trending_up">trending_up</span>
+                        +45.20 (1.61%)
+                    </span>
+<span class="text-outline font-label-sm text-label-sm">ISIN: INE002A01018</span>
+</div>
+</div>
+<div class="flex gap-2">
+<button class="h-[48px] px-lg bg-surface-container hover:bg-surface-container-high transition-colors text-primary font-label-md text-label-md rounded-lg flex-1 md:flex-none">Sell</button>
+<button class="h-[48px] px-lg bg-primary hover:bg-primary-container transition-colors text-on-primary font-label-md text-label-md rounded-lg flex-1 md:flex-none shadow-sm">Buy</button>
+</div>
+</div>
+<!-- Key Stats Grid -->
+<div class="col-span-4 md:col-span-8 grid grid-cols-2 md:grid-cols-4 gap-sm">
+<div class="bg-surface-container-lowest rounded-xl p-sm md:p-md border border-outline-variant">
+<p class="text-on-surface-variant font-label-sm text-label-sm mb-xs">Quantity</p>
+<p class="font-headline-sm text-headline-sm text-on-surface">150</p>
+</div>
+<div class="bg-surface-container-lowest rounded-xl p-sm md:p-md border border-outline-variant">
+<p class="text-on-surface-variant font-label-sm text-label-sm mb-xs">Avg. Cost</p>
+<p class="font-headline-sm text-headline-sm text-on-surface">₹2,610.50</p>
+</div>
+<div class="bg-surface-container-lowest rounded-xl p-sm md:p-md border border-outline-variant">
+<p class="text-on-surface-variant font-label-sm text-label-sm mb-xs">Current Value</p>
+<p class="font-headline-sm text-headline-sm text-on-surface">₹4,26,795</p>
+</div>
+<div class="bg-surface-container-lowest rounded-xl p-sm md:p-md border border-outline-variant bg-secondary-container/10">
+<p class="text-on-surface-variant font-label-sm text-label-sm mb-xs">Total P&amp;L</p>
+<p class="font-headline-sm text-headline-sm text-secondary">+₹35,220 (9.0%)</p>
+</div>
+</div>
+<!-- Performance Chart Area -->
+<div class="col-span-4 md:col-span-5 bg-surface-container-lowest rounded-xl p-md border border-outline-variant shadow-sm h-[300px] flex flex-col">
+<div class="flex justify-between items-center mb-md">
+<h3 class="font-headline-sm text-headline-sm text-primary">Performance</h3>
+<div class="flex gap-1 bg-surface-container-low p-1 rounded-md">
+<button class="px-2 py-1 font-label-sm text-label-sm rounded text-on-surface-variant hover:bg-surface-container">1D</button>
+<button class="px-2 py-1 font-label-sm text-label-sm rounded bg-surface-container text-primary">1M</button>
+<button class="px-2 py-1 font-label-sm text-label-sm rounded text-on-surface-variant hover:bg-surface-container">1Y</button>
+<button class="px-2 py-1 font-label-sm text-label-sm rounded text-on-surface-variant hover:bg-surface-container">ALL</button>
+</div>
+</div>
+<div class="flex-grow w-full relative flex items-center justify-center bg-surface-container-low rounded-lg overflow-hidden border border-outline-variant/30">
+<!-- Placeholder for Chart -->
+<div class="absolute inset-0 opacity-20 pointer-events-none" style="background-image: repeating-linear-gradient(0deg, transparent, transparent 19px, var(--tw-colors-outline-variant) 20px), repeating-linear-gradient(90deg, transparent, transparent 19px, var(--tw-colors-outline-variant) 20px); background-size: 20px 20px;"></div>
+<svg class="w-full h-full absolute inset-0" preserveAspectRatio="none" viewBox="0 0 100 100">
+<path d="M0,80 Q20,70 40,50 T80,30 T100,10" fill="none" stroke="var(--tw-colors-primary)" stroke-width="2" vector-effect="non-scaling-stroke"></path>
+<path d="M0,100 L0,80 Q20,70 40,50 T80,30 T100,10 L100,100 Z" fill="var(--tw-colors-primary-container)" opacity="0.1"></path>
+</svg>
+<span class="text-on-surface-variant font-label-md text-label-md opacity-50">Chart Visualization Area</span>
+</div>
+</div>
+<!-- Insights / News Panel -->
+<div class="col-span-4 md:col-span-3 bg-surface-container-lowest rounded-xl border border-outline-variant shadow-sm flex flex-col h-[300px]">
+<div class="p-md border-b border-outline-variant">
+<h3 class="font-headline-sm text-headline-sm text-primary">Insights &amp; News</h3>
+</div>
+<div class="flex-grow overflow-y-auto p-md space-y-sm">
+<!-- News Item -->
+<a class="block p-sm rounded-lg hover:bg-surface-container-low transition-colors group" href="#">
+<div class="flex justify-between items-start mb-1">
+<span class="font-label-sm text-label-sm text-on-surface-variant">2 hrs ago • Reuters</span>
+</div>
+<p class="font-body-md text-body-md text-on-surface line-clamp-2 group-hover:text-primary transition-colors">Reliance announces major investment in renewable energy sector, aiming for net-zero by 2035.</p>
+</a>
+<div class="w-full h-[1px] bg-outline-variant ml-sm mr-sm w-auto"></div>
+<!-- News Item -->
+<a class="block p-sm rounded-lg hover:bg-surface-container-low transition-colors group" href="#">
+<div class="flex justify-between items-start mb-1">
+<span class="font-label-sm text-label-sm text-on-surface-variant">5 hrs ago • Bloomberg</span>
+</div>
+<p class="font-body-md text-body-md text-on-surface line-clamp-2 group-hover:text-primary transition-colors">Quarterly earnings report exceeds expectations driven by retail and telecom segments.</p>
+</a>
+</div>
+</div>
+<!-- Fallback State Example (Hidden by default, shown for demonstration) -->
+<div class="col-span-4 md:col-span-8 bg-surface-container-lowest rounded-xl border border-outline-variant p-xl flex flex-col items-center justify-center text-center mt-md">
+<div class="w-[64px] h-[64px] bg-surface-container rounded-full flex items-center justify-center mb-md">
+<span class="material-symbols-outlined text-[32px] text-outline" data-icon="info">info</span>
+</div>
+<h3 class="font-headline-sm text-headline-sm text-on-surface mb-xs">Extended Details Unavailable</h3>
+<p class="font-body-md text-body-md text-on-surface-variant max-w-md">We couldn't retrieve full fundamental data or recent news for this specific instrument at this time. Basic holding information is displayed above.</p>
+</div>
+</main>
+</body></html>

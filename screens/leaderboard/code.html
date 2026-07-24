@@ -1,0 +1,296 @@
+<!DOCTYPE html><html lang="en"><head>
+<meta charset="utf-8">
+<meta content="width=device-width, initial-scale=1.0" name="viewport">
+<title>Leaderboard - SahaVest</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com" rel="preconnect">
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<script id="tailwind-config">
+        tailwind.config = {
+          darkMode: "class",
+          theme: {
+            extend: {
+              "colors": {
+                      "surface-container-high": "#e7e8e9",
+                      "on-secondary-fixed": "#002110",
+                      "error-container": "#ffdad6",
+                      "surface-container-low": "#f3f4f5",
+                      "tertiary-container": "#573500",
+                      "surface-variant": "#e1e3e4",
+                      "on-secondary-fixed-variant": "#005230",
+                      "secondary-fixed-dim": "#7ed9a3",
+                      "on-tertiary": "#ffffff",
+                      "on-primary-fixed": "#001b3f",
+                      "error": "#ba1a1a",
+                      "tertiary-fixed-dim": "#ffb95f",
+                      "on-surface": "#191c1d",
+                      "surface-container-highest": "#e1e3e4",
+                      "surface-dim": "#d9dadb",
+                      "outline": "#747780",
+                      "on-tertiary-fixed": "#2a1700",
+                      "tertiary": "#3a2100",
+                      "inverse-primary": "#abc7ff",
+                      "background": "#f8f9fa",
+                      "surface-bright": "#f8f9fa",
+                      "on-primary-container": "#8aa8e0",
+                      "outline-variant": "#c4c6d0",
+                      "on-primary-fixed-variant": "#264679",
+                      "on-error": "#ffffff",
+                      "on-background": "#191c1d",
+                      "tertiary-fixed": "#ffddb8",
+                      "secondary": "#006d42",
+                      "surface-container": "#edeeef",
+                      "on-surface-variant": "#43474f",
+                      "on-tertiary-fixed-variant": "#653e00",
+                      "surface-tint": "#405e92",
+                      "primary": "#002653",
+                      "primary-fixed": "#d7e3ff",
+                      "secondary-fixed": "#9af6be",
+                      "on-tertiary-container": "#e89500",
+                      "on-secondary-container": "#087347",
+                      "primary-fixed-dim": "#abc7ff",
+                      "inverse-on-surface": "#f0f1f2",
+                      "primary-container": "#1a3c6e",
+                      "on-error-container": "#93000a",
+                      "surface-container-lowest": "#ffffff",
+                      "surface": "#f8f9fa",
+                      "secondary-container": "#9af6be",
+                      "on-primary": "#ffffff",
+                      "on-secondary": "#ffffff",
+                      "inverse-surface": "#2e3132"
+              },
+              "borderRadius": {
+                      "DEFAULT": "0.25rem",
+                      "lg": "0.5rem",
+                      "xl": "0.75rem",
+                      "full": "9999px"
+              },
+              "spacing": {
+                      "tap-target-min": "44px",
+                      "sm": "12px",
+                      "gutter-mobile": "12px",
+                      "xs": "8px",
+                      "md": "16px",
+                      "margin-mobile": "16px",
+                      "base": "4px",
+                      "lg": "24px",
+                      "xl": "32px"
+              },
+              "fontFamily": {
+                      "display-lg-mobile": ["Inter"],
+                      "display-lg": ["Inter"],
+                      "body-md": ["Inter"],
+                      "headline-sm": ["Inter"],
+                      "label-sm": ["Inter"],
+                      "body-lg": ["Inter"],
+                      "label-md": ["Inter"],
+                      "headline-md": ["Inter"]
+              },
+              "fontSize": {
+                      "display-lg-mobile": ["28px", { "lineHeight": "36px", "letterSpacing": "-0.02em", "fontWeight": "700" }],
+                      "display-lg": ["32px", { "lineHeight": "40px", "letterSpacing": "-0.02em", "fontWeight": "700" }],
+                      "body-md": ["16px", { "lineHeight": "24px", "fontWeight": "400" }],
+                      "headline-sm": ["20px", { "lineHeight": "28px", "fontWeight": "600" }],
+                      "label-sm": ["12px", { "lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "600" }],
+                      "body-lg": ["18px", { "lineHeight": "28px", "fontWeight": "400" }],
+                      "label-md": ["14px", { "lineHeight": "20px", "letterSpacing": "0.01em", "fontWeight": "500" }],
+                      "headline-md": ["24px", { "lineHeight": "32px", "fontWeight": "600" }]
+              }
+            }
+          }
+        }
+    </script>
+<style>
+        body {
+            background-color: #f8f9fa; /* background */
+            color: #191c1d; /* on-background */
+            font-family: 'Inter', sans-serif;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+        .glass-card {
+            background: rgba(255, 255, 255, 0.85);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.4);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.04);
+        }
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .material-symbols-outlined.fill-icon {
+            font-variation-settings: 'FILL' 1, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        
+        /* Custom Toggle Switch */
+        .toggle-checkbox:checked {
+            right: 0;
+            border-color: #002653; /* primary */
+        }
+        .toggle-checkbox:checked + .toggle-label {
+            background-color: #002653; /* primary */
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="min-h-screen pb-safe">
+<!-- TopAppBar -->
+<header class="w-full sticky top-0 z-50 bg-surface text-primary border-b border-outline-variant flat no shadows">
+<div class="flex items-center justify-between px-margin-mobile py-sm w-full max-w-7xl mx-auto">
+<div class="flex items-center gap-xs">
+<button aria-label="Search" class="p-xs hover:bg-surface-container-low transition-colors rounded-full active:scale-95 duration-100 flex items-center justify-center min-h-[44px] min-w-[44px]">
+<span class="material-symbols-outlined text-primary" data-icon="search">search</span>
+</button>
+</div>
+<h1 class="font-headline-md text-headline-md text-primary tracking-tight">SahaVest</h1>
+<div class="flex items-center gap-xs">
+<button aria-label="Account" class="p-xs hover:bg-surface-container-low transition-colors rounded-full active:scale-95 duration-100 flex items-center justify-center min-h-[44px] min-w-[44px]">
+<span class="material-symbols-outlined text-primary" data-icon="account_circle">account_circle</span>
+</button>
+</div>
+</div>
+</header>
+<!-- Main Content -->
+<main class="w-full max-w-3xl mx-auto px-margin-mobile py-lg pb-[88px] md:pb-lg flex flex-col gap-lg">
+<!-- Header Section -->
+<div class="flex flex-col gap-xs">
+<h2 class="font-display-lg-mobile text-display-lg-mobile md:font-display-lg md:text-display-lg text-on-surface">Community Leaderboard</h2>
+<p class="font-body-md text-body-md text-on-surface-variant">See how your portfolio performance compares to the SahaVest community.</p>
+</div>
+<!-- Privacy Control Card -->
+<section class="glass-card rounded-xl p-md flex flex-col sm:flex-row sm:items-center justify-between gap-md">
+<div class="flex flex-col gap-base">
+<div class="flex items-center gap-sm">
+<span class="material-symbols-outlined text-secondary" data-icon="shield">shield</span>
+<h3 class="font-headline-sm text-headline-sm text-on-surface">Public Profile</h3>
+</div>
+<p class="font-body-md text-body-md text-on-surface-variant">Only your initials are shown to others.</p>
+</div>
+<!-- Toggle -->
+<div class="relative inline-block w-12 mr-2 align-middle select-none transition duration-200 ease-in flex-shrink-0">
+<input checked="" class="toggle-checkbox absolute block w-6 h-6 rounded-full bg-white border-4 appearance-none cursor-pointer focus:ring-0 focus:outline-none z-10 transition-transform duration-200 ease-in-out left-0" id="privacy-toggle" name="toggle" type="checkbox">
+<label class="toggle-label block overflow-hidden h-6 rounded-full bg-outline-variant cursor-pointer transition-colors duration-200 ease-in-out" for="privacy-toggle"></label>
+</div>
+</section>
+<!-- Leaderboard List -->
+<section class="glass-card rounded-xl overflow-hidden flex flex-col">
+<!-- Header Row -->
+<div class="flex items-center px-md py-sm border-b border-surface-variant bg-surface-container-lowest">
+<div class="w-12 font-label-md text-label-md text-on-surface-variant">Rank</div>
+<div class="flex-1 font-label-md text-label-md text-on-surface-variant">Investor</div>
+<div class="text-right font-label-md text-label-md text-on-surface-variant">Return</div>
+</div>
+<!-- List Items -->
+<div class="flex flex-col">
+<!-- Rank 1 -->
+<div class="flex items-center px-md py-md border-b border-surface-variant hover:bg-surface-container-lowest transition-colors">
+<div class="w-12 font-headline-sm text-headline-sm text-primary flex items-center">
+<span class="w-8 h-8 rounded-full bg-primary-fixed text-primary flex items-center justify-center font-label-sm text-label-sm">1</span>
+</div>
+<div class="flex-1 flex items-center gap-sm">
+<div class="w-10 h-10 rounded-full bg-surface-container-high flex items-center justify-center font-headline-sm text-headline-sm text-on-surface">A.K.</div>
+<span class="font-body-lg text-body-lg text-on-surface font-medium">A.K.</span>
+</div>
+<div class="text-right flex flex-col">
+<span class="font-body-lg text-body-lg text-secondary font-medium">+14.2%</span>
+</div>
+</div>
+<!-- Rank 2 -->
+<div class="flex items-center px-md py-md border-b border-surface-variant hover:bg-surface-container-lowest transition-colors">
+<div class="w-12 font-headline-sm text-headline-sm text-on-surface-variant flex items-center">
+<span class="w-8 h-8 rounded-full bg-surface-container-high text-on-surface-variant flex items-center justify-center font-label-sm text-label-sm">2</span>
+</div>
+<div class="flex-1 flex items-center gap-sm">
+<div class="w-10 h-10 rounded-full bg-surface-container-high flex items-center justify-center font-headline-sm text-headline-sm text-on-surface">S.M.</div>
+<span class="font-body-lg text-body-lg text-on-surface font-medium">S.M.</span>
+</div>
+<div class="text-right flex flex-col">
+<span class="font-body-lg text-body-lg text-secondary font-medium">+12.8%</span>
+</div>
+</div>
+<!-- Rank 3 (Current User Highlighted) -->
+<div class="flex items-center px-md py-md border-b border-surface-variant bg-secondary-fixed-dim bg-opacity-20 relative overflow-hidden group">
+<div class="absolute left-0 top-0 bottom-0 w-1 bg-secondary"></div>
+<div class="w-12 font-headline-sm text-headline-sm text-on-surface flex items-center">
+<span class="w-8 h-8 rounded-full bg-secondary-container text-on-secondary-container flex items-center justify-center font-label-sm text-label-sm">3</span>
+</div>
+<div class="flex-1 flex items-center gap-sm">
+<div class="w-10 h-10 rounded-full bg-primary text-on-primary flex items-center justify-center font-headline-sm text-headline-sm">R.S.</div>
+<div class="flex flex-col">
+<span class="font-body-lg text-body-lg text-on-surface font-semibold">You (R.S.)</span>
+</div>
+</div>
+<div class="text-right flex flex-col">
+<span class="font-body-lg text-body-lg text-secondary font-semibold">+11.5%</span>
+</div>
+</div>
+<!-- Rank 4 -->
+<div class="flex items-center px-md py-md border-b border-surface-variant hover:bg-surface-container-lowest transition-colors">
+<div class="w-12 font-headline-sm text-headline-sm text-on-surface-variant flex items-center">
+<span class="w-8 h-8 flex items-center justify-center font-body-md text-body-md">4</span>
+</div>
+<div class="flex-1 flex items-center gap-sm">
+<div class="w-10 h-10 rounded-full bg-surface-container-high flex items-center justify-center font-headline-sm text-headline-sm text-on-surface">P.D.</div>
+<span class="font-body-lg text-body-lg text-on-surface font-medium">P.D.</span>
+</div>
+<div class="text-right flex flex-col">
+<span class="font-body-lg text-body-lg text-secondary font-medium">+9.4%</span>
+</div>
+</div>
+<!-- Rank 5 -->
+<div class="flex items-center px-md py-md hover:bg-surface-container-lowest transition-colors">
+<div class="w-12 font-headline-sm text-headline-sm text-on-surface-variant flex items-center">
+<span class="w-8 h-8 flex items-center justify-center font-body-md text-body-md">5</span>
+</div>
+<div class="flex-1 flex items-center gap-sm">
+<div class="w-10 h-10 rounded-full bg-surface-container-high flex items-center justify-center font-headline-sm text-headline-sm text-on-surface">N.J.</div>
+<span class="font-body-lg text-body-lg text-on-surface font-medium">N.J.</span>
+</div>
+<div class="text-right flex flex-col">
+<span class="font-body-lg text-body-lg text-secondary font-medium">+8.1%</span>
+</div>
+</div>
+</div>
+</section>
+</main>
+<!-- BottomNavBar (Mobile Only) -->
+<nav class="md:hidden fixed bottom-0 w-full z-50 bg-surface border-t border-outline-variant flat no shadows flex justify-around items-center h-[64px] px-2 pb-safe">
+<!-- Dashboard - Inactive -->
+<a class="flex flex-col items-center justify-center text-on-surface-variant p-2 hover:bg-surface-container-high rounded-full active:scale-90 duration-200 ease-in-out min-h-[44px] min-w-[44px]" href="#">
+<span class="material-symbols-outlined" data-icon="dashboard">dashboard</span>
+<span class="font-label-sm text-label-sm mt-1">Dashboard</span>
+</a>
+<!-- Portfolio - Inactive -->
+<a class="flex flex-col items-center justify-center text-on-surface-variant p-2 hover:bg-surface-container-high rounded-full active:scale-90 duration-200 ease-in-out min-h-[44px] min-w-[44px]" href="#">
+<span class="material-symbols-outlined" data-icon="account_balance_wallet">account_balance_wallet</span>
+<span class="font-label-sm text-label-sm mt-1">Portfolio</span>
+</a>
+<!-- Protection - Inactive -->
+<a class="flex flex-col items-center justify-center text-on-surface-variant p-2 hover:bg-surface-container-high rounded-full active:scale-90 duration-200 ease-in-out min-h-[44px] min-w-[44px]" href="#">
+<span class="material-symbols-outlined" data-icon="shield">shield</span>
+<span class="font-label-sm text-label-sm mt-1">Protection</span>
+</a>
+<!-- Profile - Active (Matches intent of viewing user ranking/profile setting) -->
+<a class="flex flex-col items-center justify-center bg-secondary-container text-on-secondary-container rounded-full px-4 py-1 hover:bg-surface-container-high active:scale-90 duration-200 ease-in-out min-h-[44px] min-w-[44px]" href="#">
+<span class="material-symbols-outlined fill-icon" data-icon="person">person</span>
+<span class="font-label-sm text-label-sm mt-1">Profile</span>
+</a>
+</nav>
+<script>
+        // Simple toggle logic for the custom switch to handle keyboard accessibility
+        const toggleInput = document.getElementById('privacy-toggle');
+        toggleInput.addEventListener('keydown', function(e) {
+            if (e.key === 'Enter' || e.key === ' ') {
+                e.preventDefault();
+                this.checked = !this.checked;
+            }
+        });
+    </script>
+</body></html>

@@ -1,0 +1,229 @@
+<!DOCTYPE html><html lang="en"><head>
+<meta charset="utf-8">
+<meta content="width=device-width, initial-scale=1.0" name="viewport">
+<title>Linking Accounts - SahaVest</title>
+<!-- Google Fonts: Inter -->
+<link href="https://fonts.googleapis.com" rel="preconnect">
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet">
+<!-- Material Symbols -->
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<!-- Tailwind CSS -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<!-- Tailwind Config injected from prompt -->
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "surface-variant": "#e1e3e4",
+                        "surface": "#f8f9fa",
+                        "surface-dim": "#d9dadb",
+                        "surface-bright": "#f8f9fa",
+                        "surface-container": "#edeeef",
+                        "on-secondary-container": "#087347",
+                        "on-surface": "#191c1d",
+                        "surface-container-low": "#f3f4f5",
+                        "tertiary-fixed-dim": "#ffb95f",
+                        "on-primary-fixed": "#001b3f",
+                        "inverse-surface": "#2e3132",
+                        "inverse-primary": "#abc7ff",
+                        "error-container": "#ffdad6",
+                        "on-error-container": "#93000a",
+                        "tertiary-fixed": "#ffddb8",
+                        "background": "#f8f9fa",
+                        "on-tertiary-fixed": "#2a1700",
+                        "on-surface-variant": "#43474f",
+                        "on-error": "#ffffff",
+                        "on-primary-container": "#8aa8e0",
+                        "primary-fixed": "#d7e3ff",
+                        "on-secondary-fixed": "#002110",
+                        "on-background": "#191c1d",
+                        "primary": "#002653",
+                        "secondary": "#006d42",
+                        "tertiary-container": "#573500",
+                        "on-secondary-fixed-variant": "#005230",
+                        "error": "#ba1a1a",
+                        "outline": "#747780",
+                        "surface-tint": "#405e92",
+                        "primary-fixed-dim": "#abc7ff",
+                        "tertiary": "#3a2100",
+                        "primary-container": "#1a3c6e",
+                        "inverse-on-surface": "#f0f1f2",
+                        "on-primary": "#ffffff",
+                        "secondary-container": "#9af6be",
+                        "secondary-fixed-dim": "#7ed9a3",
+                        "on-tertiary-fixed-variant": "#653e00",
+                        "on-primary-fixed-variant": "#264679",
+                        "on-secondary": "#ffffff",
+                        "outline-variant": "#c4c6d0",
+                        "surface-container-high": "#e7e8e9",
+                        "secondary-fixed": "#9af6be",
+                        "on-tertiary": "#ffffff",
+                        "surface-container-lowest": "#ffffff",
+                        "surface-container-highest": "#e1e3e4",
+                        "on-tertiary-container": "#e89500"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "md": "16px",
+                        "base": "4px",
+                        "tap-target-min": "44px",
+                        "xl": "32px",
+                        "margin-mobile": "16px",
+                        "sm": "12px",
+                        "gutter-mobile": "12px",
+                        "xs": "8px",
+                        "lg": "24px"
+                    },
+                    "fontFamily": {
+                        "display-lg": ["Inter"],
+                        "display-lg-mobile": ["Inter"],
+                        "label-md": ["Inter"],
+                        "headline-sm": ["Inter"],
+                        "headline-md": ["Inter"],
+                        "label-sm": ["Inter"],
+                        "body-lg": ["Inter"],
+                        "body-md": ["Inter"]
+                    },
+                    "fontSize": {
+                        "display-lg": ["32px", { "lineHeight": "40px", "letterSpacing": "-0.02em", "fontWeight": "700" }],
+                        "display-lg-mobile": ["28px", { "lineHeight": "36px", "letterSpacing": "-0.02em", "fontWeight": "700" }],
+                        "label-md": ["14px", { "lineHeight": "20px", "letterSpacing": "0.01em", "fontWeight": "500" }],
+                        "headline-sm": ["20px", { "lineHeight": "28px", "fontWeight": "600" }],
+                        "headline-md": ["24px", { "lineHeight": "32px", "fontWeight": "600" }],
+                        "label-sm": ["12px", { "lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "600" }],
+                        "body-lg": ["18px", { "lineHeight": "28px", "fontWeight": "400" }],
+                        "body-md": ["16px", { "lineHeight": "24px", "fontWeight": "400" }]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        /* Custom animations for the progress screen */
+        @keyframes subtle-pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.6; }
+        }
+        .animate-subtle-pulse {
+            animation: subtle-pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+        }
+        @keyframes progress-fill {
+            from { width: 0%; }
+            to { width: 50%; }
+        }
+        .animate-progress {
+            animation: progress-fill 1s ease-out forwards;
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background text-on-background min-h-screen flex flex-col font-body-md antialiased selection:bg-primary-fixed selection:text-on-primary-fixed">
+<!-- 
+        Navigation Shell Suppressed: 
+        As per the "Semantic Shell" mandate, this is a linear/transactional screen 
+        (Onboarding/Linking flow). Therefore, global navigation (TopAppBar/BottomNavBar) 
+        is intentionally hidden to prioritize the focused task canvas.
+    -->
+<!-- Main Content Canvas -->
+<main class="flex-1 flex flex-col items-center justify-center p-margin-mobile w-full max-w-lg mx-auto">
+<!-- Header Section -->
+<div class="w-full text-center mb-xl">
+<div class="inline-flex items-center justify-center w-16 h-16 rounded-full bg-primary-fixed text-on-primary-fixed mb-lg relative">
+<span class="material-symbols-outlined text-[32px] animate-spin" style="animation-duration: 3s;">autorenew</span>
+<div class="absolute inset-0 rounded-full border-4 border-primary/20 border-t-primary animate-spin" style="animation-duration: 1.5s;"></div>
+</div>
+<h1 class="font-headline-md text-headline-md text-on-surface mb-sm">Linking your wealth</h1>
+<p class="font-body-md text-body-md text-on-surface-variant max-w-[280px] mx-auto">
+                Establishing secure connections to your financial institutions. Please don't close this screen.
+            </p>
+</div>
+<!-- Progress Indicator -->
+<div class="w-full bg-surface-container-lowest rounded-xl p-md border border-outline-variant mb-lg shadow-sm">
+<div class="flex justify-between items-end mb-sm">
+<div>
+<span class="font-label-sm text-label-sm text-on-surface-variant uppercase tracking-wider block mb-base">Status</span>
+<span class="font-headline-sm text-headline-sm text-primary">50% Complete</span>
+</div>
+<div class="flex items-center gap-xs bg-surface-container-high rounded-full px-sm py-1">
+<span class="material-symbols-outlined text-[16px] text-on-surface-variant">timer</span>
+<span class="font-label-sm text-label-sm text-on-surface-variant animate-subtle-pulse">Approx. 2 mins left</span>
+</div>
+</div>
+<!-- Linear Progress Track -->
+<div class="w-full h-2 bg-surface-variant rounded-full overflow-hidden">
+<div class="h-full bg-primary rounded-full animate-progress" style="width: 50%;"></div>
+</div>
+</div>
+<!-- Vertical Checklist -->
+<div class="w-full flex flex-col gap-sm mb-xl">
+<!-- Item 1: Bank (Done) -->
+<div class="flex items-center p-sm bg-surface-container-lowest rounded-lg border border-outline-variant transition-all">
+<div class="flex-shrink-0 mr-md">
+<span class="material-symbols-outlined text-[24px] text-secondary" style="font-variation-settings: 'FILL' 1;">check_circle</span>
+</div>
+<div class="flex-1">
+<h3 class="font-label-md text-label-md text-on-surface">Bank Accounts</h3>
+<p class="font-body-md text-[13px] text-on-surface-variant">HDFC &amp; SBI Verified</p>
+</div>
+<span class="font-label-sm text-label-sm text-secondary bg-secondary/10 px-2 py-1 rounded">Linked</span>
+</div>
+<!-- Item 2: Demat (Done) -->
+<div class="flex items-center p-sm bg-surface-container-lowest rounded-lg border border-outline-variant transition-all">
+<div class="flex-shrink-0 mr-md">
+<span class="material-symbols-outlined text-[24px] text-secondary" style="font-variation-settings: 'FILL' 1;">check_circle</span>
+</div>
+<div class="flex-1">
+<h3 class="font-label-md text-label-md text-on-surface">Demat Holdings</h3>
+<p class="font-body-md text-[13px] text-on-surface-variant">Zerodha Connected</p>
+</div>
+<span class="font-label-sm text-label-sm text-secondary bg-secondary/10 px-2 py-1 rounded">Linked</span>
+</div>
+<!-- Item 3: Mutual Fund (In Progress) -->
+<div class="flex items-center p-sm bg-primary/5 rounded-lg border border-primary/20 relative overflow-hidden">
+<div class="absolute left-0 top-0 bottom-0 w-1 bg-primary"></div>
+<div class="flex-shrink-0 mr-md">
+<span class="material-symbols-outlined text-[24px] text-primary animate-spin">sync</span>
+</div>
+<div class="flex-1">
+<h3 class="font-label-md text-label-md text-on-surface">Mutual Funds</h3>
+<p class="font-body-md text-[13px] text-on-surface-variant">Fetching CAS statement...</p>
+</div>
+<span class="font-label-sm text-label-sm text-primary animate-subtle-pulse">In-progress</span>
+</div>
+<!-- Item 4: NPS (Pending) -->
+<div class="flex items-center p-sm bg-surface rounded-lg border border-transparent opacity-70">
+<div class="flex-shrink-0 mr-md">
+<span class="material-symbols-outlined text-[24px] text-outline">schedule</span>
+</div>
+<div class="flex-1">
+<h3 class="font-label-md text-label-md text-on-surface text-outline">NPS Tier 1 &amp; 2</h3>
+<p class="font-body-md text-[13px] text-outline">Waiting in queue</p>
+</div>
+<span class="font-label-sm text-label-sm text-outline">Pending</span>
+</div>
+</div>
+<!-- Footer Action -->
+<div class="w-full mt-auto pb-lg">
+<button class="w-full min-h-[48px] flex items-center justify-center gap-xs rounded-full border border-outline-variant bg-surface-container-lowest hover:bg-surface-container-low transition-colors text-primary font-label-md text-label-md">
+<span class="material-symbols-outlined text-[20px]">notifications_active</span>
+                Notify me when done
+            </button>
+<p class="text-center font-body-md text-[12px] text-on-surface-variant mt-sm">
+                You can safely minimize the app. We'll send a push notification once complete.
+            </p>
+</div>
+</main>
+</body></html>

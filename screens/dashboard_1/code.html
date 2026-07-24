@@ -1,0 +1,235 @@
+<!DOCTYPE html><html lang="en"><head>
+<meta charset="utf-8">
+<meta content="width=device-width, initial-scale=1.0" name="viewport">
+<title>SahaVest - Dashboard</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+        tailwind.config = {
+          darkMode: "class",
+          theme: {
+            extend: {
+              "colors": {
+                      "surface-variant": "#e1e3e4",
+                      "surface": "#f8f9fa",
+                      "surface-dim": "#d9dadb",
+                      "surface-bright": "#f8f9fa",
+                      "surface-container": "#edeeef",
+                      "on-secondary-container": "#087347",
+                      "on-surface": "#191c1d",
+                      "surface-container-low": "#f3f4f5",
+                      "tertiary-fixed-dim": "#ffb95f",
+                      "on-primary-fixed": "#001b3f",
+                      "inverse-surface": "#2e3132",
+                      "inverse-primary": "#abc7ff",
+                      "error-container": "#ffdad6",
+                      "on-error-container": "#93000a",
+                      "tertiary-fixed": "#ffddb8",
+                      "background": "#f8f9fa",
+                      "on-tertiary-fixed": "#2a1700",
+                      "on-surface-variant": "#43474f",
+                      "on-error": "#ffffff",
+                      "on-primary-container": "#8aa8e0",
+                      "primary-fixed": "#d7e3ff",
+                      "on-secondary-fixed": "#002110",
+                      "on-background": "#191c1d",
+                      "primary": "#002653",
+                      "secondary": "#006d42",
+                      "tertiary-container": "#573500",
+                      "on-secondary-fixed-variant": "#005230",
+                      "error": "#ba1a1a",
+                      "outline": "#747780",
+                      "surface-tint": "#405e92",
+                      "primary-fixed-dim": "#abc7ff",
+                      "tertiary": "#3a2100",
+                      "primary-container": "#1a3c6e",
+                      "inverse-on-surface": "#f0f1f2",
+                      "on-primary": "#ffffff",
+                      "secondary-container": "#9af6be",
+                      "secondary-fixed-dim": "#7ed9a3",
+                      "on-tertiary-fixed-variant": "#653e00",
+                      "on-primary-fixed-variant": "#264679",
+                      "on-secondary": "#ffffff",
+                      "outline-variant": "#c4c6d0",
+                      "surface-container-high": "#e7e8e9",
+                      "secondary-fixed": "#9af6be",
+                      "on-tertiary": "#ffffff",
+                      "surface-container-lowest": "#ffffff",
+                      "surface-container-highest": "#e1e3e4",
+                      "on-tertiary-container": "#e89500"
+              },
+              "borderRadius": {
+                      "DEFAULT": "0.25rem",
+                      "lg": "0.5rem",
+                      "xl": "0.75rem",
+                      "full": "9999px"
+              },
+              "spacing": {
+                      "md": "16px",
+                      "base": "4px",
+                      "tap-target-min": "44px",
+                      "xl": "32px",
+                      "margin-mobile": "16px",
+                      "sm": "12px",
+                      "gutter-mobile": "12px",
+                      "xs": "8px",
+                      "lg": "24px"
+              },
+              "fontFamily": {
+                      "display-lg": [
+                              "Inter"
+                      ],
+                      "display-lg-mobile": [
+                              "Inter"
+                      ],
+                      "label-md": [
+                              "Inter"
+                      ],
+                      "headline-sm": [
+                              "Inter"
+                      ],
+                      "headline-md": [
+                              "Inter"
+                      ],
+                      "label-sm": [
+                              "Inter"
+                      ],
+                      "body-lg": [
+                              "Inter"
+                      ],
+                      "body-md": [
+                              "Inter"
+                      ]
+              },
+              "fontSize": {
+                      "display-lg": [
+                              "32px",
+                              {
+                                      "lineHeight": "40px",
+                                      "letterSpacing": "-0.02em",
+                                      "fontWeight": "700"
+                              }
+                      ],
+                      "display-lg-mobile": [
+                              "28px",
+                              {
+                                      "lineHeight": "36px",
+                                      "letterSpacing": "-0.02em",
+                                      "fontWeight": "700"
+                              }
+                      ],
+                      "label-md": [
+                              "14px",
+                              {
+                                      "lineHeight": "20px",
+                                      "letterSpacing": "0.01em",
+                                      "fontWeight": "500"
+                              }
+                      ],
+                      "headline-sm": [
+                              "20px",
+                              {
+                                      "lineHeight": "28px",
+                                      "fontWeight": "600"
+                              }
+                      ],
+                      "headline-md": [
+                              "24px",
+                              {
+                                      "lineHeight": "32px",
+                                      "fontWeight": "600"
+                              }
+                      ],
+                      "label-sm": [
+                              "12px",
+                              {
+                                      "lineHeight": "16px",
+                                      "letterSpacing": "0.05em",
+                                      "fontWeight": "600"
+                              }
+                      ],
+                      "body-lg": [
+                              "18px",
+                              {
+                                      "lineHeight": "28px",
+                                      "fontWeight": "400"
+                              }
+                      ],
+                      "body-md": [
+                              "16px",
+                              {
+                                      "lineHeight": "24px",
+                                      "fontWeight": "400"
+                              }
+                      ]
+              }
+      },
+          },
+        }
+    </script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f8f9fa; /* bg-background */
+        }
+        .pb-safe { padding-bottom: env(safe-area-inset-bottom); }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="text-on-background min-h-screen flex flex-col">
+<!-- TopAppBar -->
+<header class="w-full sticky top-0 z-50 bg-surface border-b border-outline-variant flat no shadows">
+<div class="flex items-center justify-between px-margin-mobile py-sm w-full max-w-7xl mx-auto">
+<button aria-label="Search" class="text-primary hover:bg-surface-container-low transition-colors active:scale-95 duration-100 p-2 rounded-full">
+<span class="material-symbols-outlined" data-icon="search">search</span>
+</button>
+<h1 class="font-headline-md text-headline-md text-primary tracking-tight">SahaVest</h1>
+<button aria-label="Account" class="text-primary hover:bg-surface-container-low transition-colors active:scale-95 duration-100 p-2 rounded-full">
+<span class="material-symbols-outlined" data-icon="account_circle">account_circle</span>
+</button>
+</div>
+</header>
+<!-- Main Content Canvas (Empty State) -->
+<main class="flex-grow flex flex-col items-center justify-center p-margin-mobile max-w-md mx-auto text-center w-full pb-32">
+<div class="mb-8 w-48 h-48 rounded-full bg-surface-container-low flex items-center justify-center shadow-sm relative overflow-hidden border border-outline-variant/30">
+<!-- Illustration Placeholder -->
+<img alt="Secure Vault Illustration" class="w-full h-full object-cover opacity-80" data-alt="A clean, modern corporate illustration of a secure steel vault opening to reveal glowing, connected digital nodes representing financial accounts. The style is 3D isometric with a stark white and soft gray palette, highlighted by deep trust-blue accents. Bright, highly legible studio lighting creates a sense of financial zen and security." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAfqaayInJL_4WrbotpVPyVNxMUH_nXZIsgFmxiAMqXQT3UwWbNJijbLI9YJ792Bgw7OLseiFiPE7jgeW5wzEN--zeRRCqa3nynR3E8QW8NPQEgrXWVngcuFcUszeQIB28Bq3_n5eYWh97vZAsY4_lz_14sDHc6vmn6z-Q55Sf39gCaqzftANBipMSQ5XQ-CvvUZQACBo4kWrZlCFsAm65FqVjIMLIDe_fdMWpO6XXrIi13mntmYqbvSz3EFhmTq3vW2o2ecsEIlvE">
+</div>
+<h2 class="font-headline-sm text-headline-sm text-on-surface mb-xs">Welcome to Guided Prosperity</h2>
+<p class="font-body-md text-body-md text-on-surface-variant mb-xl px-4">
+            Your investment journey starts here. Link your accounts to see your unified net worth and gain crystal-clear insights.
+        </p>
+<button class="bg-primary text-on-primary w-full h-[48px] rounded-lg font-label-md text-label-md hover:opacity-90 active:scale-95 transition-all shadow-sm flex items-center justify-center gap-2">
+<span class="material-symbols-outlined text-[20px]" data-icon="link">link</span>
+            Link Accounts Now
+        </button>
+</main>
+<!-- BottomNavBar (Mobile Only) -->
+<nav class="md:hidden fixed bottom-0 w-full z-50 border-t border-outline-variant bg-surface flat no shadows flex justify-around items-center h-[64px] px-2 pb-safe">
+<!-- Dashboard (Active) -->
+<button class="flex flex-col items-center justify-center bg-secondary-container text-on-secondary-container rounded-full px-4 py-1 active:scale-90 duration-200 ease-in-out">
+<span class="material-symbols-outlined" data-icon="dashboard" data-weight="fill" style="font-variation-settings: 'FILL' 1;">dashboard</span>
+<span class="font-label-sm text-label-sm mt-1">Dashboard</span>
+</button>
+<!-- Portfolio -->
+<button class="flex flex-col items-center justify-center text-on-surface-variant p-2 hover:bg-surface-container-high rounded-full active:scale-90 duration-200 ease-in-out">
+<span class="material-symbols-outlined" data-icon="account_balance_wallet">account_balance_wallet</span>
+<span class="font-label-sm text-label-sm mt-1">Portfolio</span>
+</button>
+<!-- Protection -->
+<button class="flex flex-col items-center justify-center text-on-surface-variant p-2 hover:bg-surface-container-high rounded-full active:scale-90 duration-200 ease-in-out">
+<span class="material-symbols-outlined" data-icon="shield">shield</span>
+<span class="font-label-sm text-label-sm mt-1">Protection</span>
+</button>
+<!-- Profile -->
+<button class="flex flex-col items-center justify-center text-on-surface-variant p-2 hover:bg-surface-container-high rounded-full active:scale-90 duration-200 ease-in-out">
+<span class="material-symbols-outlined" data-icon="person">person</span>
+<span class="font-label-sm text-label-sm mt-1">Profile</span>
+</button>
+</nav>
+</body></html>

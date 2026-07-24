@@ -1,0 +1,180 @@
+<!DOCTYPE html><html class="h-full" lang="en"><head>
+<meta charset="utf-8">
+<meta content="width=device-width, initial-scale=1.0" name="viewport">
+<title>KYC Processing - SahaVest</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@100..900&amp;display=swap" rel="stylesheet">
+<script id="tailwind-config">
+        tailwind.config = {
+          darkMode: "class",
+          theme: {
+            extend: {
+              "colors": {
+                      "surface-container-highest": "#e1e3e4",
+                      "tertiary-fixed": "#ffddb8",
+                      "secondary": "#006d42",
+                      "tertiary-fixed-dim": "#ffb95f",
+                      "error-container": "#ffdad6",
+                      "outline-variant": "#c4c6d0",
+                      "on-surface": "#191c1d",
+                      "surface-container-high": "#e7e8e9",
+                      "on-error-container": "#93000a",
+                      "inverse-on-surface": "#f0f1f2",
+                      "primary-fixed": "#d7e3ff",
+                      "surface": "#f8f9fa",
+                      "secondary-container": "#9af6be",
+                      "tertiary-container": "#573500",
+                      "surface-container-lowest": "#ffffff",
+                      "primary-container": "#1a3c6e",
+                      "on-secondary": "#ffffff",
+                      "surface-container": "#edeeef",
+                      "secondary-fixed-dim": "#7ed9a3",
+                      "on-primary-fixed-variant": "#264679",
+                      "surface-container-low": "#f3f4f5",
+                      "on-primary-container": "#8aa8e0",
+                      "error": "#ba1a1a",
+                      "secondary-fixed": "#9af6be",
+                      "on-surface-variant": "#43474f",
+                      "inverse-surface": "#2e3132",
+                      "on-secondary-fixed-variant": "#005230",
+                      "primary-fixed-dim": "#abc7ff",
+                      "outline": "#747780",
+                      "on-tertiary": "#ffffff",
+                      "on-background": "#191c1d",
+                      "on-secondary-container": "#087347",
+                      "on-secondary-fixed": "#002110",
+                      "surface-bright": "#f8f9fa",
+                      "on-tertiary-fixed-variant": "#653e00",
+                      "inverse-primary": "#abc7ff",
+                      "tertiary": "#3a2100",
+                      "surface-tint": "#405e92",
+                      "primary": "#002653",
+                      "on-tertiary-container": "#e89500",
+                      "on-primary": "#ffffff",
+                      "surface-variant": "#e1e3e4",
+                      "background": "#f8f9fa",
+                      "on-error": "#ffffff",
+                      "surface-dim": "#d9dadb",
+                      "on-tertiary-fixed": "#2a1700",
+                      "on-primary-fixed": "#001b3f"
+              },
+              "borderRadius": {
+                      "DEFAULT": "0.25rem",
+                      "lg": "0.5rem",
+                      "xl": "0.75rem",
+                      "full": "9999px"
+              },
+              "spacing": {
+                      "lg": "24px",
+                      "xs": "8px",
+                      "xl": "32px",
+                      "md": "16px",
+                      "margin-mobile": "16px",
+                      "tap-target-min": "44px",
+                      "gutter-mobile": "12px",
+                      "sm": "12px",
+                      "base": "4px"
+              },
+              "fontFamily": {
+                      "display-lg-mobile": ["Inter"],
+                      "body-lg": ["Inter"],
+                      "label-sm": ["Inter"],
+                      "label-md": ["Inter"],
+                      "headline-sm": ["Inter"],
+                      "headline-md": ["Inter"],
+                      "display-lg": ["Inter"],
+                      "body-md": ["Inter"]
+              },
+              "fontSize": {
+                      "display-lg-mobile": ["28px", {"lineHeight": "36px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                      "body-lg": ["18px", {"lineHeight": "28px", "fontWeight": "400"}],
+                      "label-sm": ["12px", {"lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "600"}],
+                      "label-md": ["14px", {"lineHeight": "20px", "letterSpacing": "0.01em", "fontWeight": "500"}],
+                      "headline-sm": ["20px", {"lineHeight": "28px", "fontWeight": "600"}],
+                      "headline-md": ["24px", {"lineHeight": "32px", "fontWeight": "600"}],
+                      "display-lg": ["32px", {"lineHeight": "40px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                      "body-md": ["16px", {"lineHeight": "24px", "fontWeight": "400"}]
+              }
+            }
+          }
+        }
+    </script>
+<style>
+        .spin-slow {
+            animation: spin 3s linear infinite;
+        }
+        @keyframes spin {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+        .pulse-soft {
+            animation: pulse-op 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+        }
+        @keyframes pulse-op {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.6; }
+        }
+        
+        .timer-progress {
+            stroke-dasharray: 283;
+            stroke-dashoffset: 283;
+            animation: countdown 30s linear forwards;
+        }
+        @keyframes countdown {
+            from { stroke-dashoffset: 283; }
+            to { stroke-dashoffset: 0; }
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background text-on-background h-full flex flex-col font-sans">
+<!-- Top Navigation (Shell suppressed due to Transactional/Linear state, keeping only a minimal header for brand presence if needed, but per prompt, standard nav shell is suppressed. Implementing a simple back/brand header) -->
+<header class="w-full flex items-center justify-center py-lg border-b border-surface-variant bg-surface sticky top-0 z-50">
+<div class="font-headline-md text-headline-md text-primary tracking-tight">SahaVest</div>
+</header>
+<!-- Main Content -->
+<main class="flex-grow flex flex-col items-center justify-center p-margin-mobile md:px-lg max-w-md mx-auto w-full text-center">
+<!-- Central Animated Progress Ring -->
+<div class="relative w-48 h-48 mb-xl">
+<!-- Background Ring -->
+<svg class="w-full h-full transform -rotate-90" viewBox="0 0 100 100">
+<circle class="text-surface-container-high" cx="50" cy="50" fill="none" r="45" stroke="currentColor" stroke-width="6"></circle>
+<!-- Animated Progress -->
+<circle class="text-secondary timer-progress" cx="50" cy="50" fill="none" r="45" stroke="currentColor" stroke-linecap="round" stroke-width="6"></circle>
+</svg>
+<!-- Inner Icon / Shield -->
+<div class="absolute inset-0 flex items-center justify-center pulse-soft">
+<span class="material-symbols-outlined text-[64px] text-primary" data-icon="shield_lock" style="font-variation-settings: 'FILL' 0, 'wght' 200;">shield_lock</span>
+</div>
+</div>
+<!-- Primary Message -->
+<h1 class="font-display-lg-mobile text-display-lg-mobile md:font-display-lg md:text-display-lg text-on-surface mb-sm">Verifying your details...</h1>
+<p class="font-body-lg text-body-lg text-on-surface-variant mb-xl max-w-[280px]">
+            Please wait a moment while we securely process your information.
+        </p>
+<!-- Reassurance Banner -->
+<div class="bg-surface-container-low border border-outline-variant rounded-xl p-md flex items-start gap-md mb-xl w-full text-left shadow-[0_4px_12px_rgba(0,0,0,0.04)]">
+<span class="material-symbols-outlined text-secondary mt-1" data-icon="verified" style="font-variation-settings: 'FILL' 1;">verified</span>
+<div>
+<p class="font-label-md text-label-md text-on-surface mb-1">Secure &amp; Compliant</p>
+<p class="font-body-md text-body-md text-on-surface-variant">SahaVest is safe and uses RBI-regulated protocols for all data verification.</p>
+</div>
+</div>
+</main>
+<!-- Timeout / Fallback Section (Fixed at bottom) -->
+<div class="w-full bg-surface-container-lowest border-t border-surface-variant p-margin-mobile md:p-lg">
+<div class="max-w-md mx-auto text-center">
+<p class="font-label-sm text-label-sm text-outline uppercase tracking-wider mb-sm">Taking too long?</p>
+<button class="w-full h-[56px] min-h-[56px] flex items-center justify-center gap-xs rounded-full border border-outline text-on-surface hover:bg-surface-container-low transition-colors duration-200 active:scale-[0.98]">
+<span class="material-symbols-outlined text-[20px]" data-icon="upload_file">upload_file</span>
+<span class="font-label-md text-label-md">Try alternate KYC via Aadhaar upload</span>
+</button>
+</div>
+</div>
+</body></html>

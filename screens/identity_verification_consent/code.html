@@ -1,0 +1,196 @@
+<!DOCTYPE html><html class="light" lang="en"><head>
+<meta charset="utf-8">
+<meta content="width=device-width, initial-scale=1.0" name="viewport">
+<title>SahaVest - DigiLocker Consent</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "surface-container-highest": "#e1e3e4",
+                        "tertiary-fixed": "#ffddb8",
+                        "secondary": "#006d42",
+                        "tertiary-fixed-dim": "#ffb95f",
+                        "error-container": "#ffdad6",
+                        "outline-variant": "#c4c6d0",
+                        "on-surface": "#191c1d",
+                        "surface-container-high": "#e7e8e9",
+                        "on-error-container": "#93000a",
+                        "inverse-on-surface": "#f0f1f2",
+                        "primary-fixed": "#d7e3ff",
+                        "surface": "#f8f9fa",
+                        "secondary-container": "#9af6be",
+                        "tertiary-container": "#573500",
+                        "surface-container-lowest": "#ffffff",
+                        "primary-container": "#1a3c6e",
+                        "on-secondary": "#ffffff",
+                        "surface-container": "#edeeef",
+                        "secondary-fixed-dim": "#7ed9a3",
+                        "on-primary-fixed-variant": "#264679",
+                        "surface-container-low": "#f3f4f5",
+                        "on-primary-container": "#8aa8e0",
+                        "error": "#ba1a1a",
+                        "secondary-fixed": "#9af6be",
+                        "on-surface-variant": "#43474f",
+                        "inverse-surface": "#2e3132",
+                        "on-secondary-fixed-variant": "#005230",
+                        "primary-fixed-dim": "#abc7ff",
+                        "outline": "#747780",
+                        "on-tertiary": "#ffffff",
+                        "on-background": "#191c1d",
+                        "on-secondary-container": "#087347",
+                        "on-secondary-fixed": "#002110",
+                        "surface-bright": "#f8f9fa",
+                        "on-tertiary-fixed-variant": "#653e00",
+                        "inverse-primary": "#abc7ff",
+                        "tertiary": "#3a2100",
+                        "surface-tint": "#405e92",
+                        "primary": "#002653",
+                        "on-tertiary-container": "#e89500",
+                        "on-primary": "#ffffff",
+                        "surface-variant": "#e1e3e4",
+                        "background": "#f8f9fa",
+                        "on-error": "#ffffff",
+                        "surface-dim": "#d9dadb",
+                        "on-tertiary-fixed": "#2a1700",
+                        "on-primary-fixed": "#001b3f"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "lg": "24px",
+                        "xs": "8px",
+                        "xl": "32px",
+                        "md": "16px",
+                        "margin-mobile": "16px",
+                        "tap-target-min": "44px",
+                        "gutter-mobile": "12px",
+                        "sm": "12px",
+                        "base": "4px"
+                    },
+                    "fontFamily": {
+                        "display-lg-mobile": ["Inter"],
+                        "body-lg": ["Inter"],
+                        "label-sm": ["Inter"],
+                        "label-md": ["Inter"],
+                        "headline-sm": ["Inter"],
+                        "headline-md": ["Inter"],
+                        "display-lg": ["Inter"],
+                        "body-md": ["Inter"]
+                    },
+                    "fontSize": {
+                        "display-lg-mobile": ["28px", { "lineHeight": "36px", "letterSpacing": "-0.02em", "fontWeight": "700" }],
+                        "body-lg": ["18px", { "lineHeight": "28px", "fontWeight": "400" }],
+                        "label-sm": ["12px", { "lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "600" }],
+                        "label-md": ["14px", { "lineHeight": "20px", "letterSpacing": "0.01em", "fontWeight": "500" }],
+                        "headline-sm": ["20px", { "lineHeight": "28px", "fontWeight": "600" }],
+                        "headline-md": ["24px", { "lineHeight": "32px", "fontWeight": "600" }],
+                        "display-lg": ["32px", { "lineHeight": "40px", "letterSpacing": "-0.02em", "fontWeight": "700" }],
+                        "body-md": ["16px", { "lineHeight": "24px", "fontWeight": "400" }]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        body {
+            background-color: #f8f9fa; /* surface */
+        }
+        .material-symbols-outlined {
+          font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background text-on-background antialiased flex flex-col min-h-screen">
+<!-- Content Canvas -->
+<main class="flex-grow flex items-center justify-center p-margin-mobile">
+<div class="w-full max-w-md bg-surface-container-lowest rounded-xl shadow-[0_4px_12px_rgba(0,0,0,0.04)] border border-outline-variant overflow-hidden flex flex-col">
+<!-- Header Section -->
+<div class="p-lg bg-surface-container-low border-b border-outline-variant text-center relative">
+<!-- Decorative elements for trust -->
+<div class="flex justify-center items-center gap-4 mb-4">
+<img class="h-12 w-auto object-contain" data-alt="A highly detailed vector logo of the Indian Government emblem, representing official authority and trust. The style is crisp, modern, and minimalist, utilizing deep navy blue and pristine white to convey security and reliability in a financial context. The lighting is flat and uniform, emphasizing legibility and official status. The mood is serious and trustworthy." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBuLwRzCYc66_8Z_n4nJpsamrSr0L3EbQmCkbHhPxYMm9n-u1ClpQHtRY437jsNb-RO_9wd5SgNylAbDmjP5YC2qdTifq0hH8AXAvKHk46ccH2j6rmEPh0kbiRjdAPoUiu3Fk4VRqLLjr9QjEfJuwjpVV3foTFYU1RnHbTni7ioUlA-uphgrTVv9w7pWnMyQr9_n7xQWW0yYY8LyevF69EJ0qwXigCvH4OY8Ix2wFSE892JdABkzLSDsbGAG0H9bD4yXvfcjpKVeMQ">
+<span class="text-on-surface-variant">
+<span class="material-symbols-outlined text-[32px]">sync_alt</span>
+</span>
+<img class="h-12 w-auto object-contain" data-alt="A sophisticated vector logo representing a secure digital locker or vault. The icon features a stylized shield and padlock design in a minimalist, corporate modern style. The color palette incorporates deep trust-blue and subtle green accents against a pure white background, signaling financial security and data protection. The mood is safe and assured." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBfJc_65woxAMWeQ2N8kstNBqXfaCuo0BCpXbDo6JXhCE6u5bw-sNIkMH_V_ilynhWvbKOnrntgd8hSIdvnuw-bOHa6FYm3AUtuvK3-lJzGqorZs0_VZfE-UjMp71OSeH1myBWthmHr1JMvPiJPwHBezZZxMWtiBFCSOonlOL0MsaSWka1lz4t0yEZbYks39LzlRpmXGSJcgfkJgFc8fY6ms6kjX590CLCNFP4DeUerDReKQmOY6qJMZiKCoOBiUPRO-EHyvD2P30g">
+</div>
+<h1 class="font-headline-md text-headline-md text-on-surface mb-2">DigiLocker Consent</h1>
+<p class="font-body-md text-body-md text-on-surface-variant">
+                    SahaVest requires access to your official documents to complete your KYC securely.
+                </p>
+</div>
+<!-- Content Section -->
+<div class="p-lg flex flex-col gap-lg">
+<div class="bg-primary-container/10 rounded-lg p-md border border-primary-container/20 flex items-start gap-3">
+<span class="material-symbols-outlined text-primary-container mt-1" style="font-variation-settings: 'FILL' 1;">security</span>
+<div>
+<p class="font-label-md text-label-md text-on-surface mb-1">Secure &amp; Encrypted</p>
+<p class="font-body-md text-body-md text-on-surface-variant text-sm">SahaVest will use this only for identity verification. We do not store your raw document files.</p>
+</div>
+</div>
+<div>
+<h2 class="font-label-md text-label-md text-on-surface mb-xs uppercase tracking-wider text-xs">Requested Information</h2>
+<ul class="flex flex-col border border-outline-variant rounded-lg divide-y divide-outline-variant">
+<li class="flex items-center gap-md p-md bg-surface-container-lowest">
+<div class="bg-surface-container-low rounded-full p-2 flex items-center justify-center text-on-surface-variant">
+<span class="material-symbols-outlined">badge</span>
+</div>
+<div class="flex-grow">
+<p class="font-body-md text-body-md text-on-surface font-medium">PAN Record</p>
+<p class="font-label-sm text-label-sm text-on-surface-variant font-normal">Income Tax Department</p>
+</div>
+<span class="material-symbols-outlined text-secondary">check_circle</span>
+</li>
+<li class="flex items-center gap-md p-md bg-surface-container-lowest">
+<div class="bg-surface-container-low rounded-full p-2 flex items-center justify-center text-on-surface-variant">
+<span class="material-symbols-outlined">fingerprint</span>
+</div>
+<div class="flex-grow">
+<p class="font-body-md text-body-md text-on-surface font-medium">Aadhaar Card</p>
+<p class="font-label-sm text-label-sm text-on-surface-variant font-normal">UIDAI</p>
+</div>
+<span class="material-symbols-outlined text-secondary">check_circle</span>
+</li>
+<li class="flex items-center gap-md p-md bg-surface-container-lowest">
+<div class="bg-surface-container-low rounded-full p-2 flex items-center justify-center text-on-surface-variant">
+<span class="material-symbols-outlined">home_pin</span>
+</div>
+<div class="flex-grow">
+<p class="font-body-md text-body-md text-on-surface font-medium">Permanent Address</p>
+<p class="font-label-sm text-label-sm text-on-surface-variant font-normal">From Aadhaar/Driving License</p>
+</div>
+<span class="material-symbols-outlined text-secondary">check_circle</span>
+</li>
+</ul>
+</div>
+</div>
+<!-- Action Section -->
+<div class="p-lg pt-0 flex flex-col gap-sm">
+<button class="w-full h-[56px] min-h-[56px] bg-primary text-on-primary rounded-lg font-label-md text-label-md flex items-center justify-center transition-transform active:scale-[0.98] hover:bg-primary/90 shadow-sm">
+                    Approve Request
+                </button>
+<button class="w-full h-[48px] min-h-[48px] bg-transparent text-on-surface-variant border border-outline-variant rounded-lg font-label-md text-label-md flex items-center justify-center transition-colors hover:bg-surface-container-low">
+                    Deny
+                </button>
+<div class="text-center mt-2">
+<a class="font-label-sm text-label-sm text-primary hover:underline" href="#">Privacy Policy</a>
+</div>
+</div>
+</div>
+</main>
+</body></html>

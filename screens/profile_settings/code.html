@@ -1,0 +1,309 @@
+<!DOCTYPE html><html class="light" lang="en"><head>
+<meta charset="utf-8">
+<meta content="width=device-width, initial-scale=1.0" name="viewport">
+<title>Profile &amp; Account Settings - SahaVest</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<script id="tailwind-config">
+        tailwind.config = {
+          darkMode: "class",
+          theme: {
+            extend: {
+              "colors": {
+                      "on-error-container": "#93000a",
+                      "inverse-on-surface": "#f0f1f2",
+                      "surface-bright": "#f8f9fa",
+                      "on-primary": "#ffffff",
+                      "background": "#f8f9fa",
+                      "inverse-surface": "#2e3132",
+                      "on-primary-container": "#8aa8e0",
+                      "tertiary-fixed-dim": "#ffb95f",
+                      "error": "#ba1a1a",
+                      "surface-tint": "#405e92",
+                      "surface-dim": "#d9dadb",
+                      "secondary-fixed": "#9af6be",
+                      "on-primary-fixed-variant": "#264679",
+                      "tertiary-container": "#573500",
+                      "secondary": "#006d42",
+                      "surface-container-lowest": "#ffffff",
+                      "surface": "#f8f9fa",
+                      "secondary-fixed-dim": "#7ed9a3",
+                      "surface-variant": "#e1e3e4",
+                      "primary-fixed": "#d7e3ff",
+                      "on-tertiary-container": "#e89500",
+                      "surface-container-high": "#e7e8e9",
+                      "secondary-container": "#9af6be",
+                      "on-tertiary": "#ffffff",
+                      "surface-container-highest": "#e1e3e4",
+                      "surface-container": "#edeeef",
+                      "primary-container": "#1a3c6e",
+                      "inverse-primary": "#abc7ff",
+                      "on-background": "#191c1d",
+                      "on-error": "#ffffff",
+                      "on-primary-fixed": "#001b3f",
+                      "on-secondary-fixed": "#002110",
+                      "outline-variant": "#c4c6d0",
+                      "on-secondary": "#ffffff",
+                      "tertiary": "#3a2100",
+                      "on-secondary-fixed-variant": "#005230",
+                      "tertiary-fixed": "#ffddb8",
+                      "error-container": "#ffdad6",
+                      "primary-fixed-dim": "#abc7ff",
+                      "on-surface-variant": "#43474f",
+                      "outline": "#747780",
+                      "on-tertiary-fixed-variant": "#653e00",
+                      "surface-container-low": "#f3f4f5",
+                      "primary": "#002653",
+                      "on-surface": "#191c1d",
+                      "on-secondary-container": "#087347",
+                      "on-tertiary-fixed": "#2a1700"
+              },
+              "borderRadius": {
+                      "DEFAULT": "0.25rem",
+                      "lg": "0.5rem",
+                      "xl": "0.75rem",
+                      "full": "9999px"
+              },
+              "spacing": {
+                      "sm": "12px",
+                      "gutter-mobile": "12px",
+                      "base": "4px",
+                      "tap-target-min": "44px",
+                      "lg": "24px",
+                      "margin-mobile": "16px",
+                      "xs": "8px",
+                      "xl": "32px",
+                      "md": "16px"
+              },
+              "fontFamily": {
+                      "label-sm": ["Inter"],
+                      "label-md": ["Inter"],
+                      "display-lg": ["Inter"],
+                      "headline-sm": ["Inter"],
+                      "headline-md": ["Inter"],
+                      "body-lg": ["Inter"],
+                      "body-md": ["Inter"],
+                      "display-lg-mobile": ["Inter"]
+              },
+              "fontSize": {
+                      "label-sm": ["12px", {"lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "600"}],
+                      "label-md": ["14px", {"lineHeight": "20px", "letterSpacing": "0.01em", "fontWeight": "500"}],
+                      "display-lg": ["32px", {"lineHeight": "40px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                      "headline-sm": ["20px", {"lineHeight": "28px", "fontWeight": "600"}],
+                      "headline-md": ["24px", {"lineHeight": "32px", "fontWeight": "600"}],
+                      "body-lg": ["18px", {"lineHeight": "28px", "fontWeight": "400"}],
+                      "body-md": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                      "display-lg-mobile": ["28px", {"lineHeight": "36px", "letterSpacing": "-0.02em", "fontWeight": "700"}]
+              }
+            },
+          },
+        }
+    </script>
+<style>
+        body { font-family: 'Inter', sans-serif; }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background text-on-background min-h-screen pb-[100px] md:pb-0 pt-[56px]">
+<!-- TopAppBar -->
+<header class="fixed top-0 left-0 w-full z-50 flex justify-between items-center px-margin-mobile h-[56px] bg-surface border-b border-outline-variant shadow-sm transition-transform duration-150">
+<div class="flex items-center gap-4">
+<button aria-label="Menu" class="w-[44px] h-[44px] flex items-center justify-center text-on-surface-variant hover:bg-surface-container-low rounded-full transition-colors">
+<span class="material-symbols-outlined" data-icon="menu">menu</span>
+</button>
+<h1 class="font-headline-md text-headline-md font-bold text-primary tracking-tight">SahaVest</h1>
+</div>
+<div class="flex items-center gap-2">
+<button aria-label="Notifications" class="w-[44px] h-[44px] flex items-center justify-center text-on-surface-variant hover:bg-surface-container-low rounded-full transition-colors">
+<span class="material-symbols-outlined" data-icon="notifications">notifications</span>
+</button>
+</div>
+</header>
+<main class="max-w-7xl mx-auto px-margin-mobile md:px-lg py-lg">
+<!-- Profile Header Area -->
+<section class="mb-xl flex flex-col md:flex-row items-center md:items-start gap-lg bg-surface-container-lowest p-lg rounded-xl shadow-[0_4px_12px_rgba(0,0,0,0.04)] border border-surface-variant">
+<div class="relative">
+<img alt="Profile Picture" class="w-32 h-32 rounded-full object-cover border-4 border-surface shadow-sm" data-alt="A professional headshot of a middle-aged Indian man with a slight smile, wearing a neat navy blue blazer over a light blue dress shirt. The lighting is soft and natural, suggesting a bright office environment. The background is a clean, out-of-focus white wall, aligning perfectly with a modern, high-trust corporate financial aesthetic." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBRtH_E4Vl8fYwKDDz5MTdOhCSGOtPHjDKxwqya8eCUIgkuJcjx5nV7uOxsc7Ra6F46g4_wWmYURbbwax1KsgqJ5YOuzhl9ZhnWjMyaXzz4ZAOkWCCaLsxc3SRLIiOLno5UGsmGUO1-x__cQzUVU8b0X8Xa992DHCF8xvuZsavMQlKI3dvUld7aJHVk5ZLEftbf-cW_BUqr87lNkpiq8zY0BEGtah5sj2VkT7JWiC6CP03q4Z1ndc56MrisEHHARy5AYiDDiMCfWgQ">
+<button aria-label="Edit Profile Picture" class="absolute bottom-0 right-0 w-10 h-10 bg-primary text-on-primary rounded-full flex items-center justify-center shadow-md hover:bg-on-primary-fixed-variant transition-colors">
+<span class="material-symbols-outlined text-xl" data-icon="edit">edit</span>
+</button>
+</div>
+<div class="text-center md:text-left flex-1 mt-4 md:mt-0">
+<div class="flex flex-col md:flex-row items-center gap-sm mb-2">
+<h2 class="font-display-lg-mobile md:font-display-lg text-display-lg-mobile md:text-display-lg text-on-background">Vikram Sharma</h2>
+<div class="inline-flex items-center gap-1 bg-secondary-container text-on-secondary-container px-3 py-1 rounded-full">
+<span class="material-symbols-outlined text-sm" data-icon="verified">verified</span>
+<span class="font-label-sm text-label-sm uppercase tracking-wider">KYC Verified</span>
+</div>
+</div>
+<p class="font-body-md text-body-md text-on-surface-variant mb-4">vikram.sharma@example.com • +91 98765 43210</p>
+<p class="font-body-md text-body-md text-on-surface-variant max-w-2xl">
+                    Retail investor focused on long-term wealth creation. Primary investment interests include large-cap mutual funds and sovereign gold bonds.
+                </p>
+</div>
+</section>
+<div class="grid grid-cols-1 lg:grid-cols-3 gap-lg">
+<!-- Left Column: Personal Info & Nominees -->
+<div class="lg:col-span-2 space-y-lg">
+<!-- Personal Information -->
+<section class="bg-surface-container-lowest rounded-xl shadow-[0_4px_12px_rgba(0,0,0,0.04)] border border-surface-variant overflow-hidden">
+<div class="px-md py-sm border-b border-surface-variant bg-surface-bright flex justify-between items-center">
+<h3 class="font-headline-sm text-headline-sm text-on-background flex items-center gap-2">
+<span class="material-symbols-outlined text-primary" data-icon="badge">badge</span>
+                            Personal Information
+                        </h3>
+<button aria-label="Edit Personal Information" class="w-[44px] h-[44px] flex items-center justify-center text-primary hover:bg-surface-container-low rounded-full transition-colors">
+<span class="material-symbols-outlined" data-icon="edit">edit</span>
+</button>
+</div>
+<div class="p-md">
+<div class="grid grid-cols-1 sm:grid-cols-2 gap-y-sm gap-x-lg">
+<div class="py-2 border-b border-surface-variant sm:border-none">
+<p class="font-label-sm text-label-sm text-outline mb-1 uppercase">Date of Birth</p>
+<p class="font-body-md text-body-md text-on-background">15 Aug 1980</p>
+</div>
+<div class="py-2 border-b border-surface-variant sm:border-none">
+<p class="font-label-sm text-label-sm text-outline mb-1 uppercase">PAN</p>
+<p class="font-body-md text-body-md text-on-background tracking-widest">ABCDE1234F</p>
+</div>
+<div class="py-2 border-b border-surface-variant sm:border-none">
+<p class="font-label-sm text-label-sm text-outline mb-1 uppercase">Marital Status</p>
+<p class="font-body-md text-body-md text-on-background">Married</p>
+</div>
+<div class="py-2">
+<p class="font-label-sm text-label-sm text-outline mb-1 uppercase">Annual Income</p>
+<p class="font-body-md text-body-md text-on-background">₹10L - ₹25L</p>
+</div>
+</div>
+</div>
+</section>
+<!-- Manage Nominees -->
+<section class="bg-surface-container-lowest rounded-xl shadow-[0_4px_12px_rgba(0,0,0,0.04)] border border-surface-variant overflow-hidden">
+<div class="px-md py-sm border-b border-surface-variant bg-surface-bright flex justify-between items-center">
+<h3 class="font-headline-sm text-headline-sm text-on-background flex items-center gap-2">
+<span class="material-symbols-outlined text-primary" data-icon="group">group</span>
+                            Manage Nominees
+                        </h3>
+<button class="px-4 py-2 bg-primary-container text-on-primary-container font-label-md text-label-md rounded-lg hover:bg-primary hover:text-on-primary transition-colors flex items-center gap-2">
+<span class="material-symbols-outlined text-sm" data-icon="add">add</span>
+                            Add Nominee
+                        </button>
+</div>
+<div class="p-md space-y-md">
+<!-- Nominee Item -->
+<div class="flex items-center justify-between p-sm border border-surface-variant rounded-lg bg-surface-bright">
+<div class="flex items-center gap-md">
+<div class="w-12 h-12 bg-surface-container-high rounded-full flex items-center justify-center text-on-surface-variant">
+<span class="material-symbols-outlined" data-icon="person">person</span>
+</div>
+<div>
+<p class="font-body-md text-body-md text-on-background font-medium">Anjali Sharma</p>
+<p class="font-label-md text-label-md text-on-surface-variant">Spouse • 100% Allocation</p>
+</div>
+</div>
+<button aria-label="Edit Nominee" class="w-[44px] h-[44px] flex items-center justify-center text-on-surface-variant hover:text-primary transition-colors">
+<span class="material-symbols-outlined" data-icon="more_vert">more_vert</span>
+</button>
+</div>
+</div>
+</section>
+</div>
+<!-- Right Column: Linked Accounts & Settings -->
+<div class="space-y-lg">
+<!-- Linked Accounts -->
+<section class="bg-surface-container-lowest rounded-xl shadow-[0_4px_12px_rgba(0,0,0,0.04)] border border-surface-variant overflow-hidden">
+<div class="px-md py-sm border-b border-surface-variant bg-surface-bright">
+<h3 class="font-headline-sm text-headline-sm text-on-background flex items-center gap-2">
+<span class="material-symbols-outlined text-primary" data-icon="account_balance">account_balance</span>
+                            Linked Accounts
+                        </h3>
+</div>
+<div class="p-md space-y-4">
+<!-- Bank Account -->
+<div class="p-sm bg-surface-container-low rounded-lg border border-surface-variant flex items-start gap-sm">
+<div class="mt-1 text-primary">
+<span class="material-symbols-outlined" data-icon="food_bank">food_bank</span>
+</div>
+<div class="flex-1">
+<p class="font-label-sm text-label-sm text-outline uppercase mb-1">Primary Bank</p>
+<p class="font-body-md text-body-md text-on-background font-medium">HDFC Bank</p>
+<p class="font-label-md text-label-md text-on-surface-variant">XXXX-XXXX-1234</p>
+<div class="mt-2 inline-flex items-center gap-1 text-secondary">
+<span class="material-symbols-outlined text-[16px]" data-icon="check_circle">check_circle</span>
+<span class="font-label-sm text-label-sm">Mandate Active</span>
+</div>
+</div>
+</div>
+<!-- Demat Account -->
+<div class="p-sm bg-surface-container-low rounded-lg border border-surface-variant flex items-start gap-sm">
+<div class="mt-1 text-primary">
+<span class="material-symbols-outlined" data-icon="show_chart">show_chart</span>
+</div>
+<div class="flex-1">
+<p class="font-label-sm text-label-sm text-outline uppercase mb-1">Demat Account</p>
+<p class="font-body-md text-body-md text-on-background font-medium">Zerodha Broking</p>
+<p class="font-label-md text-label-md text-on-surface-variant">DP ID: 12081600</p>
+</div>
+</div>
+<button class="w-full py-3 border-2 border-dashed border-outline-variant text-primary font-label-md text-label-md rounded-lg hover:bg-surface-container-low hover:border-primary transition-all flex items-center justify-center gap-2">
+<span class="material-symbols-outlined text-sm" data-icon="link">link</span>
+                            Link Another Account
+                        </button>
+</div>
+</section>
+<!-- Preferences & Security -->
+<section class="bg-surface-container-lowest rounded-xl shadow-[0_4px_12px_rgba(0,0,0,0.04)] border border-surface-variant overflow-hidden">
+<div class="px-md py-sm border-b border-surface-variant bg-surface-bright">
+<h3 class="font-headline-sm text-headline-sm text-on-background flex items-center gap-2">
+<span class="material-symbols-outlined text-primary" data-icon="security">security</span>
+                            Security &amp; Preferences
+                        </h3>
+</div>
+<div class="flex flex-col">
+<a class="flex items-center justify-between p-md border-b border-surface-variant hover:bg-surface-container-low transition-colors min-h-[56px]" href="#">
+<span class="font-body-md text-body-md text-on-background">Change PIN/Password</span>
+<span class="material-symbols-outlined text-on-surface-variant" data-icon="chevron_right">chevron_right</span>
+</a>
+<a class="flex items-center justify-between p-md border-b border-surface-variant hover:bg-surface-container-low transition-colors min-h-[56px]" href="#">
+<span class="font-body-md text-body-md text-on-background">Two-Factor Authentication</span>
+<span class="material-symbols-outlined text-on-surface-variant" data-icon="chevron_right">chevron_right</span>
+</a>
+<a class="flex items-center justify-between p-md hover:bg-surface-container-low transition-colors min-h-[56px]" href="#">
+<span class="font-body-md text-body-md text-on-background">Communication Preferences</span>
+<span class="material-symbols-outlined text-on-surface-variant" data-icon="chevron_right">chevron_right</span>
+</a>
+</div>
+</section>
+<button class="w-full h-[48px] bg-error-container text-on-error-container font-label-md text-label-md rounded-lg flex items-center justify-center gap-2 hover:bg-error hover:text-on-error transition-colors">
+<span class="material-symbols-outlined text-sm" data-icon="logout">logout</span>
+                    Sign Out Securely
+                </button>
+</div>
+</div>
+</main>
+<!-- BottomNavBar (Mobile Only) -->
+<nav class="fixed bottom-0 left-0 w-full z-50 flex justify-around items-center px-2 pb-safe h-[80px] bg-surface-container shadow-[0_-4px_12px_rgba(0,0,0,0.04)] rounded-t-xl md:hidden">
+<a class="flex flex-col items-center justify-center text-on-surface-variant px-5 py-1 hover:bg-surface-variant rounded-lg transition-colors" href="#">
+<span class="material-symbols-outlined mb-1" data-icon="grid_view">grid_view</span>
+<span class="font-label-sm text-label-sm">Dashboard</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant px-5 py-1 hover:bg-surface-variant rounded-lg transition-colors" href="#">
+<span class="material-symbols-outlined mb-1" data-icon="account_balance_wallet">account_balance_wallet</span>
+<span class="font-label-sm text-label-sm">Portfolio</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant px-5 py-1 hover:bg-surface-variant rounded-lg transition-colors" href="#">
+<span class="material-symbols-outlined mb-1" data-icon="shield">shield</span>
+<span class="font-label-sm text-label-sm">Protection</span>
+</a>
+<a class="flex flex-col items-center justify-center bg-primary-container text-on-primary-container rounded-full px-5 py-1 scale-90 transition-all duration-200" href="#">
+<span class="material-symbols-outlined mb-1" data-icon="person" style="font-variation-settings: 'FILL' 1;">person</span>
+<span class="font-label-sm text-label-sm">Profile</span>
+</a>
+</nav>
+</body></html>

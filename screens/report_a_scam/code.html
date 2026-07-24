@@ -1,0 +1,302 @@
+<!DOCTYPE html><html class="light" lang="en"><head>
+<meta charset="utf-8">
+<meta content="width=device-width, initial-scale=1.0" name="viewport">
+<title>Report an Issue - SahaVest</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "secondary": "#006d42",
+                        "outline-variant": "#c4c6d0",
+                        "background": "#f8f9fa",
+                        "surface-container": "#edeeef",
+                        "surface-container-low": "#f3f4f5",
+                        "on-surface-variant": "#43474f",
+                        "on-tertiary-fixed": "#2a1700",
+                        "inverse-primary": "#abc7ff",
+                        "secondary-container": "#9af6be",
+                        "on-secondary": "#ffffff",
+                        "primary-fixed-dim": "#abc7ff",
+                        "primary": "#002653",
+                        "surface-container-highest": "#e1e3e4",
+                        "on-secondary-fixed-variant": "#005230",
+                        "on-secondary-container": "#087347",
+                        "on-primary-fixed": "#001b3f",
+                        "on-tertiary-container": "#e89500",
+                        "on-error": "#ffffff",
+                        "surface-bright": "#f8f9fa",
+                        "inverse-surface": "#2e3132",
+                        "outline": "#747780",
+                        "inverse-on-surface": "#f0f1f2",
+                        "primary-container": "#1a3c6e",
+                        "on-tertiary": "#ffffff",
+                        "on-secondary-fixed": "#002110",
+                        "on-primary": "#ffffff",
+                        "surface-tint": "#405e92",
+                        "secondary-fixed": "#9af6be",
+                        "on-error-container": "#93000a",
+                        "on-background": "#191c1d",
+                        "surface-container-lowest": "#ffffff",
+                        "surface-container-high": "#e7e8e9",
+                        "on-primary-container": "#8aa8e0",
+                        "error": "#ba1a1a",
+                        "on-primary-fixed-variant": "#264679",
+                        "secondary-fixed-dim": "#7ed9a3",
+                        "tertiary-fixed": "#ffddb8",
+                        "error-container": "#ffdad6",
+                        "tertiary-fixed-dim": "#ffb95f",
+                        "surface-variant": "#e1e3e4",
+                        "surface-dim": "#d9dadb",
+                        "on-surface": "#191c1d",
+                        "tertiary-container": "#573500",
+                        "on-tertiary-fixed-variant": "#653e00",
+                        "primary-fixed": "#d7e3ff",
+                        "surface": "#f8f9fa",
+                        "tertiary": "#3a2100"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "md": "16px",
+                        "sm": "12px",
+                        "base": "4px",
+                        "gutter-mobile": "12px",
+                        "xl": "32px",
+                        "tap-target-min": "44px",
+                        "xs": "8px",
+                        "margin-mobile": "16px",
+                        "lg": "24px",
+                        "safe": "env(safe-area-inset-bottom)"
+                    },
+                    "fontFamily": {
+                        "label-md": ["Inter"],
+                        "label-sm": ["Inter"],
+                        "body-md": ["Inter"],
+                        "headline-md": ["Inter"],
+                        "display-lg-mobile": ["Inter"],
+                        "display-lg": ["Inter"],
+                        "headline-sm": ["Inter"],
+                        "body-lg": ["Inter"]
+                    },
+                    "fontSize": {
+                        "label-md": ["14px", { "lineHeight": "20px", "letterSpacing": "0.01em", "fontWeight": "500" }],
+                        "label-sm": ["12px", { "lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "600" }],
+                        "body-md": ["16px", { "lineHeight": "24px", "fontWeight": "400" }],
+                        "headline-md": ["24px", { "lineHeight": "32px", "fontWeight": "600" }],
+                        "display-lg-mobile": ["28px", { "lineHeight": "36px", "letterSpacing": "-0.02em", "fontWeight": "700" }],
+                        "display-lg": ["32px", { "lineHeight": "40px", "letterSpacing": "-0.02em", "fontWeight": "700" }],
+                        "headline-sm": ["20px", { "lineHeight": "28px", "fontWeight": "600" }],
+                        "body-lg": ["18px", { "lineHeight": "28px", "fontWeight": "400" }]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        body { font-family: 'Inter', sans-serif; }
+        .material-symbols-outlined { font-variation-settings: 'FILL' 0; }
+        .filled-icon { font-variation-settings: 'FILL' 1; }
+        /* Hide scrollbar for cleaner look */
+        ::-webkit-scrollbar { display: none; }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background text-on-background min-h-screen pb-24 md:pb-0 antialiased flex flex-col">
+<!-- TopAppBar -->
+<header class="w-full top-0 sticky z-40 bg-surface dark:bg-surface-dim border-b border-outline-variant dark:border-outline shadow-sm dark:shadow-none flex justify-between items-center h-14 px-margin-mobile">
+<div class="flex items-center gap-xs">
+<div class="w-8 h-8 rounded-full bg-surface-container overflow-hidden flex items-center justify-center">
+<span class="material-symbols-outlined text-primary dark:text-primary-fixed-dim" data-icon="person">person</span>
+</div>
+</div>
+<div class="font-display-lg-mobile text-display-lg-mobile font-bold text-primary dark:text-primary-fixed-dim truncate">
+            SahaVest
+        </div>
+<button aria-label="notifications" class="w-10 h-10 flex items-center justify-center rounded-full text-on-surface-variant dark:text-on-surface-variant hover:bg-surface-container dark:hover:bg-surface-container-high transition-colors duration-200">
+<span class="material-symbols-outlined" data-icon="notifications">notifications</span>
+</button>
+</header>
+<!-- Main Content Canvas -->
+<main class="flex-grow flex flex-col items-center w-full px-margin-mobile pt-lg pb-xl max-w-3xl mx-auto">
+<!-- Header Section -->
+<div class="w-full mb-lg text-center md:text-left">
+<div class="inline-flex items-center justify-center w-12 h-12 rounded-full bg-error-container text-on-error-container mb-xs">
+<span class="material-symbols-outlined filled-icon" data-icon="security">security</span>
+</div>
+<h1 class="font-headline-md text-headline-md text-on-background mb-base">Report an Issue</h1>
+<p class="font-body-md text-body-md text-on-surface-variant max-w-xl">
+                Your report helps protect the entire community. Please provide as much detail as possible to assist our security team.
+            </p>
+</div>
+<!-- Form Card -->
+<div class="w-full bg-surface-container-lowest rounded-xl shadow-[0_4px_12px_rgba(0,0,0,0.04)] border border-surface-container-high p-md md:p-lg">
+<form class="flex flex-col gap-md" id="reportForm">
+<!-- Type Dropdown -->
+<div class="flex flex-col gap-base">
+<label class="font-label-md text-label-md text-on-surface-variant" for="scamType">Type of Issue *</label>
+<div class="relative">
+<select class="w-full appearance-none bg-surface border border-outline-variant rounded-lg px-md py-sm font-body-md text-body-md text-on-background focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary transition-shadow min-h-[tap-target-min]" id="scamType" required="">
+<option disabled="" selected="" value="">Select a category</option>
+<option value="phishing">Phishing Attempt</option>
+<option value="fake_investment">Fake Investment Opportunity</option>
+<option value="impersonation">Account Impersonation</option>
+<option value="spam">Suspicious Spam</option>
+<option value="other">Other</option>
+</select>
+<div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-md text-on-surface-variant">
+<span class="material-symbols-outlined" data-icon="expand_more">expand_more</span>
+</div>
+</div>
+</div>
+<!-- Description Text Area -->
+<div class="flex flex-col gap-base">
+<label class="font-label-md text-label-md text-on-surface-variant" for="description">Description *</label>
+<textarea class="w-full bg-surface border border-outline-variant rounded-lg px-md py-sm font-body-md text-body-md text-on-background focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary transition-shadow resize-y min-h-[100px]" id="description" placeholder="Describe what happened, when it occurred, and any suspicious links or messages." required="" rows="4"></textarea>
+</div>
+<!-- Evidence Section (Checkbox/File Picker hybrid concept) -->
+<div class="flex flex-col gap-sm p-sm rounded-lg bg-surface-container-low border border-surface-container-high mt-xs">
+<div class="flex items-start gap-sm">
+<div class="flex items-center h-6">
+<input class="w-5 h-5 text-primary border-outline rounded focus:ring-primary bg-surface min-w-[tap-target-min] min-h-[tap-target-min] md:min-w-auto md:min-h-auto" id="linkEvidence" type="checkbox">
+</div>
+<div class="flex flex-col">
+<label class="font-label-md text-label-md text-on-background cursor-pointer" for="linkEvidence">I have evidence to attach (Optional)</label>
+<p class="font-label-sm text-label-sm text-on-surface-variant mt-1">Upload screenshots, documents, or link original checks to support your claim.</p>
+</div>
+</div>
+<!-- Hidden File Input Area (Revealed by JS) -->
+<div class="hidden mt-xs" id="fileUploadArea">
+<label class="flex flex-col items-center justify-center w-full h-24 border-2 border-outline-variant border-dashed rounded-lg cursor-pointer bg-surface hover:bg-surface-container transition-colors">
+<div class="flex flex-col items-center justify-center pt-5 pb-6">
+<span class="material-symbols-outlined text-on-surface-variant mb-1" data-icon="upload_file">upload_file</span>
+<p class="font-label-sm text-label-sm text-on-surface-variant">Tap to select a file</p>
+</div>
+<input accept="image/*,.pdf" class="hidden" type="file">
+</label>
+</div>
+</div>
+<!-- Action Button -->
+<div class="mt-md">
+<button class="w-full bg-primary text-on-primary font-label-md text-label-md rounded-lg py-sm px-md flex items-center justify-center gap-xs min-h-[tap-target-min] hover:bg-primary-container hover:text-on-primary-container transition-colors shadow-sm" type="submit">
+<span class="material-symbols-outlined filled-icon" data-icon="flag">flag</span>
+                        Submit Report
+                    </button>
+</div>
+</form>
+</div>
+</main>
+<!-- Success Modal Overlay (Hidden by default) -->
+<div class="fixed inset-0 z-50 flex items-center justify-center bg-on-background/40 backdrop-blur-sm hidden opacity-0 transition-opacity duration-300 px-margin-mobile" id="successModal">
+<div class="bg-surface-container-lowest rounded-xl shadow-lg p-lg w-full max-w-sm flex flex-col items-center text-center transform scale-95 transition-transform duration-300">
+<div class="w-16 h-16 rounded-full bg-secondary-container text-on-secondary-container flex items-center justify-center mb-md">
+<span class="material-symbols-outlined text-4xl filled-icon" data-icon="check_circle">check_circle</span>
+</div>
+<h2 class="font-headline-sm text-headline-sm text-on-background mb-xs">Report Submitted</h2>
+<p class="font-body-md text-body-md text-on-surface-variant mb-lg">
+                Thank you. We have received your report and our security team will review it shortly to keep SahaVest safe.
+            </p>
+<button class="w-full bg-surface-container-high text-on-surface font-label-md text-label-md rounded-lg py-sm px-md min-h-[tap-target-min] hover:bg-surface-variant transition-colors" id="closeModalBtn">
+                Return to Safety Center
+            </button>
+</div>
+</div>
+<!-- BottomNavBar (Mobile Only) -->
+<nav class="md:hidden fixed bottom-0 w-full z-50 bg-surface-container-lowest dark:bg-inverse-surface border-t border-outline-variant dark:border-outline shadow-lg dark:shadow-none flex justify-around items-center h-16 px-2 pb-safe">
+<a class="flex flex-col items-center justify-center text-on-surface-variant dark:text-on-surface-variant px-4 py-1 hover:bg-surface-container dark:hover:bg-surface-container-highest active:scale-95 transition-all duration-150 rounded-lg" href="#">
+<span class="material-symbols-outlined" data-icon="pie_chart">pie_chart</span>
+<span class="font-label-sm text-label-sm mt-1">Portfolio</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant dark:text-on-surface-variant px-4 py-1 hover:bg-surface-container dark:hover:bg-surface-container-highest active:scale-95 transition-all duration-150 rounded-lg" href="#">
+<span class="material-symbols-outlined" data-icon="search">search</span>
+<span class="font-label-sm text-label-sm mt-1">Explore</span>
+</a>
+<!-- Active Tab (Shield/Safety context) -->
+<a class="flex flex-col items-center justify-center bg-secondary-container dark:bg-secondary text-on-secondary-container dark:text-on-secondary rounded-full px-4 py-1 active:scale-95 transition-transform duration-150 shadow-sm" href="#">
+<span class="material-symbols-outlined filled-icon" data-icon="security">security</span>
+<span class="font-label-sm text-label-sm mt-1">Shield</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant dark:text-on-surface-variant px-4 py-1 hover:bg-surface-container dark:hover:bg-surface-container-highest active:scale-95 transition-all duration-150 rounded-lg" href="#">
+<span class="material-symbols-outlined" data-icon="person">person</span>
+<span class="font-label-sm text-label-sm mt-1">Profile</span>
+</a>
+</nav>
+<!-- Desktop SideNav (Placeholder for larger screens if layout changes, hidden by default per logic but good structure) -->
+<aside class="hidden md:flex flex-col fixed left-0 top-14 bottom-0 w-64 bg-surface border-r border-outline-variant p-md gap-sm overflow-y-auto">
+<div class="font-label-sm text-label-sm text-on-surface-variant mb-xs px-sm">MENU</div>
+<a class="flex items-center gap-sm px-sm py-sm rounded-lg text-on-surface-variant hover:bg-surface-container transition-colors" href="#">
+<span class="material-symbols-outlined" data-icon="pie_chart">pie_chart</span>
+<span class="font-label-md text-label-md">Portfolio</span>
+</a>
+<a class="flex items-center gap-sm px-sm py-sm rounded-lg text-on-surface-variant hover:bg-surface-container transition-colors" href="#">
+<span class="material-symbols-outlined" data-icon="search">search</span>
+<span class="font-label-md text-label-md">Explore</span>
+</a>
+<a class="flex items-center gap-sm px-sm py-sm rounded-lg bg-secondary-container text-on-secondary-container transition-colors" href="#">
+<span class="material-symbols-outlined filled-icon" data-icon="security">security</span>
+<span class="font-label-md text-label-md font-semibold">Shield Center</span>
+</a>
+<a class="flex items-center gap-sm px-sm py-sm rounded-lg text-on-surface-variant hover:bg-surface-container transition-colors" href="#">
+<span class="material-symbols-outlined" data-icon="person">person</span>
+<span class="font-label-md text-label-md">Profile</span>
+</a>
+</aside>
+<script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const form = document.getElementById('reportForm');
+            const checkbox = document.getElementById('linkEvidence');
+            const uploadArea = document.getElementById('fileUploadArea');
+            const modal = document.getElementById('successModal');
+            const modalContent = modal.querySelector('div');
+            const closeBtn = document.getElementById('closeModalBtn');
+
+            // Toggle file upload area
+            checkbox.addEventListener('change', (e) => {
+                if(e.target.checked) {
+                    uploadArea.classList.remove('hidden');
+                } else {
+                    uploadArea.classList.add('hidden');
+                }
+            });
+
+            // Handle form submission
+            form.addEventListener('submit', (e) => {
+                e.preventDefault();
+                
+                // Show modal with slight animation delay
+                modal.classList.remove('hidden');
+                // Force reflow
+                void modal.offsetWidth;
+                modal.classList.remove('opacity-0');
+                modalContent.classList.remove('scale-95');
+                modalContent.classList.add('scale-100');
+            });
+
+            // Close modal
+            closeBtn.addEventListener('click', () => {
+                modal.classList.add('opacity-0');
+                modalContent.classList.remove('scale-100');
+                modalContent.classList.add('scale-95');
+                
+                setTimeout(() => {
+                    modal.classList.add('hidden');
+                    form.reset();
+                    uploadArea.classList.add('hidden');
+                }, 300); // match duration-300
+            });
+        });
+    </script>
+</body></html>

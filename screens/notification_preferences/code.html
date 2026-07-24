@@ -1,0 +1,326 @@
+<!DOCTYPE html><html lang="en"><head>
+<meta charset="utf-8">
+<meta content="width=device-width, initial-scale=1.0" name="viewport">
+<title>SahaVest - Notification Preferences</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<script id="tailwind-config">
+        tailwind.config = {
+          darkMode: "class",
+          theme: {
+            extend: {
+              "colors": {
+                      "on-error-container": "#93000a",
+                      "inverse-on-surface": "#f0f1f2",
+                      "surface-bright": "#f8f9fa",
+                      "on-primary": "#ffffff",
+                      "background": "#f8f9fa",
+                      "inverse-surface": "#2e3132",
+                      "on-primary-container": "#8aa8e0",
+                      "tertiary-fixed-dim": "#ffb95f",
+                      "error": "#ba1a1a",
+                      "surface-tint": "#405e92",
+                      "surface-dim": "#d9dadb",
+                      "secondary-fixed": "#9af6be",
+                      "on-primary-fixed-variant": "#264679",
+                      "tertiary-container": "#573500",
+                      "secondary": "#006d42",
+                      "surface-container-lowest": "#ffffff",
+                      "surface": "#f8f9fa",
+                      "secondary-fixed-dim": "#7ed9a3",
+                      "surface-variant": "#e1e3e4",
+                      "primary-fixed": "#d7e3ff",
+                      "on-tertiary-container": "#e89500",
+                      "surface-container-high": "#e7e8e9",
+                      "secondary-container": "#9af6be",
+                      "on-tertiary": "#ffffff",
+                      "surface-container-highest": "#e1e3e4",
+                      "surface-container": "#edeeef",
+                      "primary-container": "#1a3c6e",
+                      "inverse-primary": "#abc7ff",
+                      "on-background": "#191c1d",
+                      "on-error": "#ffffff",
+                      "on-primary-fixed": "#001b3f",
+                      "on-secondary-fixed": "#002110",
+                      "outline-variant": "#c4c6d0",
+                      "on-secondary": "#ffffff",
+                      "tertiary": "#3a2100",
+                      "on-secondary-fixed-variant": "#005230",
+                      "tertiary-fixed": "#ffddb8",
+                      "error-container": "#ffdad6",
+                      "primary-fixed-dim": "#abc7ff",
+                      "on-surface-variant": "#43474f",
+                      "outline": "#747780",
+                      "on-tertiary-fixed-variant": "#653e00",
+                      "surface-container-low": "#f3f4f5",
+                      "primary": "#002653",
+                      "on-surface": "#191c1d",
+                      "on-secondary-container": "#087347",
+                      "on-tertiary-fixed": "#2a1700"
+              },
+              "borderRadius": {
+                      "DEFAULT": "0.25rem",
+                      "lg": "0.5rem",
+                      "xl": "0.75rem",
+                      "full": "9999px"
+              },
+              "spacing": {
+                      "sm": "12px",
+                      "gutter-mobile": "12px",
+                      "base": "4px",
+                      "tap-target-min": "44px",
+                      "lg": "24px",
+                      "margin-mobile": "16px",
+                      "xs": "8px",
+                      "xl": "32px",
+                      "md": "16px"
+              },
+              "fontFamily": {
+                      "label-sm": [
+                              "Inter"
+                      ],
+                      "label-md": [
+                              "Inter"
+                      ],
+                      "display-lg": [
+                              "Inter"
+                      ],
+                      "headline-sm": [
+                              "Inter"
+                      ],
+                      "headline-md": [
+                              "Inter"
+                      ],
+                      "body-lg": [
+                              "Inter"
+                      ],
+                      "body-md": [
+                              "Inter"
+                      ],
+                      "display-lg-mobile": [
+                              "Inter"
+                      ]
+              },
+              "fontSize": {
+                      "label-sm": [
+                              "12px",
+                              {
+                                      "lineHeight": "16px",
+                                      "letterSpacing": "0.05em",
+                                      "fontWeight": "600"
+                              }
+                      ],
+                      "label-md": [
+                              "14px",
+                              {
+                                      "lineHeight": "20px",
+                                      "letterSpacing": "0.01em",
+                                      "fontWeight": "500"
+                              }
+                      ],
+                      "display-lg": [
+                              "32px",
+                              {
+                                      "lineHeight": "40px",
+                                      "letterSpacing": "-0.02em",
+                                      "fontWeight": "700"
+                              }
+                      ],
+                      "headline-sm": [
+                              "20px",
+                              {
+                                      "lineHeight": "28px",
+                                      "fontWeight": "600"
+                              }
+                      ],
+                      "headline-md": [
+                              "24px",
+                              {
+                                      "lineHeight": "32px",
+                                      "fontWeight": "600"
+                              }
+                      ],
+                      "body-lg": [
+                              "18px",
+                              {
+                                      "lineHeight": "28px",
+                                      "fontWeight": "400"
+                              }
+                      ],
+                      "body-md": [
+                              "16px",
+                              {
+                                      "lineHeight": "24px",
+                                      "fontWeight": "400"
+                              }
+                      ],
+                      "display-lg-mobile": [
+                              "28px",
+                              {
+                                      "lineHeight": "36px",
+                                      "letterSpacing": "-0.02em",
+                                      "fontWeight": "700"
+                              }
+                      ]
+              }
+      },
+          },
+        }
+    </script>
+<style>
+        body {
+            -webkit-tap-highlight-color: transparent;
+        }
+        /* Custom Toggle Switch Styles */
+        .toggle-checkbox:checked {
+            right: 0;
+            border-color: #002653; /* Primary */
+        }
+        .toggle-checkbox:checked + .toggle-label {
+            background-color: #002653; /* Primary */
+        }
+        .toggle-checkbox:checked + .toggle-label:after {
+            transform: translateX(100%);
+            border-color: white;
+        }
+        .toggle-label {
+            width: 48px;
+            height: 24px;
+            background-color: #e1e3e4; /* Surface Variant */
+            border-radius: 9999px;
+            position: relative;
+            cursor: pointer;
+            transition: background-color 0.2s ease-in-out;
+        }
+        .toggle-label:after {
+            content: '';
+            position: absolute;
+            top: 2px;
+            left: 2px;
+            width: 20px;
+            height: 20px;
+            background-color: white;
+            border-radius: 50%;
+            transition: transform 0.2s ease-in-out;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background text-on-background antialiased md:bg-surface-container-low min-h-screen">
+<!-- Top App Bar (Modified for sub-page task: Back instead of Menu) -->
+<header class="fixed top-0 left-0 w-full z-50 flex justify-between items-center px-margin-mobile h-[56px] bg-surface shadow-sm border-b border-outline-variant md:max-w-2xl md:mx-auto md:relative md:mt-8 md:rounded-t-xl md:border-t md:border-x">
+<button aria-label="Go back" class="w-[44px] h-[44px] flex items-center justify-center text-on-surface hover:bg-surface-container-low rounded-full transition-colors">
+<span class="material-symbols-outlined" data-icon="arrow_back">arrow_back</span>
+</button>
+<h1 class="font-headline-sm-mobile text-headline-sm-mobile text-on-surface font-semibold flex-1 text-center mr-[44px]">Notification Preferences</h1>
+<!-- Trailing icon removed for focused sub-page -->
+</header>
+<!-- Main Content Canvas -->
+<main class="pt-[72px] pb-[96px] px-margin-mobile md:max-w-2xl md:mx-auto md:pt-0 md:bg-surface md:border-x md:border-b md:rounded-b-xl md:shadow-sm md:px-lg min-h-screen md:min-h-0">
+<div class="mb-lg mt-sm">
+<p class="font-body-md text-body-md text-on-surface-variant">
+                Manage how and when SahaVest communicates with you. We prioritize your security and focus, delivering only what matters.
+            </p>
+</div>
+<!-- Section: Critical Alerts -->
+<section class="mb-xl bg-surface-container-lowest rounded-xl border border-outline-variant/50 shadow-[0_4px_12px_rgba(0,0,0,0.02)] overflow-hidden">
+<div class="px-md py-sm bg-surface-container-low border-b border-outline-variant/50">
+<h2 class="font-label-md text-label-md text-on-surface-variant uppercase tracking-wider">Critical</h2>
+</div>
+<!-- Item: Trust & Safety -->
+<div class="flex items-start justify-between p-md hover:bg-surface-container-low/50 transition-colors">
+<div class="flex-1 pr-md">
+<div class="flex items-center gap-2 mb-1">
+<span class="material-symbols-outlined text-error text-[20px]" data-icon="security" style="font-variation-settings: 'FILL' 1;">security</span>
+<h3 class="font-headline-sm text-headline-sm text-on-surface text-[16px]">Trust &amp; Safety Alerts</h3>
+</div>
+<p class="font-body-md text-body-md text-on-surface-variant text-[14px]">
+                        Immediate alerts for unusual login attempts, changes to banking details, and critical account security events. <span class="text-error font-medium">Cannot be disabled.</span>
+</p>
+</div>
+<div class="flex items-center h-[44px]">
+<span class="material-symbols-outlined text-on-surface-variant/50" data-icon="lock">lock</span>
+</div>
+</div>
+</section>
+<!-- Section: Portfolio & Operations -->
+<section class="mb-xl bg-surface-container-lowest rounded-xl border border-outline-variant/50 shadow-[0_4px_12px_rgba(0,0,0,0.02)] overflow-hidden">
+<div class="px-md py-sm bg-surface-container-low border-b border-outline-variant/50">
+<h2 class="font-label-md text-label-md text-on-surface-variant uppercase tracking-wider">Investments &amp; Support</h2>
+</div>
+<!-- Item: Portfolio Updates -->
+<div class="flex items-start justify-between p-md border-b border-outline-variant/30 hover:bg-surface-container-low/50 transition-colors">
+<div class="flex-1 pr-md">
+<div class="flex items-center gap-2 mb-1">
+<span class="material-symbols-outlined text-primary text-[20px]" data-icon="show_chart">show_chart</span>
+<h3 class="font-headline-sm text-headline-sm text-on-surface text-[16px]">Portfolio Updates</h3>
+</div>
+<p class="font-body-md text-body-md text-on-surface-variant text-[14px]">
+                        Weekly summaries of your portfolio's performance, dividend credits, and rebalancing recommendations.
+                    </p>
+</div>
+<div class="flex items-center h-[44px]">
+<div class="relative inline-block w-12 mr-2 align-middle select-none transition duration-200 ease-in">
+<input checked="" class="toggle-checkbox absolute block w-6 h-6 rounded-full bg-white border-4 appearance-none cursor-pointer z-10 opacity-0" id="toggle_portfolio" name="toggle_portfolio" type="checkbox">
+<label class="toggle-label block overflow-hidden h-6 rounded-full bg-gray-300 cursor-pointer" for="toggle_portfolio"></label>
+</div>
+</div>
+</div>
+<!-- Item: Grievance Status -->
+<div class="flex items-start justify-between p-md hover:bg-surface-container-low/50 transition-colors">
+<div class="flex-1 pr-md">
+<div class="flex items-center gap-2 mb-1">
+<span class="material-symbols-outlined text-secondary text-[20px]" data-icon="assignment_turned_in">assignment_turned_in</span>
+<h3 class="font-headline-sm text-headline-sm text-on-surface text-[16px]">Grievance Status</h3>
+</div>
+<p class="font-body-md text-body-md text-on-surface-variant text-[14px]">
+                        Real-time updates on active support tickets, resolution timelines, and regulatory compliance queries.
+                    </p>
+</div>
+<div class="flex items-center h-[44px]">
+<div class="relative inline-block w-12 mr-2 align-middle select-none transition duration-200 ease-in">
+<input checked="" class="toggle-checkbox absolute block w-6 h-6 rounded-full bg-white border-4 appearance-none cursor-pointer z-10 opacity-0" id="toggle_grievance" name="toggle_grievance" type="checkbox">
+<label class="toggle-label block overflow-hidden h-6 rounded-full bg-gray-300 cursor-pointer" for="toggle_grievance"></label>
+</div>
+</div>
+</div>
+</section>
+<!-- Section: Education -->
+<section class="mb-xl bg-surface-container-lowest rounded-xl border border-outline-variant/50 shadow-[0_4px_12px_rgba(0,0,0,0.02)] overflow-hidden">
+<div class="px-md py-sm bg-surface-container-low border-b border-outline-variant/50">
+<h2 class="font-label-md text-label-md text-on-surface-variant uppercase tracking-wider">Education</h2>
+</div>
+<!-- Item: Learning Reminders -->
+<div class="flex items-start justify-between p-md hover:bg-surface-container-low/50 transition-colors">
+<div class="flex-1 pr-md">
+<div class="flex items-center gap-2 mb-1">
+<span class="material-symbols-outlined text-tertiary text-[20px]" data-icon="school">school</span>
+<h3 class="font-headline-sm text-headline-sm text-on-surface text-[16px]">Learning Reminders</h3>
+</div>
+<p class="font-body-md text-body-md text-on-surface-variant text-[14px]">
+                        Nudges to complete pending modules in the SahaVest Academy and updates on new financial literacy courses.
+                    </p>
+</div>
+<div class="flex items-center h-[44px]">
+<div class="relative inline-block w-12 mr-2 align-middle select-none transition duration-200 ease-in">
+<input class="toggle-checkbox absolute block w-6 h-6 rounded-full bg-white border-4 appearance-none cursor-pointer z-10 opacity-0" id="toggle_learning" name="toggle_learning" type="checkbox">
+<label class="toggle-label block overflow-hidden h-6 rounded-full bg-gray-300 cursor-pointer" for="toggle_learning"></label>
+</div>
+</div>
+</div>
+</section>
+<div class="mt-lg">
+<button class="w-full bg-primary text-on-primary h-[56px] rounded-full font-label-md text-label-md font-semibold hover:bg-on-primary-fixed-variant transition-colors flex items-center justify-center min-h-[44px]">
+                Save Preferences
+            </button>
+</div>
+</main>
+<!-- Navigation Shell suppressed because this is a Settings/Task sub-page (Notification Preferences) requiring focus and a 'Back' action, fitting the suppression criteria. -->
+</body></html>

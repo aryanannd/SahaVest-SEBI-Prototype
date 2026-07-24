@@ -1,0 +1,312 @@
+<!DOCTYPE html><html class="light" lang="en"><head>
+<meta charset="utf-8">
+<meta content="width=device-width, initial-scale=1.0" name="viewport">
+<title>SahaVest - Account Aggregator Consent</title>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com" rel="preconnect">
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+        tailwind.config = {
+          darkMode: "class",
+          theme: {
+            extend: {
+              "colors": {
+                      "surface-variant": "#e1e3e4",
+                      "surface": "#f8f9fa",
+                      "surface-dim": "#d9dadb",
+                      "surface-bright": "#f8f9fa",
+                      "surface-container": "#edeeef",
+                      "on-secondary-container": "#087347",
+                      "on-surface": "#191c1d",
+                      "surface-container-low": "#f3f4f5",
+                      "tertiary-fixed-dim": "#ffb95f",
+                      "on-primary-fixed": "#001b3f",
+                      "inverse-surface": "#2e3132",
+                      "inverse-primary": "#abc7ff",
+                      "error-container": "#ffdad6",
+                      "on-error-container": "#93000a",
+                      "tertiary-fixed": "#ffddb8",
+                      "background": "#f8f9fa",
+                      "on-tertiary-fixed": "#2a1700",
+                      "on-surface-variant": "#43474f",
+                      "on-error": "#ffffff",
+                      "on-primary-container": "#8aa8e0",
+                      "primary-fixed": "#d7e3ff",
+                      "on-secondary-fixed": "#002110",
+                      "on-background": "#191c1d",
+                      "primary": "#002653",
+                      "secondary": "#006d42",
+                      "tertiary-container": "#573500",
+                      "on-secondary-fixed-variant": "#005230",
+                      "error": "#ba1a1a",
+                      "outline": "#747780",
+                      "surface-tint": "#405e92",
+                      "primary-fixed-dim": "#abc7ff",
+                      "tertiary": "#3a2100",
+                      "primary-container": "#1a3c6e",
+                      "inverse-on-surface": "#f0f1f2",
+                      "on-primary": "#ffffff",
+                      "secondary-container": "#9af6be",
+                      "secondary-fixed-dim": "#7ed9a3",
+                      "on-tertiary-fixed-variant": "#653e00",
+                      "on-primary-fixed-variant": "#264679",
+                      "on-secondary": "#ffffff",
+                      "outline-variant": "#c4c6d0",
+                      "surface-container-high": "#e7e8e9",
+                      "secondary-fixed": "#9af6be",
+                      "on-tertiary": "#ffffff",
+                      "surface-container-lowest": "#ffffff",
+                      "surface-container-highest": "#e1e3e4",
+                      "on-tertiary-container": "#e89500"
+              },
+              "borderRadius": {
+                      "DEFAULT": "0.25rem",
+                      "lg": "0.5rem",
+                      "xl": "0.75rem",
+                      "full": "9999px"
+              },
+              "spacing": {
+                      "md": "16px",
+                      "base": "4px",
+                      "tap-target-min": "44px",
+                      "xl": "32px",
+                      "margin-mobile": "16px",
+                      "sm": "12px",
+                      "gutter-mobile": "12px",
+                      "xs": "8px",
+                      "lg": "24px"
+              },
+              "fontFamily": {
+                      "display-lg": [
+                              "Inter"
+                      ],
+                      "display-lg-mobile": [
+                              "Inter"
+                      ],
+                      "label-md": [
+                              "Inter"
+                      ],
+                      "headline-sm": [
+                              "Inter"
+                      ],
+                      "headline-md": [
+                              "Inter"
+                      ],
+                      "label-sm": [
+                              "Inter"
+                      ],
+                      "body-lg": [
+                              "Inter"
+                      ],
+                      "body-md": [
+                              "Inter"
+                      ]
+              },
+              "fontSize": {
+                      "display-lg": [
+                              "32px",
+                              {
+                                      "lineHeight": "40px",
+                                      "letterSpacing": "-0.02em",
+                                      "fontWeight": "700"
+                              }
+                      ],
+                      "display-lg-mobile": [
+                              "28px",
+                              {
+                                      "lineHeight": "36px",
+                                      "letterSpacing": "-0.02em",
+                                      "fontWeight": "700"
+                              }
+                      ],
+                      "label-md": [
+                              "14px",
+                              {
+                                      "lineHeight": "20px",
+                                      "letterSpacing": "0.01em",
+                                      "fontWeight": "500"
+                              }
+                      ],
+                      "headline-sm": [
+                              "20px",
+                              {
+                                      "lineHeight": "28px",
+                                      "fontWeight": "600"
+                              }
+                      ],
+                      "headline-md": [
+                              "24px",
+                              {
+                                      "lineHeight": "32px",
+                                      "fontWeight": "600"
+                              }
+                      ],
+                      "label-sm": [
+                              "12px",
+                              {
+                                      "lineHeight": "16px",
+                                      "letterSpacing": "0.05em",
+                                      "fontWeight": "600"
+                              }
+                      ],
+                      "body-lg": [
+                              "18px",
+                              {
+                                      "lineHeight": "28px",
+                                      "fontWeight": "400"
+                              }
+                      ],
+                      "body-md": [
+                              "16px",
+                              {
+                                      "lineHeight": "24px",
+                                      "fontWeight": "400"
+                              }
+                      ]
+              }
+      },
+          },
+        }
+      </script>
+<style>
+        .material-symbols-outlined {
+          font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+      </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background text-on-background min-h-screen pb-24 md:pb-0">
+<!-- TopAppBar -->
+<header class="bg-surface dark:bg-surface-dim text-primary dark:text-primary-fixed font-headline-sm text-headline-sm w-full sticky top-0 z-50 border-b border-outline-variant dark:border-outline flat no shadows flex items-center justify-between px-margin-mobile py-sm w-full max-w-7xl mx-auto">
+<button class="text-on-surface-variant dark:text-on-surface-variant hover:bg-surface-container-low dark:hover:bg-surface-container-highest transition-colors active:scale-95 duration-100 p-2 rounded-full flex items-center justify-center min-w-tap-target-min min-h-tap-target-min">
+<span class="material-symbols-outlined">search</span>
+</button>
+<div class="font-headline-md text-headline-md text-primary dark:text-primary-fixed tracking-tight">
+            SahaVest
+        </div>
+<button class="text-on-surface-variant dark:text-on-surface-variant hover:bg-surface-container-low dark:hover:bg-surface-container-highest transition-colors active:scale-95 duration-100 p-2 rounded-full flex items-center justify-center min-w-tap-target-min min-h-tap-target-min">
+<span class="material-symbols-outlined">account_circle</span>
+</button>
+</header>
+<main class="max-w-3xl mx-auto px-margin-mobile py-lg">
+<!-- Header Section -->
+<div class="mb-xl text-center md:text-left">
+<div class="inline-flex items-center justify-center w-16 h-16 rounded-full bg-primary-fixed mb-md">
+<span class="material-symbols-outlined text-primary text-3xl" style="font-variation-settings: 'FILL' 1;">shield_lock</span>
+</div>
+<h1 class="font-display-lg-mobile text-display-lg-mobile md:font-display-lg md:text-display-lg text-on-background mb-xs">
+                Data Consent Request
+            </h1>
+<p class="font-body-md text-body-md text-on-surface-variant">
+                Review the details below to authorize data sharing via Account Aggregator.
+            </p>
+</div>
+<!-- Consent Card -->
+<div class="bg-white rounded-xl border border-outline-variant p-md md:p-lg mb-xl shadow-[0_4px_12px_rgba(0,0,0,0.04)]">
+<!-- Purpose Section -->
+<div class="mb-lg pb-md border-b border-surface-variant">
+<h2 class="font-label-md text-label-md text-on-surface-variant uppercase tracking-wider mb-sm">Purpose of Request</h2>
+<div class="flex items-start gap-sm">
+<span class="material-symbols-outlined text-secondary mt-1">analytics</span>
+<div>
+<p class="font-headline-sm text-headline-sm text-on-surface mb-base">Financial Planning &amp; Aggregation</p>
+<p class="font-body-md text-body-md text-on-surface-variant">To provide comprehensive portfolio insights and personalized financial recommendations.</p>
+</div>
+</div>
+</div>
+<!-- FIP Section -->
+<div class="mb-lg pb-md border-b border-surface-variant">
+<h2 class="font-label-md text-label-md text-on-surface-variant uppercase tracking-wider mb-sm">Information Providers (FIPs)</h2>
+<ul class="space-y-sm">
+<li class="flex items-center gap-md bg-surface-container-low p-sm rounded-lg">
+<div class="w-10 h-10 bg-white rounded-full flex items-center justify-center border border-outline-variant">
+<span class="material-symbols-outlined text-primary">account_balance</span>
+</div>
+<div class="flex-1">
+<p class="font-label-md text-label-md text-on-surface">HDFC Bank Ltd.</p>
+<p class="font-label-sm text-label-sm text-on-surface-variant">Savings Account</p>
+</div>
+</li>
+<li class="flex items-center gap-md bg-surface-container-low p-sm rounded-lg">
+<div class="w-10 h-10 bg-white rounded-full flex items-center justify-center border border-outline-variant">
+<span class="material-symbols-outlined text-primary">trending_up</span>
+</div>
+<div class="flex-1">
+<p class="font-label-md text-label-md text-on-surface">Zerodha Broking Ltd.</p>
+<p class="font-label-sm text-label-sm text-on-surface-variant">Demat Account</p>
+</div>
+</li>
+</ul>
+</div>
+<!-- Data Types Section -->
+<div class="mb-lg pb-md border-b border-surface-variant">
+<h2 class="font-label-md text-label-md text-on-surface-variant uppercase tracking-wider mb-sm">Requested Data Types</h2>
+<div class="grid grid-cols-1 md:grid-cols-2 gap-sm">
+<div class="flex items-center gap-xs">
+<span class="material-symbols-outlined text-primary text-xl">check_circle</span>
+<span class="font-body-md text-body-md text-on-surface">Profile Information</span>
+</div>
+<div class="flex items-center gap-xs">
+<span class="material-symbols-outlined text-primary text-xl">check_circle</span>
+<span class="font-body-md text-body-md text-on-surface">Account Balances</span>
+</div>
+<div class="flex items-center gap-xs">
+<span class="material-symbols-outlined text-primary text-xl">check_circle</span>
+<span class="font-body-md text-body-md text-on-surface">Transaction History</span>
+</div>
+<div class="flex items-center gap-xs">
+<span class="material-symbols-outlined text-primary text-xl">check_circle</span>
+<span class="font-body-md text-body-md text-on-surface">Holding Details</span>
+</div>
+</div>
+</div>
+<!-- Duration & Frequency -->
+<div class="mb-lg">
+<h2 class="font-label-md text-label-md text-on-surface-variant uppercase tracking-wider mb-sm">Consent Parameters</h2>
+<div class="flex flex-col md:flex-row gap-md">
+<div class="bg-surface-container-low p-md rounded-lg flex-1 border border-transparent hover:border-outline-variant transition-colors">
+<div class="flex items-center gap-xs mb-xs">
+<span class="material-symbols-outlined text-on-surface-variant">calendar_today</span>
+<span class="font-label-md text-label-md text-on-surface-variant">Duration</span>
+</div>
+<p class="font-headline-sm text-headline-sm text-on-surface">1 Year</p>
+<p class="font-label-sm text-label-sm text-on-surface-variant mt-1">Expires 24 Oct 2024</p>
+</div>
+<div class="bg-surface-container-low p-md rounded-lg flex-1 border border-transparent hover:border-outline-variant transition-colors">
+<div class="flex items-center gap-xs mb-xs">
+<span class="material-symbols-outlined text-on-surface-variant">update</span>
+<span class="font-label-md text-label-md text-on-surface-variant">Frequency</span>
+</div>
+<p class="font-headline-sm text-headline-sm text-on-surface">Daily</p>
+<p class="font-label-sm text-label-sm text-on-surface-variant mt-1">Automated fetch</p>
+</div>
+</div>
+</div>
+<!-- Regulatory Note -->
+<div class="bg-surface p-md rounded-lg flex items-start gap-sm border border-outline-variant">
+<span class="material-symbols-outlined text-on-surface-variant mt-0.5">info</span>
+<p class="font-label-sm text-label-sm text-on-surface-variant leading-relaxed">
+                    This consent is mandated by RBI guidelines. You have the right to revoke this consent at any time from your account settings. Your data is encrypted and securely transmitted via the Account Aggregator framework.
+                </p>
+</div>
+</div>
+<!-- Action Buttons -->
+<div class="flex flex-col-reverse md:flex-row gap-md w-full">
+<button class="flex-1 min-h-[48px] md:min-h-[56px] font-label-md text-label-md text-primary bg-white border-2 border-primary rounded-lg flex items-center justify-center hover:bg-surface-container-low transition-colors min-w-tap-target-min active:scale-[0.98]">
+                Deny
+            </button>
+<button class="flex-1 min-h-[48px] md:min-h-[56px] font-label-md text-label-md text-white bg-primary rounded-lg flex items-center justify-center hover:bg-primary-container transition-colors min-w-tap-target-min active:scale-[0.98] shadow-sm">
+                Approve &amp; Secure Data
+            </button>
+</div>
+</main>
+<!-- BottomNavBar (Hidden on desktop, shown on mobile if top-level, but this is a transactional/flow screen, so it should be suppressed based on guidelines. However, if forced by JSON anchor requirements for structural demo, leaving it commented out or suppressed intentionally as per the "Semantic Shell Mandate" rule for transactional/flow screens.) -->
+<!-- SUPPRESSED: Transactional/Consent Screen -->
+</body></html>

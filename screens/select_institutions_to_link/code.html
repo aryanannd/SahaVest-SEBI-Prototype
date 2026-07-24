@@ -1,0 +1,271 @@
+<!DOCTYPE html><html lang="en"><head>
+<meta charset="utf-8">
+<meta content="width=device-width, initial-scale=1.0" name="viewport">
+<title>SahaVest - Select FIPs</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "surface-variant": "#e1e3e4",
+                        "surface": "#f8f9fa",
+                        "surface-dim": "#d9dadb",
+                        "surface-bright": "#f8f9fa",
+                        "surface-container": "#edeeef",
+                        "on-secondary-container": "#087347",
+                        "on-surface": "#191c1d",
+                        "surface-container-low": "#f3f4f5",
+                        "tertiary-fixed-dim": "#ffb95f",
+                        "on-primary-fixed": "#001b3f",
+                        "inverse-surface": "#2e3132",
+                        "inverse-primary": "#abc7ff",
+                        "error-container": "#ffdad6",
+                        "on-error-container": "#93000a",
+                        "tertiary-fixed": "#ffddb8",
+                        "background": "#f8f9fa",
+                        "on-tertiary-fixed": "#2a1700",
+                        "on-surface-variant": "#43474f",
+                        "on-error": "#ffffff",
+                        "on-primary-container": "#8aa8e0",
+                        "primary-fixed": "#d7e3ff",
+                        "on-secondary-fixed": "#002110",
+                        "on-background": "#191c1d",
+                        "primary": "#002653",
+                        "secondary": "#006d42",
+                        "tertiary-container": "#573500",
+                        "on-secondary-fixed-variant": "#005230",
+                        "error": "#ba1a1a",
+                        "outline": "#747780",
+                        "surface-tint": "#405e92",
+                        "primary-fixed-dim": "#abc7ff",
+                        "tertiary": "#3a2100",
+                        "primary-container": "#1a3c6e",
+                        "inverse-on-surface": "#f0f1f2",
+                        "on-primary": "#ffffff",
+                        "secondary-container": "#9af6be",
+                        "secondary-fixed-dim": "#7ed9a3",
+                        "on-tertiary-fixed-variant": "#653e00",
+                        "on-primary-fixed-variant": "#264679",
+                        "on-secondary": "#ffffff",
+                        "outline-variant": "#c4c6d0",
+                        "surface-container-high": "#e7e8e9",
+                        "secondary-fixed": "#9af6be",
+                        "on-tertiary": "#ffffff",
+                        "surface-container-lowest": "#ffffff",
+                        "surface-container-highest": "#e1e3e4",
+                        "on-tertiary-container": "#e89500"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "md": "16px",
+                        "base": "4px",
+                        "tap-target-min": "44px",
+                        "xl": "32px",
+                        "margin-mobile": "16px",
+                        "sm": "12px",
+                        "gutter-mobile": "12px",
+                        "xs": "8px",
+                        "lg": "24px"
+                    },
+                    "fontFamily": {
+                        "display-lg": ["Inter"],
+                        "display-lg-mobile": ["Inter"],
+                        "label-md": ["Inter"],
+                        "headline-sm": ["Inter"],
+                        "headline-md": ["Inter"],
+                        "label-sm": ["Inter"],
+                        "body-lg": ["Inter"],
+                        "body-md": ["Inter"]
+                    },
+                    "fontSize": {
+                        "display-lg": ["32px", { "lineHeight": "40px", "letterSpacing": "-0.02em", "fontWeight": "700" }],
+                        "display-lg-mobile": ["28px", { "lineHeight": "36px", "letterSpacing": "-0.02em", "fontWeight": "700" }],
+                        "label-md": ["14px", { "lineHeight": "20px", "letterSpacing": "0.01em", "fontWeight": "500" }],
+                        "headline-sm": ["20px", { "lineHeight": "28px", "fontWeight": "600" }],
+                        "headline-md": ["24px", { "lineHeight": "32px", "fontWeight": "600" }],
+                        "label-sm": ["12px", { "lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "600" }],
+                        "body-lg": ["18px", { "lineHeight": "28px", "fontWeight": "400" }],
+                        "body-md": ["16px", { "lineHeight": "24px", "fontWeight": "400" }]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        .toggle-checkbox:checked {
+            right: 0;
+            border-color: #002653;
+        }
+        .toggle-checkbox:checked + .toggle-label {
+            background-color: #002653;
+        }
+        .toggle-checkbox:checked + .toggle-label:after {
+            transform: translateX(100%);
+            border-color: white;
+        }
+        .card-shadow {
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.04);
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-surface text-on-surface min-h-screen font-body-md flex flex-col items-center">
+<!-- TopAppBar -->
+<header class="w-full sticky top-0 z-50 bg-surface border-b border-outline-variant flex items-center justify-between px-margin-mobile py-sm max-w-7xl mx-auto">
+<button class="w-tap-target-min h-tap-target-min flex items-center justify-center text-on-surface-variant hover:bg-surface-container-low transition-colors rounded-full active:scale-95 duration-100">
+<span class="material-symbols-outlined">arrow_back</span>
+</button>
+<div class="font-headline-md text-headline-md text-primary tracking-tight">SahaVest</div>
+<div class="w-tap-target-min"></div> <!-- Placeholder for balance -->
+</header>
+<!-- Main Content -->
+<main class="w-full max-w-3xl flex-grow px-margin-mobile py-lg pb-[120px]">
+<div class="mb-lg">
+<h1 class="font-headline-md text-headline-md text-on-surface mb-xs">Link Financial Providers</h1>
+<p class="font-body-md text-body-md text-on-surface-variant">Select the institutions you want to connect via Account Aggregator to consolidate your portfolio view.</p>
+</div>
+<div class="space-y-lg">
+<!-- Category: Banks -->
+<section>
+<h2 class="font-label-md text-label-md text-on-surface-variant uppercase tracking-wider mb-sm px-xs">Bank Accounts</h2>
+<div class="bg-surface-container-lowest rounded-xl border border-outline-variant card-shadow overflow-hidden">
+<div class="flex items-center justify-between p-md border-b border-outline-variant last:border-b-0">
+<div class="flex items-center gap-md">
+<div class="w-12 h-12 bg-surface-container flex items-center justify-center rounded-lg">
+<span class="material-symbols-outlined text-primary" style="font-variation-settings: 'FILL' 1;">account_balance</span>
+</div>
+<div>
+<h3 class="font-headline-sm text-headline-sm text-on-surface">HDFC Bank</h3>
+<p class="font-body-md text-body-md text-on-surface-variant">Savings &amp; Current Accounts</p>
+</div>
+</div>
+<div class="relative inline-block w-12 mr-2 align-middle select-none transition duration-200 ease-in">
+<input checked="" class="toggle-checkbox absolute block w-6 h-6 rounded-full bg-white border-4 appearance-none cursor-pointer z-10 top-0 left-0 transition-transform duration-200 ease-in-out border-primary" id="hdfc-toggle" name="toggle" type="checkbox">
+<label class="toggle-label block overflow-hidden h-6 rounded-full bg-primary cursor-pointer transition-colors duration-200 ease-in-out" for="hdfc-toggle"></label>
+</div>
+</div>
+<div class="flex items-center justify-between p-md border-b border-outline-variant last:border-b-0">
+<div class="flex items-center gap-md">
+<div class="w-12 h-12 bg-surface-container flex items-center justify-center rounded-lg">
+<span class="material-symbols-outlined text-primary" style="font-variation-settings: 'FILL' 1;">account_balance</span>
+</div>
+<div>
+<h3 class="font-headline-sm text-headline-sm text-on-surface">ICICI Bank</h3>
+<p class="font-body-md text-body-md text-on-surface-variant">Savings &amp; Deposits</p>
+</div>
+</div>
+<div class="relative inline-block w-12 mr-2 align-middle select-none transition duration-200 ease-in">
+<input class="toggle-checkbox absolute block w-6 h-6 rounded-full bg-white border-4 appearance-none cursor-pointer z-10 top-0 left-0 transition-transform duration-200 ease-in-out border-outline-variant" id="icici-toggle" name="toggle" type="checkbox">
+<label class="toggle-label block overflow-hidden h-6 rounded-full bg-surface-variant cursor-pointer transition-colors duration-200 ease-in-out" for="icici-toggle"></label>
+</div>
+</div>
+</div>
+</section>
+<!-- Category: Mutual Funds & Equities -->
+<section>
+<h2 class="font-label-md text-label-md text-on-surface-variant uppercase tracking-wider mb-sm px-xs">Investments &amp; Demat</h2>
+<div class="bg-surface-container-lowest rounded-xl border border-outline-variant card-shadow overflow-hidden">
+<div class="flex items-center justify-between p-md border-b border-outline-variant last:border-b-0">
+<div class="flex items-center gap-md">
+<div class="w-12 h-12 bg-surface-container flex items-center justify-center rounded-lg">
+<span class="material-symbols-outlined text-primary" style="font-variation-settings: 'FILL' 1;">trending_up</span>
+</div>
+<div>
+<h3 class="font-headline-sm text-headline-sm text-on-surface">CDSL</h3>
+<p class="font-body-md text-body-md text-on-surface-variant">Equities &amp; ETFs</p>
+</div>
+</div>
+<div class="relative inline-block w-12 mr-2 align-middle select-none transition duration-200 ease-in">
+<input checked="" class="toggle-checkbox absolute block w-6 h-6 rounded-full bg-white border-4 appearance-none cursor-pointer z-10 top-0 left-0 transition-transform duration-200 ease-in-out border-primary" id="cdsl-toggle" name="toggle" type="checkbox">
+<label class="toggle-label block overflow-hidden h-6 rounded-full bg-primary cursor-pointer transition-colors duration-200 ease-in-out" for="cdsl-toggle"></label>
+</div>
+</div>
+<div class="flex items-center justify-between p-md border-b border-outline-variant last:border-b-0">
+<div class="flex items-center gap-md">
+<div class="w-12 h-12 bg-surface-container flex items-center justify-center rounded-lg">
+<span class="material-symbols-outlined text-primary" style="font-variation-settings: 'FILL' 1;">donut_large</span>
+</div>
+<div>
+<h3 class="font-headline-sm text-headline-sm text-on-surface">CAMS</h3>
+<p class="font-body-md text-body-md text-on-surface-variant">Mutual Funds</p>
+</div>
+</div>
+<div class="relative inline-block w-12 mr-2 align-middle select-none transition duration-200 ease-in">
+<input checked="" class="toggle-checkbox absolute block w-6 h-6 rounded-full bg-white border-4 appearance-none cursor-pointer z-10 top-0 left-0 transition-transform duration-200 ease-in-out border-primary" id="cams-toggle" name="toggle" type="checkbox">
+<label class="toggle-label block overflow-hidden h-6 rounded-full bg-primary cursor-pointer transition-colors duration-200 ease-in-out" for="cams-toggle"></label>
+</div>
+</div>
+</div>
+</section>
+<!-- Category: Retirement -->
+<section>
+<h2 class="font-label-md text-label-md text-on-surface-variant uppercase tracking-wider mb-sm px-xs">Retirement &amp; Pension</h2>
+<div class="bg-surface-container-lowest rounded-xl border border-outline-variant card-shadow overflow-hidden">
+<div class="flex items-center justify-between p-md border-b border-outline-variant last:border-b-0">
+<div class="flex items-center gap-md">
+<div class="w-12 h-12 bg-surface-container flex items-center justify-center rounded-lg">
+<span class="material-symbols-outlined text-primary" style="font-variation-settings: 'FILL' 1;">savings</span>
+</div>
+<div>
+<h3 class="font-headline-sm text-headline-sm text-on-surface">NPS (KFintech)</h3>
+<p class="font-body-md text-body-md text-on-surface-variant">National Pension System</p>
+</div>
+</div>
+<div class="relative inline-block w-12 mr-2 align-middle select-none transition duration-200 ease-in">
+<input class="toggle-checkbox absolute block w-6 h-6 rounded-full bg-white border-4 appearance-none cursor-pointer z-10 top-0 left-0 transition-transform duration-200 ease-in-out border-outline-variant" id="nps-toggle" name="toggle" type="checkbox">
+<label class="toggle-label block overflow-hidden h-6 rounded-full bg-surface-variant cursor-pointer transition-colors duration-200 ease-in-out" for="nps-toggle"></label>
+</div>
+</div>
+</div>
+</section>
+</div>
+</main>
+<!-- Bottom Action Bar -->
+<div class="fixed bottom-0 w-full z-50 bg-surface border-t border-outline-variant p-margin-mobile flex justify-center max-w-7xl mx-auto shadow-[0_-4px_12px_rgba(0,0,0,0.05)]">
+<button class="w-full max-w-sm h-[56px] bg-primary text-on-primary font-label-md text-label-md rounded-lg flex items-center justify-center hover:bg-primary-container transition-colors active:scale-95 duration-100 shadow-md">
+            Proceed with 3 Selected
+            <span class="material-symbols-outlined ml-2">arrow_forward</span>
+</button>
+</div>
+<script>
+        // Simple script to update the button count based on selected checkboxes
+        const checkboxes = document.querySelectorAll('.toggle-checkbox');
+        const proceedButton = document.querySelector('button.bg-primary');
+        
+        function updateButtonText() {
+            let count = 0;
+            checkboxes.forEach(cb => {
+                if(cb.checked) count++;
+            });
+            
+            if(count > 0) {
+                proceedButton.innerHTML = `Proceed with ${count} Selected <span class="material-symbols-outlined ml-2">arrow_forward</span>`;
+                proceedButton.classList.remove('opacity-50', 'pointer-events-none');
+            } else {
+                proceedButton.innerHTML = `Select Providers to Proceed`;
+                proceedButton.classList.add('opacity-50', 'pointer-events-none');
+            }
+        }
+
+        checkboxes.forEach(cb => {
+            cb.addEventListener('change', updateButtonText);
+        });
+        
+        // Initialize
+        updateButtonText();
+    </script>
+</body></html>

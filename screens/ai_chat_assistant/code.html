@@ -1,0 +1,199 @@
+<!DOCTYPE html><html lang="en"><head>
+<meta charset="utf-8">
+<meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" name="viewport">
+<title>SahaVest - AI Chat Assistant</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "surface-container-high": "#e7e8e9",
+                    "on-secondary-fixed": "#002110",
+                    "error-container": "#ffdad6",
+                    "surface-container-low": "#f3f4f5",
+                    "tertiary-container": "#573500",
+                    "surface-variant": "#e1e3e4",
+                    "on-secondary-fixed-variant": "#005230",
+                    "secondary-fixed-dim": "#7ed9a3",
+                    "on-tertiary": "#ffffff",
+                    "on-primary-fixed": "#001b3f",
+                    "error": "#ba1a1a",
+                    "tertiary-fixed-dim": "#ffb95f",
+                    "on-surface": "#191c1d",
+                    "surface-container-highest": "#e1e3e4",
+                    "surface-dim": "#d9dadb",
+                    "outline": "#747780",
+                    "on-tertiary-fixed": "#2a1700",
+                    "tertiary": "#3a2100",
+                    "inverse-primary": "#abc7ff",
+                    "background": "#f8f9fa",
+                    "surface-bright": "#f8f9fa",
+                    "on-primary-container": "#8aa8e0",
+                    "outline-variant": "#c4c6d0",
+                    "on-primary-fixed-variant": "#264679",
+                    "on-error": "#ffffff",
+                    "on-background": "#191c1d",
+                    "tertiary-fixed": "#ffddb8",
+                    "secondary": "#006d42",
+                    "surface-container": "#edeeef",
+                    "on-surface-variant": "#43474f",
+                    "on-tertiary-fixed-variant": "#653e00",
+                    "surface-tint": "#405e92",
+                    "primary": "#002653",
+                    "primary-fixed": "#d7e3ff",
+                    "secondary-fixed": "#9af6be",
+                    "on-tertiary-container": "#e89500",
+                    "on-secondary-container": "#087347",
+                    "primary-fixed-dim": "#abc7ff",
+                    "inverse-on-surface": "#f0f1f2",
+                    "primary-container": "#1a3c6e",
+                    "on-error-container": "#93000a",
+                    "surface-container-lowest": "#ffffff",
+                    "surface": "#f8f9fa",
+                    "secondary-container": "#9af6be",
+                    "on-primary": "#ffffff",
+                    "on-secondary": "#ffffff",
+                    "inverse-surface": "#2e3132"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.25rem",
+                    "lg": "0.5rem",
+                    "xl": "0.75rem",
+                    "full": "9999px"
+            },
+            "spacing": {
+                    "tap-target-min": "44px",
+                    "sm": "12px",
+                    "gutter-mobile": "12px",
+                    "xs": "8px",
+                    "md": "16px",
+                    "margin-mobile": "16px",
+                    "base": "4px",
+                    "lg": "24px",
+                    "xl": "32px"
+            },
+            "fontFamily": {
+                    "display-lg-mobile": ["Inter"],
+                    "display-lg": ["Inter"],
+                    "body-md": ["Inter"],
+                    "headline-sm": ["Inter"],
+                    "label-sm": ["Inter"],
+                    "body-lg": ["Inter"],
+                    "label-md": ["Inter"],
+                    "headline-md": ["Inter"]
+            },
+            "fontSize": {
+                    "display-lg-mobile": ["28px", {"lineHeight": "36px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                    "display-lg": ["32px", {"lineHeight": "40px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                    "body-md": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                    "headline-sm": ["20px", {"lineHeight": "28px", "fontWeight": "600"}],
+                    "label-sm": ["12px", {"lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "600"}],
+                    "body-lg": ["18px", {"lineHeight": "28px", "fontWeight": "400"}],
+                    "label-md": ["14px", {"lineHeight": "20px", "letterSpacing": "0.01em", "fontWeight": "500"}],
+                    "headline-md": ["24px", {"lineHeight": "32px", "fontWeight": "600"}]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+        body { -webkit-tap-highlight-color: transparent; }
+        .hide-scrollbar::-webkit-scrollbar { display: none; }
+        .hide-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+        .chat-container { height: calc(100vh - 64px - 140px); /* Adjust based on header and input area heights */ }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background text-on-background font-body-md min-h-screen flex flex-col antialiased">
+<!-- Header (No TopAppBar Shell as this is a specific tool/flow, providing a custom back header) -->
+<header class="bg-surface w-full sticky top-0 z-50 border-b border-outline-variant flex items-center px-margin-mobile py-sm h-[64px]">
+<button aria-label="Go Back" class="w-tap-target-min h-tap-target-min flex items-center justify-center mr-xs active:bg-surface-container-high rounded-full transition-colors">
+<span class="material-symbols-outlined text-on-surface" data-icon="arrow_back">arrow_back</span>
+</button>
+<div class="flex flex-col flex-grow">
+<h1 class="font-headline-sm text-headline-sm text-on-surface">SahaVest Assistant</h1>
+<span class="font-label-sm text-label-sm text-secondary flex items-center">
+<span class="w-2 h-2 rounded-full bg-secondary mr-1"></span> Online
+            </span>
+</div>
+<button aria-label="More options" class="w-tap-target-min h-tap-target-min flex items-center justify-center active:bg-surface-container-high rounded-full transition-colors">
+<span class="material-symbols-outlined text-on-surface" data-icon="more_vert">more_vert</span>
+</button>
+</header>
+<!-- Disclaimer Banner -->
+<div class="bg-surface-container-low px-margin-mobile py-xs border-b border-outline-variant flex items-start space-x-2">
+<span class="material-symbols-outlined text-outline text-[18px] mt-0.5" data-icon="info">info</span>
+<p class="font-label-sm text-label-sm text-on-surface-variant">I can help explain concepts, but I do not provide direct buy/sell advice. Consult a verified advisor for specific recommendations.</p>
+</div>
+<!-- Chat Canvas -->
+<main class="flex-grow flex flex-col bg-surface-bright relative">
+<div class="chat-container overflow-y-auto px-margin-mobile py-md flex flex-col space-y-lg pb-xl">
+<!-- Time Divider -->
+<div class="flex justify-center">
+<span class="font-label-sm text-label-sm text-outline bg-surface-container-lowest px-3 py-1 rounded-full shadow-sm border border-outline-variant">Today, 10:24 AM</span>
+</div>
+<!-- AI Message 1 -->
+<div class="flex items-end space-x-sm max-w-[85%] self-start">
+<div class="w-8 h-8 rounded-full bg-primary-container flex items-center justify-center flex-shrink-0">
+<span class="material-symbols-outlined text-on-primary-container text-[18px]" data-icon="smart_toy">smart_toy</span>
+</div>
+<div class="bg-surface-container rounded-2xl rounded-bl-sm px-md py-sm shadow-sm border border-outline-variant">
+<p class="font-body-md text-on-surface">Hello! I'm your SahaVest assistant. I can help clarify financial terms, explain portfolio metrics, or guide you on how to find a verified advisor.</p>
+</div>
+</div>
+<!-- User Message 1 -->
+<div class="flex flex-col items-end max-w-[85%] self-end">
+<div class="bg-primary rounded-2xl rounded-br-sm px-md py-sm shadow-sm">
+<p class="font-body-md text-on-primary">I was looking at a mutual fund and it mentioned XIRR. What does that mean?</p>
+</div>
+<span class="font-label-sm text-label-sm text-outline mt-1 mr-1">10:25 AM</span>
+</div>
+<!-- AI Message 2 -->
+<div class="flex items-end space-x-sm max-w-[85%] self-start">
+<div class="w-8 h-8 rounded-full bg-primary-container flex items-center justify-center flex-shrink-0">
+<span class="material-symbols-outlined text-on-primary-container text-[18px]" data-icon="smart_toy">smart_toy</span>
+</div>
+<div class="bg-surface-container rounded-2xl rounded-bl-sm px-md py-sm shadow-sm border border-outline-variant space-y-xs">
+<p class="font-body-md text-on-surface"><strong>XIRR (Extended Internal Rate of Return)</strong> is a way to calculate returns on investments where you make multiple transactions at different times (like SIPs).</p>
+<p class="font-body-md text-on-surface text-sm">Unlike simple annualized return, it accounts for the exact dates of your cash flows, giving a more accurate picture of your true return.</p>
+</div>
+</div>
+</div>
+<!-- Sticky Bottom Area: Suggestions & Input -->
+<div class="w-full bg-surface border-t border-outline-variant pb-safe">
+<!-- Suggested Questions (Horizontal Scroll) -->
+<div class="w-full overflow-x-auto hide-scrollbar px-margin-mobile py-sm flex space-x-xs">
+<button class="flex-shrink-0 bg-surface-container-low border border-outline-variant hover:bg-surface-container-high text-on-surface font-label-md text-label-md px-4 py-2 rounded-full transition-colors active:scale-95 duration-100 flex items-center">
+<span class="material-symbols-outlined text-[16px] mr-1" data-icon="school">school</span>
+                    Explain XIRR
+                </button>
+<button class="flex-shrink-0 bg-surface-container-low border border-outline-variant hover:bg-surface-container-high text-on-surface font-label-md text-label-md px-4 py-2 rounded-full transition-colors active:scale-95 duration-100 flex items-center">
+<span class="material-symbols-outlined text-[16px] mr-1" data-icon="verified">verified</span>
+                    Is this advisor verified?
+                </button>
+<button class="flex-shrink-0 bg-surface-container-low border border-outline-variant hover:bg-surface-container-high text-on-surface font-label-md text-label-md px-4 py-2 rounded-full transition-colors active:scale-95 duration-100 flex items-center">
+<span class="material-symbols-outlined text-[16px] mr-1" data-icon="trending_up">trending_up</span>
+                    What is a good SIP amount?
+                </button>
+</div>
+<!-- Input Area -->
+<div class="px-margin-mobile pb-sm pt-xs flex items-end space-x-2">
+<div class="flex-grow bg-surface-container-low border border-outline-variant rounded-xl flex items-center px-3 min-h-[48px] focus-within:border-primary focus-within:ring-1 focus-within:ring-primary transition-all">
+<textarea class="w-full bg-transparent border-none outline-none focus:ring-0 resize-none font-body-md text-on-surface py-3 max-h-[120px] overflow-y-auto hide-scrollbar" placeholder="Type a message..." rows="1" style="field-sizing: content;"></textarea>
+</div>
+<button aria-label="Send Message" class="w-[48px] h-[48px] bg-primary text-on-primary rounded-xl flex items-center justify-center flex-shrink-0 active:scale-95 transition-transform shadow-sm">
+<span class="material-symbols-outlined" data-icon="send" data-weight="fill">send</span>
+</button>
+</div>
+</div>
+</main>
+</body></html>

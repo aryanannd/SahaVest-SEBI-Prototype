@@ -1,0 +1,290 @@
+<!DOCTYPE html><html lang="en"><head>
+<meta charset="utf-8">
+<meta content="width=device-width, initial-scale=1.0" name="viewport">
+<title>Asset Allocation - SahaVest</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "surface-variant": "#e1e3e4",
+                        "surface": "#f8f9fa",
+                        "surface-dim": "#d9dadb",
+                        "surface-bright": "#f8f9fa",
+                        "surface-container": "#edeeef",
+                        "on-secondary-container": "#087347",
+                        "on-surface": "#191c1d",
+                        "surface-container-low": "#f3f4f5",
+                        "tertiary-fixed-dim": "#ffb95f",
+                        "on-primary-fixed": "#001b3f",
+                        "inverse-surface": "#2e3132",
+                        "inverse-primary": "#abc7ff",
+                        "error-container": "#ffdad6",
+                        "on-error-container": "#93000a",
+                        "tertiary-fixed": "#ffddb8",
+                        "background": "#f8f9fa",
+                        "on-tertiary-fixed": "#2a1700",
+                        "on-surface-variant": "#43474f",
+                        "on-error": "#ffffff",
+                        "on-primary-container": "#8aa8e0",
+                        "primary-fixed": "#d7e3ff",
+                        "on-secondary-fixed": "#002110",
+                        "on-background": "#191c1d",
+                        "primary": "#002653",
+                        "secondary": "#006d42",
+                        "tertiary-container": "#573500",
+                        "on-secondary-fixed-variant": "#005230",
+                        "error": "#ba1a1a",
+                        "outline": "#747780",
+                        "surface-tint": "#405e92",
+                        "primary-fixed-dim": "#abc7ff",
+                        "tertiary": "#3a2100",
+                        "primary-container": "#1a3c6e",
+                        "inverse-on-surface": "#f0f1f2",
+                        "on-primary": "#ffffff",
+                        "secondary-container": "#9af6be",
+                        "secondary-fixed-dim": "#7ed9a3",
+                        "on-tertiary-fixed-variant": "#653e00",
+                        "on-primary-fixed-variant": "#264679",
+                        "on-secondary": "#ffffff",
+                        "outline-variant": "#c4c6d0",
+                        "surface-container-high": "#e7e8e9",
+                        "secondary-fixed": "#9af6be",
+                        "on-tertiary": "#ffffff",
+                        "surface-container-lowest": "#ffffff",
+                        "surface-container-highest": "#e1e3e4",
+                        "on-tertiary-container": "#e89500"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "md": "16px",
+                        "base": "4px",
+                        "tap-target-min": "44px",
+                        "xl": "32px",
+                        "margin-mobile": "16px",
+                        "sm": "12px",
+                        "gutter-mobile": "12px",
+                        "xs": "8px",
+                        "lg": "24px"
+                    },
+                    "fontFamily": {
+                        "display-lg": ["Inter"],
+                        "display-lg-mobile": ["Inter"],
+                        "label-md": ["Inter"],
+                        "headline-sm": ["Inter"],
+                        "headline-md": ["Inter"],
+                        "label-sm": ["Inter"],
+                        "body-lg": ["Inter"],
+                        "body-md": ["Inter"]
+                    },
+                    "fontSize": {
+                        "display-lg": ["32px", { "lineHeight": "40px", "letterSpacing": "-0.02em", "fontWeight": "700" }],
+                        "display-lg-mobile": ["28px", { "lineHeight": "36px", "letterSpacing": "-0.02em", "fontWeight": "700" }],
+                        "label-md": ["14px", { "lineHeight": "20px", "letterSpacing": "0.01em", "fontWeight": "500" }],
+                        "headline-sm": ["20px", { "lineHeight": "28px", "fontWeight": "600" }],
+                        "headline-md": ["24px", { "lineHeight": "32px", "fontWeight": "600" }],
+                        "label-sm": ["12px", { "lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "600" }],
+                        "body-lg": ["18px", { "lineHeight": "28px", "fontWeight": "400" }],
+                        "body-md": ["16px", { "lineHeight": "24px", "fontWeight": "400" }]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        body { font-family: 'Inter', sans-serif; }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-surface text-on-surface min-h-screen flex flex-col">
+<!-- TopAppBar -->
+<header class="w-full sticky top-0 z-50 bg-surface border-b border-outline-variant flex items-center justify-between px-margin-mobile py-sm max-w-7xl mx-auto">
+<button class="w-tap-target-min h-tap-target-min flex items-center justify-center text-on-surface-variant hover:bg-surface-container-low transition-colors rounded-full active:scale-95 duration-100">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 0;">arrow_back</span>
+</button>
+<h1 class="font-headline-md text-headline-md text-primary tracking-tight">SahaVest</h1>
+<div class="w-tap-target-min h-tap-target-min flex items-center justify-center text-primary">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 0;">more_vert</span>
+</div>
+</header>
+<!-- Main Content -->
+<main class="flex-grow w-full max-w-7xl mx-auto px-margin-mobile py-lg pb-[96px] md:pb-lg flex flex-col gap-lg">
+<!-- Header Section -->
+<div class="flex flex-col gap-xs">
+<h2 class="font-headline-sm text-headline-sm text-on-surface">Asset Allocation</h2>
+<p class="font-body-md text-body-md text-on-surface-variant">Breakdown of your current portfolio across different asset classes.</p>
+</div>
+<!-- Total Value Summary Card -->
+<div class="bg-surface-container-lowest rounded-xl p-md border border-outline-variant shadow-sm flex flex-col gap-sm">
+<p class="font-label-sm text-label-sm text-on-surface-variant uppercase">Total Portfolio Value</p>
+<div class="flex items-baseline gap-xs">
+<span class="font-display-lg text-display-lg text-on-surface">₹24,50,000</span>
+<span class="font-label-md text-label-md text-secondary bg-secondary-container px-2 py-1 rounded-full flex items-center gap-1">
+<span class="material-symbols-outlined text-[14px]">arrow_upward</span> 12.4%
+                </span>
+</div>
+</div>
+<!-- Allocation Breakdown Cards (Bento Style) -->
+<div class="grid grid-cols-1 md:grid-cols-2 gap-md">
+<!-- Equity -->
+<button class="bg-surface-container-lowest rounded-xl p-md border border-outline-variant shadow-sm flex items-center justify-between hover:bg-surface-container-low transition-colors active:scale-[0.98] duration-200 text-left min-h-tap-target-min group">
+<div class="flex items-center gap-md">
+<div class="w-12 h-12 rounded-full bg-[#002653] flex items-center justify-center text-white shrink-0">
+<span class="material-symbols-outlined">trending_up</span>
+</div>
+<div class="flex flex-col">
+<span class="font-headline-sm text-headline-sm text-on-surface">Equity</span>
+<span class="font-label-sm text-label-sm text-on-surface-variant">Direct Stocks</span>
+</div>
+</div>
+<div class="flex flex-col items-end gap-1">
+<span class="font-body-md text-body-md font-semibold text-on-surface">₹10,29,000</span>
+<div class="flex items-center gap-2">
+<div class="w-16 h-1.5 bg-surface-variant rounded-full overflow-hidden">
+<div class="h-full bg-[#002653] w-[42%]"></div>
+</div>
+<span class="font-label-sm text-label-sm text-on-surface-variant">42%</span>
+</div>
+</div>
+</button>
+<!-- Mutual Funds -->
+<button class="bg-surface-container-lowest rounded-xl p-md border border-outline-variant shadow-sm flex items-center justify-between hover:bg-surface-container-low transition-colors active:scale-[0.98] duration-200 text-left min-h-tap-target-min group">
+<div class="flex items-center gap-md">
+<div class="w-12 h-12 rounded-full bg-[#006d42] flex items-center justify-center text-white shrink-0">
+<span class="material-symbols-outlined">pie_chart</span>
+</div>
+<div class="flex flex-col">
+<span class="font-headline-sm text-headline-sm text-on-surface">Mutual Funds</span>
+<span class="font-label-sm text-label-sm text-on-surface-variant">SIPs &amp; Lumpsum</span>
+</div>
+</div>
+<div class="flex flex-col items-end gap-1">
+<span class="font-body-md text-body-md font-semibold text-on-surface">₹7,35,000</span>
+<div class="flex items-center gap-2">
+<div class="w-16 h-1.5 bg-surface-variant rounded-full overflow-hidden">
+<div class="h-full bg-[#006d42] w-[30%]"></div>
+</div>
+<span class="font-label-sm text-label-sm text-on-surface-variant">30%</span>
+</div>
+</div>
+</button>
+<!-- Bonds -->
+<button class="bg-surface-container-lowest rounded-xl p-md border border-outline-variant shadow-sm flex items-center justify-between hover:bg-surface-container-low transition-colors active:scale-[0.98] duration-200 text-left min-h-tap-target-min group">
+<div class="flex items-center gap-md">
+<div class="w-12 h-12 rounded-full bg-[#ffb95f] flex items-center justify-center text-white shrink-0">
+<span class="material-symbols-outlined">account_balance</span>
+</div>
+<div class="flex flex-col">
+<span class="font-headline-sm text-headline-sm text-on-surface">Bonds</span>
+<span class="font-label-sm text-label-sm text-on-surface-variant">Corporate &amp; Gov</span>
+</div>
+</div>
+<div class="flex flex-col items-end gap-1">
+<span class="font-body-md text-body-md font-semibold text-on-surface">₹3,67,500</span>
+<div class="flex items-center gap-2">
+<div class="w-16 h-1.5 bg-surface-variant rounded-full overflow-hidden">
+<div class="h-full bg-[#ffb95f] w-[15%]"></div>
+</div>
+<span class="font-label-sm text-label-sm text-on-surface-variant">15%</span>
+</div>
+</div>
+</button>
+<!-- NPS -->
+<button class="bg-surface-container-lowest rounded-xl p-md border border-outline-variant shadow-sm flex items-center justify-between hover:bg-surface-container-low transition-colors active:scale-[0.98] duration-200 text-left min-h-tap-target-min group">
+<div class="flex items-center gap-md">
+<div class="w-12 h-12 rounded-full bg-[#405e92] flex items-center justify-center text-white shrink-0">
+<span class="material-symbols-outlined">savings</span>
+</div>
+<div class="flex flex-col">
+<span class="font-headline-sm text-headline-sm text-on-surface">NPS</span>
+<span class="font-label-sm text-label-sm text-on-surface-variant">Retirement</span>
+</div>
+</div>
+<div class="flex flex-col items-end gap-1">
+<span class="font-body-md text-body-md font-semibold text-on-surface">₹1,96,000</span>
+<div class="flex items-center gap-2">
+<div class="w-16 h-1.5 bg-surface-variant rounded-full overflow-hidden">
+<div class="h-full bg-[#405e92] w-[8%]"></div>
+</div>
+<span class="font-label-sm text-label-sm text-on-surface-variant">8%</span>
+</div>
+</div>
+</button>
+<!-- SGB -->
+<button class="bg-surface-container-lowest rounded-xl p-md border border-outline-variant shadow-sm flex items-center justify-between hover:bg-surface-container-low transition-colors active:scale-[0.98] duration-200 text-left min-h-tap-target-min group">
+<div class="flex items-center gap-md">
+<div class="w-12 h-12 rounded-full bg-[#e89500] flex items-center justify-center text-white shrink-0">
+<span class="material-symbols-outlined">diamond</span>
+</div>
+<div class="flex flex-col">
+<span class="font-headline-sm text-headline-sm text-on-surface">SGB</span>
+<span class="font-label-sm text-label-sm text-on-surface-variant">Sovereign Gold Bonds</span>
+</div>
+</div>
+<div class="flex flex-col items-end gap-1">
+<span class="font-body-md text-body-md font-semibold text-on-surface">₹98,000</span>
+<div class="flex items-center gap-2">
+<div class="w-16 h-1.5 bg-surface-variant rounded-full overflow-hidden">
+<div class="h-full bg-[#e89500] w-[4%]"></div>
+</div>
+<span class="font-label-sm text-label-sm text-on-surface-variant">4%</span>
+</div>
+</div>
+</button>
+<!-- REIT / InvIT -->
+<button class="bg-surface-container-lowest rounded-xl p-md border border-outline-variant shadow-sm flex items-center justify-between hover:bg-surface-container-low transition-colors active:scale-[0.98] duration-200 text-left min-h-tap-target-min group">
+<div class="flex items-center gap-md">
+<div class="w-12 h-12 rounded-full bg-[#573500] flex items-center justify-center text-white shrink-0">
+<span class="material-symbols-outlined">domain</span>
+</div>
+<div class="flex flex-col">
+<span class="font-headline-sm text-headline-sm text-on-surface">REIT/InvIT</span>
+<span class="font-label-sm text-label-sm text-on-surface-variant">Real Estate &amp; Infra</span>
+</div>
+</div>
+<div class="flex flex-col items-end gap-1">
+<span class="font-body-md text-body-md font-semibold text-on-surface">₹24,500</span>
+<div class="flex items-center gap-2">
+<div class="w-16 h-1.5 bg-surface-variant rounded-full overflow-hidden">
+<div class="h-full bg-[#573500] w-[1%]"></div>
+</div>
+<span class="font-label-sm text-label-sm text-on-surface-variant">1%</span>
+</div>
+</div>
+</button>
+</div>
+</main>
+<!-- BottomNavBar -->
+<nav class="fixed bottom-0 w-full z-50 bg-surface border-t border-outline-variant flex justify-around items-center h-[64px] px-2 pb-safe md:hidden">
+<a class="flex flex-col items-center justify-center text-on-surface-variant p-2 hover:bg-surface-container-high rounded-full active:scale-90 duration-200 ease-in-out w-tap-target-min min-h-tap-target-min" href="#">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 0;">dashboard</span>
+<span class="font-label-sm text-label-sm mt-1">Dashboard</span>
+</a>
+<a class="flex flex-col items-center justify-center bg-secondary-container text-on-secondary-container rounded-full px-4 py-1 hover:bg-surface-container-high active:scale-90 duration-200 ease-in-out min-h-tap-target-min" href="#">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">account_balance_wallet</span>
+<span class="font-label-sm text-label-sm mt-1">Portfolio</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant p-2 hover:bg-surface-container-high rounded-full active:scale-90 duration-200 ease-in-out w-tap-target-min min-h-tap-target-min" href="#">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 0;">shield</span>
+<span class="font-label-sm text-label-sm mt-1">Protection</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant p-2 hover:bg-surface-container-high rounded-full active:scale-90 duration-200 ease-in-out w-tap-target-min min-h-tap-target-min" href="#">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 0;">person</span>
+<span class="font-label-sm text-label-sm mt-1">Profile</span>
+</a>
+</nav>
+</body></html>

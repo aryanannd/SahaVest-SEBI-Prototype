@@ -1,0 +1,380 @@
+<!DOCTYPE html><html class="light" lang="en"><head>
+<meta charset="utf-8">
+<meta content="width=device-width, initial-scale=1.0" name="viewport">
+<title>SahaVest - Financial Safety Quiz</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<style type="text/css">
+        .material-symbols-outlined {
+            font-family: 'Material Symbols Outlined';
+            font-weight: normal;
+            font-style: normal;
+            font-size: 24px;
+            line-height: 1;
+            letter-spacing: normal;
+            text-transform: none;
+            display: inline-block;
+            white-space: nowrap;
+            word-wrap: normal;
+            direction: ltr;
+            -webkit-font-feature-settings: 'liga';
+            -webkit-font-smoothing: antialiased;
+        }
+        
+        .option-card {
+            transition: all 0.2s ease-in-out;
+        }
+        
+        .option-card:hover:not(.selected) {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.04);
+        }
+
+        .option-card.selected.correct {
+            border-color: #087347; /* on-secondary-container */
+            background-color: #9af6be; /* secondary-container */
+            color: #002110; /* on-secondary-fixed */
+        }
+
+        .option-card.selected.incorrect {
+            border-color: #ba1a1a; /* error */
+            background-color: #ffdad6; /* error-container */
+            color: #93000a; /* on-error-container */
+        }
+    </style>
+<script id="tailwind-config">
+        tailwind.config = {
+          darkMode: "class",
+          theme: {
+            extend: {
+              "colors": {
+                      "surface-container-high": "#e7e8e9",
+                      "on-secondary-fixed": "#002110",
+                      "error-container": "#ffdad6",
+                      "surface-container-low": "#f3f4f5",
+                      "tertiary-container": "#573500",
+                      "surface-variant": "#e1e3e4",
+                      "on-secondary-fixed-variant": "#005230",
+                      "secondary-fixed-dim": "#7ed9a3",
+                      "on-tertiary": "#ffffff",
+                      "on-primary-fixed": "#001b3f",
+                      "error": "#ba1a1a",
+                      "tertiary-fixed-dim": "#ffb95f",
+                      "on-surface": "#191c1d",
+                      "surface-container-highest": "#e1e3e4",
+                      "surface-dim": "#d9dadb",
+                      "outline": "#747780",
+                      "on-tertiary-fixed": "#2a1700",
+                      "tertiary": "#3a2100",
+                      "inverse-primary": "#abc7ff",
+                      "background": "#f8f9fa",
+                      "surface-bright": "#f8f9fa",
+                      "on-primary-container": "#8aa8e0",
+                      "outline-variant": "#c4c6d0",
+                      "on-primary-fixed-variant": "#264679",
+                      "on-error": "#ffffff",
+                      "on-background": "#191c1d",
+                      "tertiary-fixed": "#ffddb8",
+                      "secondary": "#006d42",
+                      "surface-container": "#edeeef",
+                      "on-surface-variant": "#43474f",
+                      "on-tertiary-fixed-variant": "#653e00",
+                      "surface-tint": "#405e92",
+                      "primary": "#002653",
+                      "primary-fixed": "#d7e3ff",
+                      "secondary-fixed": "#9af6be",
+                      "on-tertiary-container": "#e89500",
+                      "on-secondary-container": "#087347",
+                      "primary-fixed-dim": "#abc7ff",
+                      "inverse-on-surface": "#f0f1f2",
+                      "primary-container": "#1a3c6e",
+                      "on-error-container": "#93000a",
+                      "surface-container-lowest": "#ffffff",
+                      "surface": "#f8f9fa",
+                      "secondary-container": "#9af6be",
+                      "on-primary": "#ffffff",
+                      "on-secondary": "#ffffff",
+                      "inverse-surface": "#2e3132"
+              },
+              "borderRadius": {
+                      "DEFAULT": "0.25rem",
+                      "lg": "0.5rem",
+                      "xl": "0.75rem",
+                      "full": "9999px"
+              },
+              "spacing": {
+                      "tap-target-min": "44px",
+                      "sm": "12px",
+                      "gutter-mobile": "12px",
+                      "xs": "8px",
+                      "md": "16px",
+                      "margin-mobile": "16px",
+                      "base": "4px",
+                      "lg": "24px",
+                      "xl": "32px"
+              },
+              "fontFamily": {
+                      "display-lg-mobile": [
+                              "Inter"
+                      ],
+                      "display-lg": [
+                              "Inter"
+                      ],
+                      "body-md": [
+                              "Inter"
+                      ],
+                      "headline-sm": [
+                              "Inter"
+                      ],
+                      "label-sm": [
+                              "Inter"
+                      ],
+                      "body-lg": [
+                              "Inter"
+                      ],
+                      "label-md": [
+                              "Inter"
+                      ],
+                      "headline-md": [
+                              "Inter"
+                      ]
+              },
+              "fontSize": {
+                      "display-lg-mobile": [
+                              "28px",
+                              {
+                                      "lineHeight": "36px",
+                                      "letterSpacing": "-0.02em",
+                                      "fontWeight": "700"
+                              }
+                      ],
+                      "display-lg": [
+                              "32px",
+                              {
+                                      "lineHeight": "40px",
+                                      "letterSpacing": "-0.02em",
+                                      "fontWeight": "700"
+                              }
+                      ],
+                      "body-md": [
+                              "16px",
+                              {
+                                      "lineHeight": "24px",
+                                      "fontWeight": "400"
+                              }
+                      ],
+                      "headline-sm": [
+                              "20px",
+                              {
+                                      "lineHeight": "28px",
+                                      "fontWeight": "600"
+                              }
+                      ],
+                      "label-sm": [
+                              "12px",
+                              {
+                                      "lineHeight": "16px",
+                                      "letterSpacing": "0.05em",
+                                      "fontWeight": "600"
+                              }
+                      ],
+                      "body-lg": [
+                              "18px",
+                              {
+                                      "lineHeight": "28px",
+                                      "fontWeight": "400"
+                              }
+                      ],
+                      "label-md": [
+                              "14px",
+                              {
+                                      "lineHeight": "20px",
+                                      "letterSpacing": "0.01em",
+                                      "fontWeight": "500"
+                              }
+                      ],
+                      "headline-md": [
+                              "24px",
+                              {
+                                      "lineHeight": "32px",
+                                      "fontWeight": "600"
+                              }
+                      ]
+              }
+      },
+          },
+        }
+    </script>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background text-on-background min-h-screen flex flex-col font-body-md">
+<!-- TopAppBar (Transactional - Hidden/Modified for focused journey) -->
+<header class="w-full sticky top-0 z-50 bg-surface dark:bg-surface-dim border-b border-outline-variant dark:border-outline">
+<div class="flex items-center justify-between px-margin-mobile py-sm w-full max-w-7xl mx-auto">
+<button class="w-10 h-10 flex items-center justify-center rounded-full hover:bg-surface-container-low transition-colors text-on-surface-variant">
+<span class="material-symbols-outlined">close</span>
+</button>
+<div class="font-headline-sm text-headline-sm text-primary dark:text-primary-fixed">Knowledge Check</div>
+<div class="w-10"></div> <!-- Spacer for balance -->
+</div>
+</header>
+<main class="flex-grow flex flex-col px-margin-mobile py-lg max-w-3xl mx-auto w-full md:px-lg">
+<!-- Progress Indicator -->
+<div class="mb-lg w-full">
+<div class="flex justify-between items-center mb-xs">
+<span class="font-label-sm text-label-sm text-on-surface-variant">Question 3 of 5</span>
+<span class="font-label-sm text-label-sm text-primary">60%</span>
+</div>
+<div class="w-full bg-surface-container-highest rounded-full h-2">
+<div class="bg-primary h-2 rounded-full" style="width: 60%"></div>
+</div>
+</div>
+<!-- Question Section -->
+<section class="mb-xl">
+<div class="inline-flex items-center px-3 py-1 rounded-full bg-surface-container-low text-on-surface-variant font-label-sm text-label-sm mb-md border border-outline-variant">
+<span class="material-symbols-outlined text-[16px] mr-1">shield</span>
+                Financial Safety
+            </div>
+<h1 class="font-display-lg-mobile text-display-lg-mobile md:font-display-lg md:text-display-lg text-on-surface mb-md tracking-tight">
+                Which action is considered the safest approach when receiving an unexpected email asking to verify your bank login details?
+            </h1>
+<p class="font-body-md text-body-md text-on-surface-variant">
+                Select the single best answer.
+            </p>
+</section>
+<!-- Options Grid -->
+<section class="flex flex-col gap-sm md:gap-md mb-xl flex-grow" id="quiz-options">
+<button class="option-card w-full text-left bg-surface-container-lowest border border-outline-variant rounded-xl p-md flex items-start min-h-[min(tap-target-min, auto)]" data-correct="false">
+<div class="flex-shrink-0 w-8 h-8 rounded-full border border-outline-variant flex items-center justify-center mr-md mt-1 option-marker">
+<span class="font-label-md text-label-md">A</span>
+</div>
+<div class="flex-grow">
+<p class="font-body-md text-body-md text-on-surface">Click the link provided in the email and enter your details quickly to secure your account.</p>
+</div>
+<div class="ml-sm hidden status-icon">
+<span class="material-symbols-outlined text-error">close</span>
+</div>
+</button>
+<button class="option-card w-full text-left bg-surface-container-lowest border border-outline-variant rounded-xl p-md flex items-start min-h-[min(tap-target-min, auto)]" data-correct="false">
+<div class="flex-shrink-0 w-8 h-8 rounded-full border border-outline-variant flex items-center justify-center mr-md mt-1 option-marker">
+<span class="font-label-md text-label-md">B</span>
+</div>
+<div class="flex-grow">
+<p class="font-body-md text-body-md text-on-surface">Reply to the email asking if the request is genuinely from the bank before proceeding.</p>
+</div>
+<div class="ml-sm hidden status-icon">
+<span class="material-symbols-outlined text-error">close</span>
+</div>
+</button>
+<button class="option-card w-full text-left bg-surface-container-lowest border border-outline-variant rounded-xl p-md flex items-start min-h-[min(tap-target-min, auto)]" data-correct="true">
+<div class="flex-shrink-0 w-8 h-8 rounded-full border border-outline-variant flex items-center justify-center mr-md mt-1 option-marker">
+<span class="font-label-md text-label-md">C</span>
+</div>
+<div class="flex-grow">
+<p class="font-body-md text-body-md text-on-surface font-medium">Do not click any links. Independently navigate to your bank's official website or app to check for alerts.</p>
+</div>
+<div class="ml-sm hidden status-icon">
+<span class="material-symbols-outlined text-secondary">check_circle</span>
+</div>
+</button>
+<button class="option-card w-full text-left bg-surface-container-lowest border border-outline-variant rounded-xl p-md flex items-start min-h-[min(tap-target-min, auto)]" data-correct="false">
+<div class="flex-shrink-0 w-8 h-8 rounded-full border border-outline-variant flex items-center justify-center mr-md mt-1 option-marker">
+<span class="font-label-md text-label-md">D</span>
+</div>
+<div class="flex-grow">
+<p class="font-body-md text-body-md text-on-surface">Forward the email to a friend to see if they think it looks legitimate.</p>
+</div>
+<div class="ml-sm hidden status-icon">
+<span class="material-symbols-outlined text-error">close</span>
+</div>
+</button>
+</section>
+<!-- Score Summary / Actions (Appears after selection) -->
+<section class="hidden mt-auto bg-surface-container-low rounded-xl p-md border border-outline-variant" id="feedback-section">
+<div class="flex flex-col md:flex-row justify-between items-center gap-md">
+<div class="flex items-center">
+<div class="w-12 h-12 rounded-full flex items-center justify-center mr-md bg-secondary-container text-on-secondary-container" id="feedback-icon-container">
+<span class="material-symbols-outlined" id="feedback-icon" style="font-variation-settings: 'FILL' 1;">task_alt</span>
+</div>
+<div>
+<h3 class="font-headline-sm text-headline-sm text-on-surface" id="feedback-title">Correct</h3>
+<p class="font-body-md text-body-md text-on-surface-variant" id="feedback-desc">Phishing emails often create a false sense of urgency.</p>
+</div>
+</div>
+<div class="flex gap-sm w-full md:w-auto">
+<button class="flex-1 md:flex-none px-lg py-sm rounded-full border border-outline text-on-surface font-label-md text-label-md hover:bg-surface-container-highest transition-colors min-h-[48px] flex items-center justify-center">
+                        Retry
+                    </button>
+<button class="flex-1 md:flex-none px-lg py-sm rounded-full bg-primary text-on-primary font-label-md text-label-md hover:bg-primary-container transition-colors min-h-[48px] flex items-center justify-center">
+                        Next
+                        <span class="material-symbols-outlined ml-2 text-[18px]">arrow_forward</span>
+</button>
+</div>
+</div>
+</section>
+</main>
+<script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const options = document.querySelectorAll('.option-card');
+            const feedbackSection = document.getElementById('feedback-section');
+            const feedbackIconContainer = document.getElementById('feedback-icon-container');
+            const feedbackIcon = document.getElementById('feedback-icon');
+            const feedbackTitle = document.getElementById('feedback-title');
+            
+            let answered = false;
+
+            options.forEach(option => {
+                option.addEventListener('click', function() {
+                    if (answered) return;
+                    answered = true;
+
+                    const isCorrect = this.getAttribute('data-correct') === 'true';
+
+                    // Disable all options
+                    options.forEach(opt => {
+                        opt.classList.add('opacity-70', 'cursor-not-allowed');
+                        opt.style.pointerEvents = 'none';
+                        
+                        // Show correct answer regardless
+                        if (opt.getAttribute('data-correct') === 'true') {
+                            opt.classList.remove('opacity-70');
+                            opt.classList.add('border-secondary', 'bg-secondary-container', 'text-on-secondary-fixed');
+                            opt.querySelector('.status-icon').classList.remove('hidden');
+                            opt.querySelector('.status-icon span').textContent = 'check_circle';
+                            opt.querySelector('.status-icon span').classList.add('text-secondary');
+                        }
+                    });
+
+                    // Highlight selected
+                    this.classList.remove('opacity-70');
+                    this.classList.add('selected');
+                    
+                    if (isCorrect) {
+                        this.classList.add('correct', 'border-[2px]');
+                        feedbackIconContainer.className = 'w-12 h-12 rounded-full flex items-center justify-center mr-md bg-secondary-container text-on-secondary-container';
+                        feedbackIcon.textContent = 'task_alt';
+                        feedbackTitle.textContent = 'Excellent!';
+                        feedbackTitle.className = 'font-headline-sm text-headline-sm text-secondary';
+                    } else {
+                        this.classList.add('incorrect', 'border-[2px]');
+                        this.querySelector('.status-icon').classList.remove('hidden');
+                        feedbackIconContainer.className = 'w-12 h-12 rounded-full flex items-center justify-center mr-md bg-error-container text-on-error-container';
+                        feedbackIcon.textContent = 'cancel';
+                        feedbackTitle.textContent = 'Not quite';
+                        feedbackTitle.className = 'font-headline-sm text-headline-sm text-error';
+                    }
+
+                    // Show feedback
+                    feedbackSection.classList.remove('hidden');
+                    feedbackSection.classList.add('animate-fade-in-up');
+                });
+            });
+        });
+    </script>
+</body></html>

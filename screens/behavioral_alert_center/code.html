@@ -1,0 +1,224 @@
+<!DOCTYPE html><html lang="en"><head>
+<meta charset="utf-8">
+<meta content="width=device-width, initial-scale=1.0" name="viewport">
+<title>Behavioral Alert Center - SahaVest</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "secondary": "#006d42",
+                        "outline-variant": "#c4c6d0",
+                        "background": "#f8f9fa",
+                        "surface-container": "#edeeef",
+                        "surface-container-low": "#f3f4f5",
+                        "on-surface-variant": "#43474f",
+                        "on-tertiary-fixed": "#2a1700",
+                        "inverse-primary": "#abc7ff",
+                        "secondary-container": "#9af6be",
+                        "on-secondary": "#ffffff",
+                        "primary-fixed-dim": "#abc7ff",
+                        "primary": "#002653",
+                        "surface-container-highest": "#e1e3e4",
+                        "on-secondary-fixed-variant": "#005230",
+                        "on-secondary-container": "#087347",
+                        "on-primary-fixed": "#001b3f",
+                        "on-tertiary-container": "#e89500",
+                        "on-error": "#ffffff",
+                        "surface-bright": "#f8f9fa",
+                        "inverse-surface": "#2e3132",
+                        "outline": "#747780",
+                        "inverse-on-surface": "#f0f1f2",
+                        "primary-container": "#1a3c6e",
+                        "on-tertiary": "#ffffff",
+                        "on-secondary-fixed": "#002110",
+                        "on-primary": "#ffffff",
+                        "surface-tint": "#405e92",
+                        "secondary-fixed": "#9af6be",
+                        "on-error-container": "#93000a",
+                        "on-background": "#191c1d",
+                        "surface-container-lowest": "#ffffff",
+                        "surface-container-high": "#e7e8e9",
+                        "on-primary-container": "#8aa8e0",
+                        "error": "#ba1a1a",
+                        "on-primary-fixed-variant": "#264679",
+                        "secondary-fixed-dim": "#7ed9a3",
+                        "tertiary-fixed": "#ffddb8",
+                        "error-container": "#ffdad6",
+                        "tertiary-fixed-dim": "#ffb95f",
+                        "surface-variant": "#e1e3e4",
+                        "surface-dim": "#d9dadb",
+                        "on-surface": "#191c1d",
+                        "tertiary-container": "#573500",
+                        "on-tertiary-fixed-variant": "#653e00",
+                        "primary-fixed": "#d7e3ff",
+                        "surface": "#f8f9fa",
+                        "tertiary": "#3a2100"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "md": "16px",
+                        "sm": "12px",
+                        "base": "4px",
+                        "gutter-mobile": "12px",
+                        "xl": "32px",
+                        "tap-target-min": "44px",
+                        "xs": "8px",
+                        "margin-mobile": "16px",
+                        "lg": "24px",
+                        "safe": "env(safe-area-inset-bottom)"
+                    },
+                    "fontFamily": {
+                        "label-md": ["Inter"],
+                        "label-sm": ["Inter"],
+                        "body-md": ["Inter"],
+                        "headline-md": ["Inter"],
+                        "display-lg-mobile": ["Inter"],
+                        "display-lg": ["Inter"],
+                        "headline-sm": ["Inter"],
+                        "body-lg": ["Inter"]
+                    },
+                    "fontSize": {
+                        "label-md": ["14px", { "lineHeight": "20px", "letterSpacing": "0.01em", "fontWeight": "500" }],
+                        "label-sm": ["12px", { "lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "600" }],
+                        "body-md": ["16px", { "lineHeight": "24px", "fontWeight": "400" }],
+                        "headline-md": ["24px", { "lineHeight": "32px", "fontWeight": "600" }],
+                        "display-lg-mobile": ["28px", { "lineHeight": "36px", "letterSpacing": "-0.02em", "fontWeight": "700" }],
+                        "display-lg": ["32px", { "lineHeight": "40px", "letterSpacing": "-0.02em", "fontWeight": "700" }],
+                        "headline-sm": ["20px", { "lineHeight": "28px", "fontWeight": "600" }],
+                        "body-lg": ["18px", { "lineHeight": "28px", "fontWeight": "400" }]
+                    }
+                },
+            },
+        }
+    </script>
+<style>
+        body { font-family: 'Inter', sans-serif; }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background text-on-background min-h-screen pb-32">
+<!-- TopAppBar -->
+<header class="w-full top-0 sticky bg-surface dark:bg-surface-dim shadow-sm dark:shadow-none border-b border-outline-variant dark:border-outline z-50">
+<div class="flex justify-between items-center h-14 px-margin-mobile transition-colors duration-200">
+<!-- Leading Avatar -->
+<div class="w-8 h-8 rounded-full overflow-hidden bg-surface-container-high flex items-center justify-center">
+<span class="material-symbols-outlined text-on-surface-variant" data-icon="person">person</span>
+</div>
+<!-- Headline / Brand -->
+<h1 class="font-display-lg-mobile text-display-lg-mobile font-bold text-primary dark:text-primary-fixed-dim">
+                SahaVest
+            </h1>
+<!-- Trailing Icon -->
+<button aria-label="notifications" class="w-10 h-10 flex items-center justify-center rounded-full text-on-surface-variant dark:text-on-surface-variant hover:bg-surface-container dark:hover:bg-surface-container-high transition-colors duration-200">
+<span class="material-symbols-outlined" data-icon="notifications">notifications</span>
+</button>
+</div>
+</header>
+<!-- Main Content -->
+<main class="px-margin-mobile py-lg max-w-3xl mx-auto">
+<div class="mb-lg">
+<h2 class="font-headline-md text-headline-md text-primary mb-2">Alert History</h2>
+<p class="font-body-md text-body-md text-on-surface-variant">Your recent behavioral nudges and safety alerts.</p>
+</div>
+<!-- Vertical Timeline List -->
+<div class="relative before:absolute before:inset-0 before:ml-5 before:-translate-x-px md:before:mx-auto md:before:translate-x-0 before:h-full before:w-0.5 before:bg-gradient-to-b before:from-transparent before:via-outline-variant before:to-transparent">
+<!-- Alert Item 1 -->
+<div class="relative flex items-center justify-between md:justify-normal md:odd:flex-row-reverse group is-active mb-xl">
+<!-- Icon -->
+<div class="flex items-center justify-center w-10 h-10 rounded-full border-4 border-background bg-secondary-container text-on-secondary-container shadow shrink-0 md:order-1 md:group-odd:-translate-x-1/2 md:group-even:translate-x-1/2 z-10">
+<span class="material-symbols-outlined text-[20px]" data-icon="lightbulb" style="font-variation-settings: 'FILL' 1;">lightbulb</span>
+</div>
+<!-- Card -->
+<div class="w-[calc(100%-3rem)] md:w-[calc(50%-2.5rem)] p-md rounded-xl bg-surface-container-lowest shadow-[0_4px_12px_rgba(0,0,0,0.04)] border border-outline-variant/50 hover:shadow-md transition-shadow duration-300">
+<div class="flex items-center justify-between mb-sm">
+<span class="font-label-sm text-label-sm text-on-surface-variant">Oct 24, 2023</span>
+<span class="px-2 py-1 bg-surface-container rounded font-label-sm text-label-sm text-primary">Suitability Nudge</span>
+</div>
+<h3 class="font-headline-sm text-headline-sm text-on-surface mb-2">High Risk Re-evaluation</h3>
+<p class="font-body-md text-body-md text-on-surface-variant mb-sm">Suggested reviewing risk tolerance based on recent volatile trades.</p>
+<div class="flex items-center text-secondary">
+<span class="material-symbols-outlined text-[16px] mr-1" data-icon="check_circle">check_circle</span>
+<span class="font-label-md text-label-md">Outcome: Reviewed Profile</span>
+</div>
+</div>
+</div>
+<!-- Alert Item 2 -->
+<div class="relative flex items-center justify-between md:justify-normal md:odd:flex-row-reverse group is-active mb-xl">
+<!-- Icon -->
+<div class="flex items-center justify-center w-10 h-10 rounded-full border-4 border-background bg-error-container text-on-error-container shadow shrink-0 md:order-1 md:group-odd:-translate-x-1/2 md:group-even:translate-x-1/2 z-10">
+<span class="material-symbols-outlined text-[20px]" data-icon="warning" style="font-variation-settings: 'FILL' 1;">warning</span>
+</div>
+<!-- Card -->
+<div class="w-[calc(100%-3rem)] md:w-[calc(50%-2.5rem)] p-md rounded-xl bg-surface-container-lowest shadow-[0_4px_12px_rgba(0,0,0,0.04)] border border-outline-variant/50 hover:shadow-md transition-shadow duration-300">
+<div class="flex items-center justify-between mb-sm">
+<span class="font-label-sm text-label-sm text-on-surface-variant">Oct 15, 2023</span>
+<span class="px-2 py-1 bg-error/10 rounded font-label-sm text-label-sm text-error">Concentration Alert</span>
+</div>
+<h3 class="font-headline-sm text-headline-sm text-on-surface mb-2">Portfolio Imbalance</h3>
+<p class="font-body-md text-body-md text-on-surface-variant mb-sm">Tech sector exposure exceeded 40% of total portfolio value.</p>
+<div class="flex items-center text-on-surface-variant">
+<span class="material-symbols-outlined text-[16px] mr-1" data-icon="done_all">done_all</span>
+<span class="font-label-md text-label-md">Outcome: Acknowledged</span>
+</div>
+</div>
+</div>
+<!-- Alert Item 3 -->
+<div class="relative flex items-center justify-between md:justify-normal md:odd:flex-row-reverse group is-active mb-xl">
+<!-- Icon -->
+<div class="flex items-center justify-center w-10 h-10 rounded-full border-4 border-background bg-primary-container text-on-primary-container shadow shrink-0 md:order-1 md:group-odd:-translate-x-1/2 md:group-even:translate-x-1/2 z-10">
+<span class="material-symbols-outlined text-[20px]" data-icon="trending_up">trending_up</span>
+</div>
+<!-- Card -->
+<div class="w-[calc(100%-3rem)] md:w-[calc(50%-2.5rem)] p-md rounded-xl bg-surface-container-lowest shadow-[0_4px_12px_rgba(0,0,0,0.04)] border border-outline-variant/50 hover:shadow-md transition-shadow duration-300">
+<div class="flex items-center justify-between mb-sm">
+<span class="font-label-sm text-label-sm text-on-surface-variant">Sep 28, 2023</span>
+<span class="px-2 py-1 bg-surface-container rounded font-label-sm text-label-sm text-primary">FOMO Guard</span>
+</div>
+<h3 class="font-headline-sm text-headline-sm text-on-surface mb-2">Cool-off Period Active</h3>
+<p class="font-body-md text-body-md text-on-surface-variant mb-sm">Initiated a 24-hour pause before executing large meme-stock purchase.</p>
+<div class="flex items-center text-secondary">
+<span class="material-symbols-outlined text-[16px] mr-1" data-icon="check_circle">check_circle</span>
+<span class="font-label-md text-label-md">Outcome: Order Cancelled</span>
+</div>
+</div>
+</div>
+</div>
+</main>
+<!-- BottomNavBar (Visible on Mobile, hidden on Web) -->
+<nav class="md:hidden fixed bottom-0 w-full z-50 bg-surface-container-lowest dark:bg-inverse-surface border-t border-outline-variant dark:border-outline shadow-lg dark:shadow-none pb-safe">
+<div class="flex justify-around items-center h-16 w-full px-2">
+<a class="flex flex-col items-center justify-center text-on-surface-variant dark:text-on-surface-variant px-4 py-1 hover:bg-surface-container dark:hover:bg-surface-container-highest active:scale-95 transition-transform duration-150 rounded-full w-[min-content] min-w-[64px]" href="#">
+<span class="material-symbols-outlined mb-1 text-[24px]" data-icon="pie_chart">pie_chart</span>
+<span class="font-label-sm text-label-sm truncate">Portfolio</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant dark:text-on-surface-variant px-4 py-1 hover:bg-surface-container dark:hover:bg-surface-container-highest active:scale-95 transition-transform duration-150 rounded-full w-[min-content] min-w-[64px]" href="#">
+<span class="material-symbols-outlined mb-1 text-[24px]" data-icon="search">search</span>
+<span class="font-label-sm text-label-sm truncate">Explore</span>
+</a>
+<!-- Active Tab: Shield maps to Behavioral/Safety Alerts -->
+<a class="flex flex-col items-center justify-center bg-secondary-container dark:bg-secondary text-on-secondary-container dark:text-on-secondary rounded-full px-4 py-1 active:scale-95 transition-transform duration-150 w-[min-content] min-w-[64px]" href="#">
+<span class="material-symbols-outlined mb-1 text-[24px]" data-icon="security" style="font-variation-settings: 'FILL' 1;">security</span>
+<span class="font-label-sm text-label-sm truncate">Shield</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant dark:text-on-surface-variant px-4 py-1 hover:bg-surface-container dark:hover:bg-surface-container-highest active:scale-95 transition-transform duration-150 rounded-full w-[min-content] min-w-[64px]" href="#">
+<span class="material-symbols-outlined mb-1 text-[24px]" data-icon="person">person</span>
+<span class="font-label-sm text-label-sm truncate">Profile</span>
+</a>
+</div>
+</nav>
+</body></html>

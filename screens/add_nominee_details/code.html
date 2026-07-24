@@ -1,0 +1,189 @@
+<!DOCTYPE html><html class="h-full" lang="en"><head>
+<meta charset="utf-8">
+<meta content="width=device-width, initial-scale=1.0" name="viewport">
+<title>Nominee Addition - SahaVest</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "surface-container-highest": "#e1e3e4",
+                        "tertiary-fixed": "#ffddb8",
+                        "secondary": "#006d42",
+                        "tertiary-fixed-dim": "#ffb95f",
+                        "error-container": "#ffdad6",
+                        "outline-variant": "#c4c6d0",
+                        "on-surface": "#191c1d",
+                        "surface-container-high": "#e7e8e9",
+                        "on-error-container": "#93000a",
+                        "inverse-on-surface": "#f0f1f2",
+                        "primary-fixed": "#d7e3ff",
+                        "surface": "#f8f9fa",
+                        "secondary-container": "#9af6be",
+                        "tertiary-container": "#573500",
+                        "surface-container-lowest": "#ffffff",
+                        "primary-container": "#1a3c6e",
+                        "on-secondary": "#ffffff",
+                        "surface-container": "#edeeef",
+                        "secondary-fixed-dim": "#7ed9a3",
+                        "on-primary-fixed-variant": "#264679",
+                        "surface-container-low": "#f3f4f5",
+                        "on-primary-container": "#8aa8e0",
+                        "error": "#ba1a1a",
+                        "secondary-fixed": "#9af6be",
+                        "on-surface-variant": "#43474f",
+                        "inverse-surface": "#2e3132",
+                        "on-secondary-fixed-variant": "#005230",
+                        "primary-fixed-dim": "#abc7ff",
+                        "outline": "#747780",
+                        "on-tertiary": "#ffffff",
+                        "on-background": "#191c1d",
+                        "on-secondary-container": "#087347",
+                        "on-secondary-fixed": "#002110",
+                        "surface-bright": "#f8f9fa",
+                        "on-tertiary-fixed-variant": "#653e00",
+                        "inverse-primary": "#abc7ff",
+                        "tertiary": "#3a2100",
+                        "surface-tint": "#405e92",
+                        "primary": "#002653",
+                        "on-tertiary-container": "#e89500",
+                        "on-primary": "#ffffff",
+                        "surface-variant": "#e1e3e4",
+                        "background": "#f8f9fa",
+                        "on-error": "#ffffff",
+                        "surface-dim": "#d9dadb",
+                        "on-tertiary-fixed": "#2a1700",
+                        "on-primary-fixed": "#001b3f"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "lg": "24px",
+                        "xs": "8px",
+                        "xl": "32px",
+                        "md": "16px",
+                        "margin-mobile": "16px",
+                        "tap-target-min": "44px",
+                        "gutter-mobile": "12px",
+                        "sm": "12px",
+                        "base": "4px"
+                    },
+                    "fontFamily": {
+                        "display-lg-mobile": ["Inter", "sans-serif"],
+                        "body-lg": ["Inter", "sans-serif"],
+                        "label-sm": ["Inter", "sans-serif"],
+                        "label-md": ["Inter", "sans-serif"],
+                        "headline-sm": ["Inter", "sans-serif"],
+                        "headline-md": ["Inter", "sans-serif"],
+                        "display-lg": ["Inter", "sans-serif"],
+                        "body-md": ["Inter", "sans-serif"]
+                    },
+                    "fontSize": {
+                        "display-lg-mobile": ["28px", { "lineHeight": "36px", "letterSpacing": "-0.02em", "fontWeight": "700" }],
+                        "body-lg": ["18px", { "lineHeight": "28px", "fontWeight": "400" }],
+                        "label-sm": ["12px", { "lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "600" }],
+                        "label-md": ["14px", { "lineHeight": "20px", "letterSpacing": "0.01em", "fontWeight": "500" }],
+                        "headline-sm": ["20px", { "lineHeight": "28px", "fontWeight": "600" }],
+                        "headline-md": ["24px", { "lineHeight": "32px", "fontWeight": "600" }],
+                        "display-lg": ["32px", { "lineHeight": "40px", "letterSpacing": "-0.02em", "fontWeight": "700" }],
+                        "body-md": ["16px", { "lineHeight": "24px", "fontWeight": "400" }]
+                    }
+                }
+            }
+        }
+    </script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<style>
+        body { font-family: 'Inter', sans-serif; }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="h-full bg-background text-on-background antialiased flex flex-col">
+<!-- TopAppBar (Transactional - Hidden Navigation Shell context for focused journey) -->
+<header class="bg-surface border-b border-outline-variant w-full sticky top-0 z-50 flex items-center justify-center px-margin-mobile py-sm min-h-[64px]">
+<div class="font-headline-md text-headline-md text-primary tracking-tight">SahaVest</div>
+</header>
+<!-- Main Content Canvas -->
+<main class="flex-grow flex flex-col items-center justify-start px-margin-mobile py-xl md:py-20 w-full max-w-3xl mx-auto">
+<div class="w-full text-center mb-xl">
+<h1 class="font-display-lg-mobile text-display-lg-mobile md:font-display-lg md:text-display-lg text-on-surface mb-xs">Protect Your Wealth</h1>
+<p class="font-body-md text-body-md text-on-surface-variant max-w-xl mx-auto">Add nominees to ensure your investments are smoothly passed on to your loved ones in the future. This step provides security and peace of mind.</p>
+</div>
+<!-- Nominee Card -->
+<div class="w-full bg-surface-container-lowest rounded-xl border border-outline-variant p-lg md:p-xl shadow-sm mb-lg relative">
+<div class="flex items-center justify-between mb-lg border-b border-outline-variant pb-sm">
+<h2 class="font-headline-sm text-headline-sm text-on-surface">Nominee 1</h2>
+<button aria-label="Remove Nominee" class="text-error flex items-center justify-center h-tap-target-min w-tap-target-min hover:bg-error-container rounded-full transition-colors" type="button">
+<span class="material-symbols-outlined">delete</span>
+</button>
+</div>
+<form class="grid grid-cols-1 md:grid-cols-2 gap-lg">
+<!-- Full Name -->
+<div class="flex flex-col gap-base col-span-1 md:col-span-2">
+<label class="font-label-md text-label-md text-on-surface-variant" for="fullName1">Full Name (as per ID)</label>
+<input class="h-tap-target-min rounded-lg border border-outline bg-surface-container-lowest px-md font-body-md text-body-md text-on-surface focus:border-primary focus:ring-1 focus:ring-primary outline-none transition-shadow" id="fullName1" name="fullName1" placeholder="e.g. Ramesh Kumar" type="text">
+</div>
+<!-- Relationship -->
+<div class="flex flex-col gap-base">
+<label class="font-label-md text-label-md text-on-surface-variant" for="relationship1">Relationship</label>
+<div class="relative">
+<select class="w-full h-tap-target-min rounded-lg border border-outline bg-surface-container-lowest px-md pr-10 font-body-md text-body-md text-on-surface appearance-none focus:border-primary focus:ring-1 focus:ring-primary outline-none transition-shadow cursor-pointer" id="relationship1" name="relationship1">
+<option disabled="" selected="" value="">Select Relationship</option>
+<option value="spouse">Spouse</option>
+<option value="child">Child</option>
+<option value="parent">Parent</option>
+<option value="sibling">Sibling</option>
+<option value="other">Other</option>
+</select>
+<span class="material-symbols-outlined absolute right-md top-1/2 -translate-y-1/2 text-on-surface-variant pointer-events-none">expand_more</span>
+</div>
+</div>
+<!-- Date of Birth -->
+<div class="flex flex-col gap-base">
+<label class="font-label-md text-label-md text-on-surface-variant" for="dob1">Date of Birth</label>
+<div class="relative">
+<input class="w-full h-tap-target-min rounded-lg border border-outline bg-surface-container-lowest px-md font-body-md text-body-md text-on-surface focus:border-primary focus:ring-1 focus:ring-primary outline-none transition-shadow" id="dob1" name="dob1" type="date">
+<span class="material-symbols-outlined absolute right-md top-1/2 -translate-y-1/2 text-on-surface-variant pointer-events-none">calendar_today</span>
+</div>
+</div>
+<!-- Share (%) -->
+<div class="flex flex-col gap-base col-span-1 md:col-span-2">
+<label class="font-label-md text-label-md text-on-surface-variant" for="share1">Share Allocation (%)</label>
+<div class="relative flex items-center">
+<input class="w-full h-tap-target-min rounded-lg border border-outline bg-surface-container-lowest px-md pr-12 font-body-md text-body-md text-on-surface focus:border-primary focus:ring-1 focus:ring-primary outline-none transition-shadow" id="share1" max="100" min="1" name="share1" type="number" value="100">
+<span class="absolute right-md font-body-md text-body-md text-on-surface-variant select-none">%</span>
+</div>
+<p class="font-label-sm text-label-sm text-outline mt-1">Total share allocation must equal 100%.</p>
+</div>
+</form>
+</div>
+<!-- Add Another Action -->
+<div class="w-full flex justify-start mb-xl">
+<button class="flex items-center gap-xs h-tap-target-min px-4 rounded-full border border-outline-variant text-primary hover:bg-surface-container-low transition-colors" type="button">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 0;">add</span>
+<span class="font-label-md text-label-md">Add Another Nominee</span>
+</button>
+</div>
+<!-- Actions -->
+<div class="w-full flex flex-col items-center gap-lg mt-auto pb-xl">
+<button class="w-full md:w-auto min-w-[240px] h-[56px] rounded-full bg-primary text-on-primary font-label-md text-label-md hover:bg-on-primary-fixed-variant transition-colors flex items-center justify-center shadow-sm" type="button">
+                Save &amp; Continue
+            </button>
+<a class="font-label-md text-label-md text-on-surface-variant hover:text-primary transition-colors underline-offset-4 hover:underline h-tap-target-min flex items-center justify-center" href="#">
+                Skip for now
+            </a>
+</div>
+</main>
+</body></html>

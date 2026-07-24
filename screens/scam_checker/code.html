@@ -1,0 +1,237 @@
+<!DOCTYPE html><html class="light" lang="en"><head>
+<meta charset="utf-8">
+<meta content="width=device-width, initial-scale=1.0" name="viewport">
+<title>SahaVest - Scam Checker</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@100..900&amp;display=swap" rel="stylesheet">
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "inverse-primary": "#abc7ff",
+                        "on-tertiary-fixed-variant": "#653e00",
+                        "on-secondary": "#ffffff",
+                        "on-primary-fixed": "#001b3f",
+                        "surface-container-high": "#e7e8e9",
+                        "surface-container": "#edeeef",
+                        "primary": "#002653",
+                        "inverse-surface": "#2e3132",
+                        "surface-container-lowest": "#ffffff",
+                        "surface-bright": "#f8f9fa",
+                        "on-secondary-fixed-variant": "#005230",
+                        "surface-container-highest": "#e1e3e4",
+                        "surface-container-low": "#f3f4f5",
+                        "on-error": "#ffffff",
+                        "surface-tint": "#405e92",
+                        "on-tertiary-container": "#e89500",
+                        "on-primary": "#ffffff",
+                        "tertiary": "#3a2100",
+                        "secondary-fixed": "#9af6be",
+                        "secondary": "#006d42",
+                        "tertiary-container": "#573500",
+                        "error-container": "#ffdad6",
+                        "on-tertiary": "#ffffff",
+                        "primary-fixed": "#d7e3ff",
+                        "primary-container": "#1a3c6e",
+                        "on-tertiary-fixed": "#2a1700",
+                        "inverse-on-surface": "#f0f1f2",
+                        "outline": "#747780",
+                        "on-surface-variant": "#43474f",
+                        "on-surface": "#191c1d",
+                        "on-background": "#191c1d",
+                        "error": "#ba1a1a",
+                        "tertiary-fixed": "#ffddb8",
+                        "surface": "#f8f9fa",
+                        "on-secondary-fixed": "#002110",
+                        "tertiary-fixed-dim": "#ffb95f",
+                        "on-secondary-container": "#087347",
+                        "on-primary-fixed-variant": "#264679",
+                        "on-error-container": "#93000a",
+                        "outline-variant": "#c4c6d0",
+                        "surface-dim": "#d9dadb",
+                        "secondary-container": "#9af6be",
+                        "background": "#f8f9fa",
+                        "primary-fixed-dim": "#abc7ff",
+                        "on-primary-container": "#8aa8e0",
+                        "secondary-fixed-dim": "#7ed9a3",
+                        "surface-variant": "#e1e3e4"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "tap-target-min": "44px",
+                        "gutter-mobile": "12px",
+                        "xl": "32px",
+                        "sm": "12px",
+                        "margin-mobile": "16px",
+                        "lg": "24px",
+                        "xs": "8px",
+                        "base": "4px",
+                        "md": "16px"
+                    },
+                    "fontFamily": {
+                        "label-md": ["Inter"],
+                        "display-lg": ["Inter"],
+                        "label-sm": ["Inter"],
+                        "headline-sm": ["Inter"],
+                        "body-md": ["Inter"],
+                        "body-lg": ["Inter"],
+                        "headline-md": ["Inter"],
+                        "display-lg-mobile": ["Inter"]
+                    },
+                    "fontSize": {
+                        "label-md": ["14px", { "lineHeight": "20px", "letterSpacing": "0.01em", "fontWeight": "500" }],
+                        "display-lg": ["32px", { "lineHeight": "40px", "letterSpacing": "-0.02em", "fontWeight": "700" }],
+                        "label-sm": ["12px", { "lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "600" }],
+                        "headline-sm": ["20px", { "lineHeight": "28px", "fontWeight": "600" }],
+                        "body-md": ["16px", { "lineHeight": "24px", "fontWeight": "400" }],
+                        "body-lg": ["18px", { "lineHeight": "28px", "fontWeight": "400" }],
+                        "headline-md": ["24px", { "lineHeight": "32px", "fontWeight": "600" }],
+                        "display-lg-mobile": ["28px", { "lineHeight": "36px", "letterSpacing": "-0.02em", "fontWeight": "700" }]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f8f9fa; /* background */
+            color: #191c1d; /* on-background */
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background text-on-background min-h-screen flex flex-col pb-[64px] md:pb-0">
+<!-- TopAppBar -->
+<header class="w-full sticky top-0 z-50 bg-surface dark:bg-surface-dim border-b border-outline-variant dark:border-outline flat no shadows">
+<div class="flex items-center justify-between px-margin-mobile py-sm w-full max-w-7xl mx-auto">
+<button aria-label="Search" class="flex items-center justify-center min-w-[44px] min-h-[44px] text-on-surface-variant dark:text-on-surface-variant hover:bg-surface-container-low dark:hover:bg-surface-container-highest transition-colors active:scale-95 duration-100 rounded-full">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 0;">search</span>
+</button>
+<h1 class="font-headline-md text-headline-md text-primary dark:text-primary-fixed tracking-tight">SahaVest</h1>
+<button aria-label="Account" class="flex items-center justify-center min-w-[44px] min-h-[44px] text-on-surface-variant dark:text-on-surface-variant hover:bg-surface-container-low dark:hover:bg-surface-container-highest transition-colors active:scale-95 duration-100 rounded-full">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 0;">account_circle</span>
+</button>
+</div>
+</header>
+<!-- Main Content Canvas -->
+<main class="flex-grow flex flex-col items-center px-margin-mobile md:px-lg py-xl max-w-3xl mx-auto w-full gap-xl">
+<!-- Hero Section -->
+<section class="w-full text-center space-y-sm">
+<h2 class="font-display-lg-mobile md:font-display-lg text-display-lg-mobile md:text-display-lg text-primary">Verify Before You Invest</h2>
+<p class="font-body-md text-body-md text-on-surface-variant max-w-lg mx-auto">
+                Paste suspicious messages, investment tips, or advisor claims below. Our system will analyze them for potential risks and common scam patterns.
+            </p>
+</section>
+<!-- Input Area -->
+<section class="w-full bg-surface-container-lowest rounded-xl shadow-sm border border-outline-variant p-md md:p-lg flex flex-col gap-md">
+<div class="relative">
+<label class="sr-only" for="scam-input">Paste message here</label>
+<textarea class="w-full bg-surface text-on-surface font-body-md text-body-md rounded-lg border border-outline-variant p-md focus:border-primary focus:ring-1 focus:ring-primary outline-none resize-y placeholder:text-outline" id="scam-input" placeholder="Paste SMS, WhatsApp message, email, or advisor claim here..." rows="5"></textarea>
+</div>
+<div class="flex flex-col sm:flex-row gap-sm justify-between items-center">
+<div class="flex gap-sm w-full sm:w-auto">
+<button class="flex-1 sm:flex-none flex items-center justify-center gap-xs px-md py-sm rounded-full border border-outline-variant text-on-surface hover:bg-surface-container-low transition-colors min-h-[44px]">
+<span class="material-symbols-outlined text-[20px]" style="font-variation-settings: 'FILL' 0;">image</span>
+<span class="font-label-md text-label-md">Upload Image</span>
+</button>
+<button class="flex-1 sm:flex-none flex items-center justify-center px-md py-sm rounded-full text-primary hover:bg-primary-fixed transition-colors min-h-[44px]">
+<span class="font-label-md text-label-md">Try an Example</span>
+</button>
+</div>
+<button class="w-full sm:w-auto flex items-center justify-center px-xl py-sm rounded-full bg-primary text-on-primary hover:bg-primary-container transition-colors min-h-[44px] shadow-sm">
+<span class="font-label-md text-label-md">Analyze Text</span>
+</button>
+</div>
+</section>
+<!-- Recent Checks -->
+<section class="w-full mt-lg">
+<h3 class="font-headline-sm text-headline-sm text-on-surface mb-md">Recent Checks</h3>
+<div class="flex flex-col gap-xs">
+<!-- Check Item 1 -->
+<div class="bg-surface-container-lowest rounded-lg border border-outline-variant p-md flex items-start gap-md hover:bg-surface-container-low transition-colors cursor-pointer">
+<div class="flex-shrink-0 w-10 h-10 rounded-full bg-error-container flex items-center justify-center">
+<span class="material-symbols-outlined text-on-error-container" style="font-variation-settings: 'FILL' 1;">warning</span>
+</div>
+<div class="flex-grow min-w-0">
+<div class="flex justify-between items-baseline mb-base">
+<h4 class="font-label-md text-label-md text-on-surface truncate">"Guaranteed 20% monthly returns on..."</h4>
+<span class="font-label-sm text-label-sm text-outline whitespace-nowrap ml-sm">Today, 10:42 AM</span>
+</div>
+<p class="font-body-md text-body-md text-on-surface-variant line-clamp-1">Analyzed SMS text message</p>
+<div class="mt-xs inline-flex items-center px-2 py-0.5 rounded text-[10px] font-bold bg-error-container text-on-error-container uppercase tracking-wider">
+                            High Risk
+                        </div>
+</div>
+</div>
+<!-- Check Item 2 -->
+<div class="bg-surface-container-lowest rounded-lg border border-outline-variant p-md flex items-start gap-md hover:bg-surface-container-low transition-colors cursor-pointer">
+<div class="flex-shrink-0 w-10 h-10 rounded-full bg-secondary-container flex items-center justify-center">
+<span class="material-symbols-outlined text-on-secondary-container" style="font-variation-settings: 'FILL' 1;">verified_user</span>
+</div>
+<div class="flex-grow min-w-0">
+<div class="flex justify-between items-baseline mb-base">
+<h4 class="font-label-md text-label-md text-on-surface truncate">Screenshot_20231025.png</h4>
+<span class="font-label-sm text-label-sm text-outline whitespace-nowrap ml-sm">Yesterday</span>
+</div>
+<p class="font-body-md text-body-md text-on-surface-variant line-clamp-1">Analyzed image from WhatsApp</p>
+<div class="mt-xs inline-flex items-center px-2 py-0.5 rounded text-[10px] font-bold bg-secondary-container text-on-secondary-container uppercase tracking-wider">
+                            Safe
+                        </div>
+</div>
+</div>
+<!-- Check Item 3 -->
+<div class="bg-surface-container-lowest rounded-lg border border-outline-variant p-md flex items-start gap-md hover:bg-surface-container-low transition-colors cursor-pointer">
+<div class="flex-shrink-0 w-10 h-10 rounded-full bg-surface-variant flex items-center justify-center">
+<span class="material-symbols-outlined text-on-surface-variant" style="font-variation-settings: 'FILL' 1;">info</span>
+</div>
+<div class="flex-grow min-w-0">
+<div class="flex justify-between items-baseline mb-base">
+<h4 class="font-label-md text-label-md text-on-surface truncate">"Hi, I am calling from your bank regarding..."</h4>
+<span class="font-label-sm text-label-sm text-outline whitespace-nowrap ml-sm">Oct 22</span>
+</div>
+<p class="font-body-md text-body-md text-on-surface-variant line-clamp-1">Analyzed transcribed call</p>
+<div class="mt-xs inline-flex items-center px-2 py-0.5 rounded text-[10px] font-bold bg-surface-variant text-on-surface-variant uppercase tracking-wider">
+                            Inconclusive
+                        </div>
+</div>
+</div>
+</div>
+<button class="w-full mt-sm py-sm text-center font-label-md text-label-md text-primary hover:bg-surface-container-low rounded-lg transition-colors">
+                View All History
+            </button>
+</section>
+</main>
+<!-- BottomNavBar (Mobile Only) -->
+<nav class="md:hidden fixed bottom-0 w-full z-50 bg-surface dark:bg-surface-dim border-t border-outline-variant dark:border-outline flat no shadows flex justify-around items-center h-[64px] px-2 pb-safe">
+<button class="flex flex-col items-center justify-center text-on-surface-variant dark:text-outline p-2 hover:bg-surface-container-high dark:hover:bg-surface-container-highest rounded-full active:scale-90 duration-200 ease-in-out min-w-[44px] min-h-[44px]">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 0;">dashboard</span>
+<span class="font-label-sm text-label-sm mt-1">Dashboard</span>
+</button>
+<button class="flex flex-col items-center justify-center text-on-surface-variant dark:text-outline p-2 hover:bg-surface-container-high dark:hover:bg-surface-container-highest rounded-full active:scale-90 duration-200 ease-in-out min-w-[44px] min-h-[44px]">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 0;">account_balance_wallet</span>
+<span class="font-label-sm text-label-sm mt-1">Portfolio</span>
+</button>
+<button class="flex flex-col items-center justify-center bg-secondary-container dark:bg-on-secondary-fixed-variant text-on-secondary-container dark:text-secondary-fixed rounded-full px-4 py-1 hover:bg-surface-container-high dark:hover:bg-surface-container-highest active:scale-90 duration-200 ease-in-out min-w-[44px] min-h-[44px]">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">shield</span>
+<span class="font-label-sm text-label-sm mt-1">Protection</span>
+</button>
+<button class="flex flex-col items-center justify-center text-on-surface-variant dark:text-outline p-2 hover:bg-surface-container-high dark:hover:bg-surface-container-highest rounded-full active:scale-90 duration-200 ease-in-out min-w-[44px] min-h-[44px]">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 0;">person</span>
+<span class="font-label-sm text-label-sm mt-1">Profile</span>
+</button>
+</nav>
+</body></html>

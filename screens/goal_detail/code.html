@@ -1,0 +1,253 @@
+<!DOCTYPE html><html lang="en"><head>
+<meta charset="utf-8">
+<meta content="width=device-width, initial-scale=1.0" name="viewport">
+<title>Goal Details</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "inverse-primary": "#abc7ff",
+                    "on-tertiary-fixed-variant": "#653e00",
+                    "on-secondary": "#ffffff",
+                    "on-primary-fixed": "#001b3f",
+                    "surface-container-high": "#e7e8e9",
+                    "surface-container": "#edeeef",
+                    "primary": "#002653",
+                    "inverse-surface": "#2e3132",
+                    "surface-container-lowest": "#ffffff",
+                    "surface-bright": "#f8f9fa",
+                    "on-secondary-fixed-variant": "#005230",
+                    "surface-container-highest": "#e1e3e4",
+                    "surface-container-low": "#f3f4f5",
+                    "on-error": "#ffffff",
+                    "surface-tint": "#405e92",
+                    "on-tertiary-container": "#e89500",
+                    "on-primary": "#ffffff",
+                    "tertiary": "#3a2100",
+                    "secondary-fixed": "#9af6be",
+                    "secondary": "#006d42",
+                    "tertiary-container": "#573500",
+                    "error-container": "#ffdad6",
+                    "on-tertiary": "#ffffff",
+                    "primary-fixed": "#d7e3ff",
+                    "primary-container": "#1a3c6e",
+                    "on-tertiary-fixed": "#2a1700",
+                    "inverse-on-surface": "#f0f1f2",
+                    "outline": "#747780",
+                    "on-surface-variant": "#43474f",
+                    "on-surface": "#191c1d",
+                    "on-background": "#191c1d",
+                    "error": "#ba1a1a",
+                    "tertiary-fixed": "#ffddb8",
+                    "surface": "#f8f9fa",
+                    "on-secondary-fixed": "#002110",
+                    "tertiary-fixed-dim": "#ffb95f",
+                    "on-secondary-container": "#087347",
+                    "on-primary-fixed-variant": "#264679",
+                    "on-error-container": "#93000a",
+                    "outline-variant": "#c4c6d0",
+                    "surface-dim": "#d9dadb",
+                    "secondary-container": "#9af6be",
+                    "background": "#f8f9fa",
+                    "primary-fixed-dim": "#abc7ff",
+                    "on-primary-container": "#8aa8e0",
+                    "secondary-fixed-dim": "#7ed9a3",
+                    "surface-variant": "#e1e3e4"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.25rem",
+                    "lg": "0.5rem",
+                    "xl": "0.75rem",
+                    "full": "9999px"
+            },
+            "spacing": {
+                    "tap-target-min": "44px",
+                    "gutter-mobile": "12px",
+                    "xl": "32px",
+                    "sm": "12px",
+                    "margin-mobile": "16px",
+                    "lg": "24px",
+                    "xs": "8px",
+                    "base": "4px",
+                    "md": "16px"
+            },
+            "fontFamily": {
+                    "label-md": ["Inter"],
+                    "display-lg": ["Inter"],
+                    "label-sm": ["Inter"],
+                    "headline-sm": ["Inter"],
+                    "body-md": ["Inter"],
+                    "body-lg": ["Inter"],
+                    "headline-md": ["Inter"],
+                    "display-lg-mobile": ["Inter"]
+            },
+            "fontSize": {
+                    "label-md": ["14px", {"lineHeight": "20px", "letterSpacing": "0.01em", "fontWeight": "500"}],
+                    "display-lg": ["32px", {"lineHeight": "40px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                    "label-sm": ["12px", {"lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "600"}],
+                    "headline-sm": ["20px", {"lineHeight": "28px", "fontWeight": "600"}],
+                    "body-md": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                    "body-lg": ["18px", {"lineHeight": "28px", "fontWeight": "400"}],
+                    "headline-md": ["24px", {"lineHeight": "32px", "fontWeight": "600"}],
+                    "display-lg-mobile": ["28px", {"lineHeight": "36px", "letterSpacing": "-0.02em", "fontWeight": "700"}]
+            }
+          }
+        }
+      }
+    </script>
+<style>
+        /* Custom styles for precise focus states and interactions */
+        .input-zen {
+            border: 1px solid #c4c6d0; /* outline-variant */
+            transition: all 0.2s ease;
+        }
+        .input-zen:focus-within {
+            border: 2px solid #002653; /* primary */
+            padding-left: 15px; /* adjust for border width change to avoid jumping */
+            padding-right: 15px;
+        }
+        .input-zen input:focus {
+            outline: none;
+            box-shadow: none;
+        }
+        
+        /* Subtle diffuse shadow for Level 1 cards */
+        .card-level-1 {
+            box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.04);
+            border: 1px solid #E5E7EB;
+        }
+
+        /* Progress Circle Animation */
+        .progress-ring__circle {
+            transition: stroke-dashoffset 0.8s ease-in-out;
+            transform: rotate(-90deg);
+            transform-origin: 50% 50%;
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-surface text-on-surface min-h-screen font-body-md text-body-md pb-[100px] antialiased">
+<!-- Task-Focused Header (Suppresses global nav) -->
+<header class="sticky top-0 z-50 bg-surface/90 backdrop-blur-sm border-b border-outline-variant/30 flex items-center h-[64px] px-margin-mobile md:px-xl">
+<button aria-label="Go back" class="h-tap-target-min w-tap-target-min flex items-center justify-start text-on-surface hover:text-primary transition-colors group">
+<span class="material-symbols-outlined text-[24px] group-active:scale-90 transition-transform">arrow_back</span>
+</button>
+<h1 class="font-headline-md text-headline-md flex-1 text-center pr-tap-target-min tracking-tight">Edit Goal</h1>
+</header>
+<main class="w-full max-w-2xl mx-auto px-margin-mobile md:px-0 py-lg flex flex-col gap-lg">
+<!-- Progress Visualization Card (Existing Goal Context) -->
+<section class="card-level-1 bg-surface-container-lowest rounded-xl p-md flex flex-col items-center justify-center relative overflow-hidden">
+<!-- Subtle background decoration -->
+<div class="absolute top-0 right-0 w-32 h-32 bg-primary-fixed-dim/20 rounded-bl-full blur-2xl pointer-events-none"></div>
+<div class="relative w-[140px] h-[140px] flex items-center justify-center mb-sm">
+<!-- SVG Progress Ring -->
+<svg class="w-full h-full" viewBox="0 0 120 120">
+<!-- Background Ring -->
+<circle class="text-surface-container-high" cx="60" cy="60" fill="transparent" r="54" stroke="currentColor" stroke-width="8"></circle>
+<!-- Progress Ring (65% filled) -->
+<circle class="text-secondary progress-ring__circle" cx="60" cy="60" fill="transparent" r="54" stroke="currentColor" stroke-dasharray="339.292" stroke-dashoffset="118.75" stroke-linecap="round" stroke-width="8"></circle>
+</svg>
+<!-- Center Text -->
+<div class="absolute flex flex-col items-center justify-center text-center">
+<span class="font-display-lg text-display-lg text-secondary tracking-tight">65%</span>
+<span class="font-label-sm text-label-sm text-on-surface-variant uppercase tracking-wider">Funded</span>
+</div>
+</div>
+<div class="text-center">
+<h2 class="font-headline-sm text-headline-sm text-on-surface mb-xs">European Vacation</h2>
+<p class="font-body-md text-body-md text-on-surface-variant">
+<span class="font-semibold text-on-surface">₹6,50,000</span> / ₹10,00,000
+                </p>
+<p class="font-label-sm text-label-sm text-outline mt-1">Target: Dec 2025</p>
+</div>
+</section>
+<!-- Form Details -->
+<section class="card-level-1 bg-surface-container-lowest rounded-xl p-md flex flex-col gap-md">
+<h3 class="font-headline-sm text-headline-sm text-on-surface mb-xs">Goal Parameters</h3>
+<!-- Goal Name Input -->
+<div class="flex flex-col gap-xs">
+<label class="font-label-md text-label-md text-on-surface pl-1" for="goal-name">Goal Name</label>
+<div class="input-zen rounded-[16px] bg-surface-bright flex items-center px-4 h-[56px]">
+<span class="material-symbols-outlined text-outline mr-3">flag</span>
+<input class="w-full bg-transparent border-none p-0 text-on-surface font-body-lg text-body-lg placeholder-outline focus:ring-0" id="goal-name" placeholder="e.g. Dream Home" type="text" value="European Vacation">
+</div>
+</div>
+<!-- Target Amount Input -->
+<div class="flex flex-col gap-xs">
+<label class="font-label-md text-label-md text-on-surface pl-1" for="target-amount">Target Amount (₹)</label>
+<div class="input-zen rounded-[16px] bg-surface-bright flex items-center px-4 h-[56px]">
+<span class="font-body-lg text-body-lg text-outline mr-2">₹</span>
+<input class="w-full bg-transparent border-none p-0 text-on-surface font-body-lg text-body-lg placeholder-outline focus:ring-0" id="target-amount" inputmode="numeric" placeholder="0.00" type="text" value="10,00,000">
+</div>
+</div>
+<!-- Target Date Input -->
+<div class="flex flex-col gap-xs">
+<label class="font-label-md text-label-md text-on-surface pl-1" for="target-date">Target Date</label>
+<div class="input-zen rounded-[16px] bg-surface-bright flex items-center px-4 h-[56px]">
+<span class="material-symbols-outlined text-outline mr-3">calendar_month</span>
+<input class="w-full bg-transparent border-none p-0 text-on-surface font-body-lg text-body-lg focus:ring-0" id="target-date" type="date" value="2025-12-15">
+</div>
+</div>
+</section>
+<!-- Linked Investments Section (Progressive Disclosure / List) -->
+<section class="card-level-1 bg-surface-container-lowest rounded-xl p-md flex flex-col gap-sm">
+<div class="flex items-center justify-between mb-2">
+<h3 class="font-headline-sm text-headline-sm text-on-surface">Linked Investments</h3>
+<span class="font-label-sm text-label-sm text-primary bg-primary-fixed px-3 py-1 rounded-full">2 Selected</span>
+</div>
+<p class="font-body-md text-body-md text-on-surface-variant mb-2">Select the portfolios contributing to this goal.</p>
+<div class="flex flex-col gap-0 border border-outline-variant/50 rounded-lg overflow-hidden">
+<!-- Investment Item 1 (Selected) -->
+<label class="flex items-center p-4 border-b border-outline-variant/30 hover:bg-surface-container-low transition-colors cursor-pointer group">
+<div class="relative flex items-center justify-center w-6 h-6 mr-4">
+<input checked="" class="peer appearance-none w-6 h-6 border-2 border-outline-variant rounded-[6px] checked:bg-primary checked:border-primary transition-all" type="checkbox">
+<span class="material-symbols-outlined absolute text-on-primary text-[16px] opacity-0 peer-checked:opacity-100 pointer-events-none">check</span>
+</div>
+<div class="flex-1 flex flex-col">
+<span class="font-label-md text-label-md text-on-surface">Core Equity Portfolio</span>
+<span class="font-label-sm text-label-sm text-on-surface-variant">Current Value: ₹4,20,000</span>
+</div>
+</label>
+<!-- Investment Item 2 (Selected) -->
+<label class="flex items-center p-4 border-b border-outline-variant/30 hover:bg-surface-container-low transition-colors cursor-pointer group bg-primary-fixed-dim/10">
+<div class="relative flex items-center justify-center w-6 h-6 mr-4">
+<input checked="" class="peer appearance-none w-6 h-6 border-2 border-outline-variant rounded-[6px] checked:bg-primary checked:border-primary transition-all" type="checkbox">
+<span class="material-symbols-outlined absolute text-on-primary text-[16px] opacity-0 peer-checked:opacity-100 pointer-events-none">check</span>
+</div>
+<div class="flex-1 flex flex-col">
+<span class="font-label-md text-label-md text-on-surface">Liquid Mutual Funds</span>
+<span class="font-label-sm text-label-sm text-on-surface-variant">Current Value: ₹2,30,000</span>
+</div>
+</label>
+<!-- Investment Item 3 (Unselected) -->
+<label class="flex items-center p-4 hover:bg-surface-container-low transition-colors cursor-pointer group">
+<div class="relative flex items-center justify-center w-6 h-6 mr-4">
+<input class="peer appearance-none w-6 h-6 border-2 border-outline-variant rounded-[6px] checked:bg-primary checked:border-primary transition-all" type="checkbox">
+<span class="material-symbols-outlined absolute text-on-primary text-[16px] opacity-0 peer-checked:opacity-100 pointer-events-none">check</span>
+</div>
+<div class="flex-1 flex flex-col">
+<span class="font-label-md text-label-md text-on-surface">Gold Sovereign Bonds</span>
+<span class="font-label-sm text-label-sm text-on-surface-variant">Current Value: ₹1,50,000</span>
+</div>
+</label>
+</div>
+</section>
+</main>
+<!-- Fixed Bottom Action Area -->
+<div class="fixed bottom-0 left-0 w-full bg-surface/95 backdrop-blur-md border-t border-outline-variant/30 p-margin-mobile z-50 flex items-center justify-center shadow-[0_-4px_12px_rgba(0,0,0,0.02)]">
+<button class="w-full max-w-2xl h-[56px] bg-primary text-on-primary font-label-md text-label-md rounded-full shadow-sm hover:shadow-md hover:bg-primary-container transition-all active:scale-[0.98] flex items-center justify-center gap-2">
+<span class="material-symbols-outlined" data-weight="fill" style="font-variation-settings: 'FILL' 1;">save</span>
+            Update Goal Details
+        </button>
+</div>
+</body></html>

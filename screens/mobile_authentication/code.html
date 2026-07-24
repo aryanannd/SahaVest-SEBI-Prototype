@@ -1,0 +1,232 @@
+<!DOCTYPE html><html lang="en"><head>
+<meta charset="utf-8">
+<meta content="width=device-width, initial-scale=1.0" name="viewport">
+<title>Enter Mobile Number</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "surface-container-highest": "#e1e3e4",
+                    "tertiary-fixed": "#ffddb8",
+                    "secondary": "#006d42",
+                    "tertiary-fixed-dim": "#ffb95f",
+                    "error-container": "#ffdad6",
+                    "outline-variant": "#c4c6d0",
+                    "on-surface": "#191c1d",
+                    "surface-container-high": "#e7e8e9",
+                    "on-error-container": "#93000a",
+                    "inverse-on-surface": "#f0f1f2",
+                    "primary-fixed": "#d7e3ff",
+                    "surface": "#f8f9fa",
+                    "secondary-container": "#9af6be",
+                    "tertiary-container": "#573500",
+                    "surface-container-lowest": "#ffffff",
+                    "primary-container": "#1a3c6e",
+                    "on-secondary": "#ffffff",
+                    "surface-container": "#edeeef",
+                    "secondary-fixed-dim": "#7ed9a3",
+                    "on-primary-fixed-variant": "#264679",
+                    "surface-container-low": "#f3f4f5",
+                    "on-primary-container": "#8aa8e0",
+                    "error": "#ba1a1a",
+                    "secondary-fixed": "#9af6be",
+                    "on-surface-variant": "#43474f",
+                    "inverse-surface": "#2e3132",
+                    "on-secondary-fixed-variant": "#005230",
+                    "primary-fixed-dim": "#abc7ff",
+                    "outline": "#747780",
+                    "on-tertiary": "#ffffff",
+                    "on-background": "#191c1d",
+                    "on-secondary-container": "#087347",
+                    "on-secondary-fixed": "#002110",
+                    "surface-bright": "#f8f9fa",
+                    "on-tertiary-fixed-variant": "#653e00",
+                    "inverse-primary": "#abc7ff",
+                    "tertiary": "#3a2100",
+                    "surface-tint": "#405e92",
+                    "primary": "#002653",
+                    "on-tertiary-container": "#e89500",
+                    "on-primary": "#ffffff",
+                    "surface-variant": "#e1e3e4",
+                    "background": "#f8f9fa",
+                    "on-error": "#ffffff",
+                    "surface-dim": "#d9dadb",
+                    "on-tertiary-fixed": "#2a1700",
+                    "on-primary-fixed": "#001b3f"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.25rem",
+                    "lg": "0.5rem",
+                    "xl": "0.75rem",
+                    "full": "9999px"
+            },
+            "spacing": {
+                    "lg": "24px",
+                    "xs": "8px",
+                    "xl": "32px",
+                    "md": "16px",
+                    "margin-mobile": "16px",
+                    "tap-target-min": "44px",
+                    "gutter-mobile": "12px",
+                    "sm": "12px",
+                    "base": "4px"
+            },
+            "fontFamily": {
+                    "display-lg-mobile": [
+                            "Inter"
+                    ],
+                    "body-lg": [
+                            "Inter"
+                    ],
+                    "label-sm": [
+                            "Inter"
+                    ],
+                    "label-md": [
+                            "Inter"
+                    ],
+                    "headline-sm": [
+                            "Inter"
+                    ],
+                    "headline-md": [
+                            "Inter"
+                    ],
+                    "display-lg": [
+                            "Inter"
+                    ],
+                    "body-md": [
+                            "Inter"
+                    ]
+            },
+            "fontSize": {
+                    "display-lg-mobile": [
+                            "28px",
+                            {
+                                    "lineHeight": "36px",
+                                    "letterSpacing": "-0.02em",
+                                    "fontWeight": "700"
+                            }
+                    ],
+                    "body-lg": [
+                            "18px",
+                            {
+                                    "lineHeight": "28px",
+                                    "fontWeight": "400"
+                            }
+                    ],
+                    "label-sm": [
+                            "12px",
+                            {
+                                    "lineHeight": "16px",
+                                    "letterSpacing": "0.05em",
+                                    "fontWeight": "600"
+                            }
+                    ],
+                    "label-md": [
+                            "14px",
+                            {
+                                    "lineHeight": "20px",
+                                    "letterSpacing": "0.01em",
+                                    "fontWeight": "500"
+                            }
+                    ],
+                    "headline-sm": [
+                            "20px",
+                            {
+                                    "lineHeight": "28px",
+                                    "fontWeight": "600"
+                            }
+                    ],
+                    "headline-md": [
+                            "24px",
+                            {
+                                    "lineHeight": "32px",
+                                    "fontWeight": "600"
+                            }
+                    ],
+                    "display-lg": [
+                            "32px",
+                            {
+                                    "lineHeight": "40px",
+                                    "letterSpacing": "-0.02em",
+                                    "fontWeight": "700"
+                            }
+                    ],
+                    "body-md": [
+                            "16px",
+                            {
+                                    "lineHeight": "24px",
+                                    "fontWeight": "400"
+                            }
+                    ]
+            }
+    },
+        },
+      }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .material-symbols-outlined.fill {
+            font-variation-settings: 'FILL' 1, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background text-on-background min-h-screen flex flex-col font-body-md antialiased md:items-center md:justify-center">
+<!-- Main Container -->
+<main class="flex-1 flex flex-col px-margin-mobile pt-[64px] pb-xl w-full max-w-md mx-auto relative z-10 md:bg-surface-container-lowest md:rounded-xl md:shadow-sm md:border md:border-outline-variant md:min-h-[600px] md:pt-xl">
+<!-- Back Button (Mobile only logic implies a flow) -->
+<button aria-label="Go back" class="w-[44px] h-[44px] flex items-center justify-center text-on-surface-variant hover:bg-surface-container-low rounded-full transition-colors absolute top-md left-margin-mobile md:static md:mb-lg">
+<span class="material-symbols-outlined" data-icon="arrow_back">arrow_back</span>
+</button>
+<!-- Header Section -->
+<header class="mt-xl md:mt-0 mb-lg">
+<h1 class="font-display-lg-mobile text-display-lg-mobile text-on-surface mb-xs">Enter Mobile Number</h1>
+<p class="font-body-md text-body-md text-on-surface-variant">We will send an OTP for verification</p>
+</header>
+<!-- Form Section -->
+<form class="flex-1 flex flex-col" onsubmit="event.preventDefault(); window.location.href='#';">
+<!-- Input Group -->
+<div class="mb-auto">
+<label class="block font-label-md text-label-md text-on-surface mb-base" for="mobile-number">Mobile Number</label>
+<div class="relative flex items-center bg-surface-container-lowest border border-outline-variant rounded-lg focus-within:border-primary focus-within:ring-1 focus-within:ring-primary transition-shadow h-[56px] overflow-hidden">
+<div class="flex items-center justify-center h-full px-md bg-surface-container-low border-r border-outline-variant text-on-surface font-body-lg text-body-lg">
+                        +91
+                    </div>
+<input autocomplete="tel-national" class="flex-1 h-full bg-transparent border-none focus:ring-0 px-md font-body-lg text-body-lg text-on-surface placeholder:text-outline" id="mobile-number" inputmode="numeric" maxlength="10" pattern="[0-9]*" placeholder="99999 99999" required="" type="tel">
+</div>
+</div>
+<!-- Bottom Actions -->
+<div class="mt-xl space-y-lg">
+<!-- Terms Checkbox -->
+<label class="flex items-start gap-sm cursor-pointer group">
+<div class="relative flex items-center justify-center w-[24px] h-[24px] shrink-0 mt-base">
+<input class="peer appearance-none w-[20px] h-[20px] border-2 border-outline rounded bg-surface-container-lowest checked:bg-primary checked:border-primary transition-colors focus:ring-2 focus:ring-primary-container focus:ring-offset-2 focus:ring-offset-background outline-none" required="" type="checkbox">
+<span class="material-symbols-outlined absolute text-on-primary text-[16px] opacity-0 peer-checked:opacity-100 pointer-events-none transition-opacity" data-icon="check">check</span>
+</div>
+<span class="font-label-sm text-label-sm text-on-surface-variant pt-1 leading-relaxed">
+                        By continuing, you agree to our <a class="text-primary hover:underline" href="#">Terms of Service</a> and <a class="text-primary hover:underline" href="#">Privacy Policy</a>.
+                    </span>
+</label>
+<!-- CTA Button -->
+<button class="w-full h-[56px] bg-primary text-on-primary font-headline-sm text-headline-sm rounded-full flex items-center justify-center gap-xs hover:bg-on-primary-fixed-variant active:scale-[0.98] transition-all disabled:opacity-30 disabled:pointer-events-none shadow-sm" type="submit">
+                    Send OTP
+                    <span class="material-symbols-outlined" data-icon="arrow_forward">arrow_forward</span>
+</button>
+</div>
+</form>
+</main>
+<!-- Subtle Background Pattern for Desktop -->
+<div class="hidden md:block fixed inset-0 z-0 pointer-events-none opacity-20" style="background-image: radial-gradient(circle at 2px 2px, var(--tw-colors-outline-variant) 1px, transparent 0); background-size: 32px 32px;"></div>
+</body></html>

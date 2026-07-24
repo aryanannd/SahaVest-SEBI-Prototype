@@ -1,0 +1,339 @@
+<!DOCTYPE html><html class="light" lang="en"><head>
+<meta charset="utf-8">
+<meta content="width=device-width, initial-scale=1.0" name="viewport">
+<title>SahaVest - Security Settings</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com" rel="preconnect">
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<script id="tailwind-config">
+        tailwind.config = {
+          darkMode: "class",
+          theme: {
+            extend: {
+              "colors": {
+                      "on-error-container": "#93000a",
+                      "inverse-on-surface": "#f0f1f2",
+                      "surface-bright": "#f8f9fa",
+                      "on-primary": "#ffffff",
+                      "background": "#f8f9fa",
+                      "inverse-surface": "#2e3132",
+                      "on-primary-container": "#8aa8e0",
+                      "tertiary-fixed-dim": "#ffb95f",
+                      "error": "#ba1a1a",
+                      "surface-tint": "#405e92",
+                      "surface-dim": "#d9dadb",
+                      "secondary-fixed": "#9af6be",
+                      "on-primary-fixed-variant": "#264679",
+                      "tertiary-container": "#573500",
+                      "secondary": "#006d42",
+                      "surface-container-lowest": "#ffffff",
+                      "surface": "#f8f9fa",
+                      "secondary-fixed-dim": "#7ed9a3",
+                      "surface-variant": "#e1e3e4",
+                      "primary-fixed": "#d7e3ff",
+                      "on-tertiary-container": "#e89500",
+                      "surface-container-high": "#e7e8e9",
+                      "secondary-container": "#9af6be",
+                      "on-tertiary": "#ffffff",
+                      "surface-container-highest": "#e1e3e4",
+                      "surface-container": "#edeeef",
+                      "primary-container": "#1a3c6e",
+                      "inverse-primary": "#abc7ff",
+                      "on-background": "#191c1d",
+                      "on-error": "#ffffff",
+                      "on-primary-fixed": "#001b3f",
+                      "on-secondary-fixed": "#002110",
+                      "outline-variant": "#c4c6d0",
+                      "on-secondary": "#ffffff",
+                      "tertiary": "#3a2100",
+                      "on-secondary-fixed-variant": "#005230",
+                      "tertiary-fixed": "#ffddb8",
+                      "error-container": "#ffdad6",
+                      "primary-fixed-dim": "#abc7ff",
+                      "on-surface-variant": "#43474f",
+                      "outline": "#747780",
+                      "on-tertiary-fixed-variant": "#653e00",
+                      "surface-container-low": "#f3f4f5",
+                      "primary": "#002653",
+                      "on-surface": "#191c1d",
+                      "on-secondary-container": "#087347",
+                      "on-tertiary-fixed": "#2a1700"
+              },
+              "borderRadius": {
+                      "DEFAULT": "0.25rem",
+                      "lg": "0.5rem",
+                      "xl": "0.75rem",
+                      "full": "9999px"
+              },
+              "spacing": {
+                      "sm": "12px",
+                      "gutter-mobile": "12px",
+                      "base": "4px",
+                      "tap-target-min": "44px",
+                      "lg": "24px",
+                      "margin-mobile": "16px",
+                      "xs": "8px",
+                      "xl": "32px",
+                      "md": "16px"
+              },
+              "fontFamily": {
+                      "label-sm": [
+                              "Inter"
+                      ],
+                      "label-md": [
+                              "Inter"
+                      ],
+                      "display-lg": [
+                              "Inter"
+                      ],
+                      "headline-sm": [
+                              "Inter"
+                      ],
+                      "headline-md": [
+                              "Inter"
+                      ],
+                      "body-lg": [
+                              "Inter"
+                      ],
+                      "body-md": [
+                              "Inter"
+                      ],
+                      "display-lg-mobile": [
+                              "Inter"
+                      ]
+              },
+              "fontSize": {
+                      "label-sm": [
+                              "12px",
+                              {
+                                      "lineHeight": "16px",
+                                      "letterSpacing": "0.05em",
+                                      "fontWeight": "600"
+                              }
+                      ],
+                      "label-md": [
+                              "14px",
+                              {
+                                      "lineHeight": "20px",
+                                      "letterSpacing": "0.01em",
+                                      "fontWeight": "500"
+                              }
+                      ],
+                      "display-lg": [
+                              "32px",
+                              {
+                                      "lineHeight": "40px",
+                                      "letterSpacing": "-0.02em",
+                                      "fontWeight": "700"
+                              }
+                      ],
+                      "headline-sm": [
+                              "20px",
+                              {
+                                      "lineHeight": "28px",
+                                      "fontWeight": "600"
+                              }
+                      ],
+                      "headline-md": [
+                              "24px",
+                              {
+                                      "lineHeight": "32px",
+                                      "fontWeight": "600"
+                              }
+                      ],
+                      "body-lg": [
+                              "18px",
+                              {
+                                      "lineHeight": "28px",
+                                      "fontWeight": "400"
+                              }
+                      ],
+                      "body-md": [
+                              "16px",
+                              {
+                                      "lineHeight": "24px",
+                                      "fontWeight": "400"
+                              }
+                      ],
+                      "display-lg-mobile": [
+                              "28px",
+                              {
+                                      "lineHeight": "36px",
+                                      "letterSpacing": "-0.02em",
+                                      "fontWeight": "700"
+                              }
+                      ]
+              }
+      },
+          },
+        }
+      </script>
+<style>
+        /* Custom Toggle Switch Styles */
+        .toggle-checkbox:checked {
+            right: 0;
+            border-color: #002653; /* primary color */
+        }
+        .toggle-checkbox:checked + .toggle-label {
+            background-color: #002653; /* primary color */
+        }
+        .toggle-checkbox:checked + .toggle-label:after {
+            transform: translateX(100%);
+            border-color: white;
+        }
+        .toggle-label {
+            width: 48px;
+            height: 24px;
+            background-color: #c4c6d0; /* outline-variant */
+            border-radius: 9999px;
+            position: relative;
+            cursor: pointer;
+            transition: background-color 0.2s ease-in-out;
+        }
+        .toggle-label:after {
+            content: '';
+            position: absolute;
+            top: 2px;
+            left: 2px;
+            width: 20px;
+            height: 20px;
+            background-color: white;
+            border-radius: 50%;
+            transition: transform 0.2s ease-in-out;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.2);
+        }
+      </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background text-on-background antialiased min-h-screen pt-[56px] pb-[80px] md:pb-0">
+<!-- TopAppBar -->
+<header class="bg-surface dark:bg-on-background fixed top-0 left-0 w-full z-50 flex justify-between items-center px-margin-mobile h-[56px] border-b border-outline-variant dark:border-outline shadow-sm">
+<div class="flex items-center">
+<button class="w-tap-target-min h-tap-target-min flex items-center justify-center mr-xs text-primary dark:text-primary-fixed-dim hover:bg-surface-container-low dark:hover:bg-surface-variant rounded-full active:scale-95 transition-transform duration-150">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 0;">arrow_back</span>
+</button>
+<h1 class="font-headline-md text-headline-md font-bold text-primary dark:text-primary-fixed-dim ml-xs">Security Settings</h1>
+</div>
+<div>
+<!-- Suppressing trailing icon for focused settings view -->
+</div>
+</header>
+<main class="max-w-3xl mx-auto px-margin-mobile py-lg grid gap-lg">
+<!-- Security Status Banner -->
+<section class="bg-primary-container text-on-primary-container rounded-xl p-md flex items-start gap-md shadow-sm">
+<div class="mt-1">
+<span class="material-symbols-outlined text-secondary-fixed" style="font-variation-settings: 'FILL' 1;">shield_locked</span>
+</div>
+<div>
+<h2 class="font-headline-sm text-headline-sm text-primary mb-base">Account Protected</h2>
+<p class="font-body-md text-body-md text-on-primary-container">Your account security is up to date. Review your settings below to ensure maximum protection.</p>
+</div>
+</section>
+<!-- Authentication Methods Card -->
+<section class="bg-surface-container-lowest rounded-xl border border-outline-variant shadow-[0_4px_12px_rgba(0,0,0,0.04)] overflow-hidden">
+<div class="p-md border-b border-surface-variant">
+<h2 class="font-headline-sm text-headline-sm text-primary">Authentication</h2>
+<p class="font-body-md text-body-md text-on-surface-variant mt-base">Manage how you access your SahaVest account.</p>
+</div>
+<div class="p-0">
+<!-- App PIN Toggle -->
+<div class="flex items-center justify-between p-md border-b border-surface-variant hover:bg-surface-container-low transition-colors">
+<div class="flex items-center gap-md">
+<div class="w-10 h-10 rounded-full bg-surface-container flex items-center justify-center text-primary">
+<span class="material-symbols-outlined">dialpad</span>
+</div>
+<div>
+<h3 class="font-label-md text-label-md text-on-surface">App PIN</h3>
+<p class="font-body-md text-body-md text-on-surface-variant text-sm mt-1">Require a 6-digit PIN to open the app.</p>
+</div>
+</div>
+<div class="relative inline-block w-12 align-middle select-none h-6">
+<input checked="" class="toggle-checkbox absolute block w-6 h-6 rounded-full bg-white border-4 appearance-none cursor-pointer opacity-0 z-10" id="toggle-pin" name="toggle-pin" type="checkbox">
+<label class="toggle-label block overflow-hidden h-6 rounded-full bg-gray-300 cursor-pointer" for="toggle-pin"></label>
+</div>
+</div>
+<!-- Biometric Login Toggle -->
+<div class="flex items-center justify-between p-md hover:bg-surface-container-low transition-colors">
+<div class="flex items-center gap-md">
+<div class="w-10 h-10 rounded-full bg-surface-container flex items-center justify-center text-primary">
+<span class="material-symbols-outlined">fingerprint</span>
+</div>
+<div>
+<h3 class="font-label-md text-label-md text-on-surface">Biometric Unlock</h3>
+<p class="font-body-md text-body-md text-on-surface-variant text-sm mt-1">Use Fingerprint or Face ID for faster access.</p>
+</div>
+</div>
+<div class="relative inline-block w-12 align-middle select-none h-6">
+<input checked="" class="toggle-checkbox absolute block w-6 h-6 rounded-full bg-white border-4 appearance-none cursor-pointer opacity-0 z-10" id="toggle-biometric" name="toggle-biometric" type="checkbox">
+<label class="toggle-label block overflow-hidden h-6 rounded-full bg-gray-300 cursor-pointer" for="toggle-biometric"></label>
+</div>
+</div>
+</div>
+<div class="bg-surface-container-low p-sm px-md flex items-start gap-sm border-t border-surface-variant">
+<span class="material-symbols-outlined text-outline text-sm mt-0.5">info</span>
+<p class="font-label-sm text-label-sm text-on-surface-variant font-normal">If biometric hardware is unavailable or fails, your 6-digit App PIN will act as a fallback method.</p>
+</div>
+</section>
+<!-- Session Management Card -->
+<section class="bg-surface-container-lowest rounded-xl border border-outline-variant shadow-[0_4px_12px_rgba(0,0,0,0.04)] overflow-hidden">
+<div class="p-md border-b border-surface-variant flex justify-between items-center">
+<div>
+<h2 class="font-headline-sm text-headline-sm text-primary">Active Sessions</h2>
+<p class="font-body-md text-body-md text-on-surface-variant mt-base">Devices currently logged into your account.</p>
+</div>
+<button class="font-label-md text-label-md text-error hover:bg-error-container hover:text-on-error-container px-sm py-xs rounded-lg transition-colors">
+                    Sign Out All
+                </button>
+</div>
+<div class="p-0">
+<!-- Current Device -->
+<div class="flex items-start justify-between p-md border-b border-surface-variant">
+<div class="flex items-start gap-md">
+<div class="w-10 h-10 rounded-full bg-primary-container flex items-center justify-center text-on-primary-container mt-1">
+<span class="material-symbols-outlined">smartphone</span>
+</div>
+<div>
+<div class="flex items-center gap-2">
+<h3 class="font-label-md text-label-md text-on-surface">iPhone 14 Pro</h3>
+<span class="bg-secondary-container text-on-secondary-container text-[10px] px-2 py-0.5 rounded-full font-bold uppercase tracking-wider">This Device</span>
+</div>
+<p class="font-body-md text-body-md text-on-surface-variant text-sm mt-1">Mumbai, India • Active Now</p>
+<p class="font-label-sm text-label-sm text-outline font-normal mt-1">SahaVest App v2.4.1</p>
+</div>
+</div>
+</div>
+<!-- Other Device -->
+<div class="flex items-start justify-between p-md hover:bg-surface-container-low transition-colors">
+<div class="flex items-start gap-md">
+<div class="w-10 h-10 rounded-full bg-surface-container flex items-center justify-center text-on-surface-variant mt-1">
+<span class="material-symbols-outlined">laptop_mac</span>
+</div>
+<div>
+<h3 class="font-label-md text-label-md text-on-surface">MacBook Air M2</h3>
+<p class="font-body-md text-body-md text-on-surface-variant text-sm mt-1">Delhi, India • Last active: 2 hours ago</p>
+<p class="font-label-sm text-label-sm text-outline font-normal mt-1">Web Browser (Chrome)</p>
+</div>
+</div>
+<button aria-label="Sign out device" class="w-tap-target-min h-tap-target-min flex items-center justify-center text-outline hover:text-error transition-colors rounded-full">
+<span class="material-symbols-outlined">logout</span>
+</button>
+</div>
+</div>
+</section>
+<!-- Danger Zone -->
+<section class="mt-xl mb-xl">
+<button class="w-full h-[56px] flex items-center justify-center gap-sm bg-surface-container border border-outline-variant text-on-surface font-label-md text-label-md rounded-xl hover:bg-surface-variant transition-colors active:scale-[0.98]">
+<span class="material-symbols-outlined">lock_reset</span>
+                Change Account Password
+            </button>
+</section>
+</main>
+<!-- Navigation Shell suppressed for Task-Focused Settings view as per instructions -->
+</body></html>

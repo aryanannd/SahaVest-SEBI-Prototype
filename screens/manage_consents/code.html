@@ -1,0 +1,266 @@
+<!DOCTYPE html><html class="h-full" lang="en"><head>
+<meta charset="utf-8">
+<meta content="width=device-width, initial-scale=1.0" name="viewport">
+<title>SahaVest - Consent Management</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "surface-variant": "#e1e3e4",
+                        "surface": "#f8f9fa",
+                        "surface-dim": "#d9dadb",
+                        "surface-bright": "#f8f9fa",
+                        "surface-container": "#edeeef",
+                        "on-secondary-container": "#087347",
+                        "on-surface": "#191c1d",
+                        "surface-container-low": "#f3f4f5",
+                        "tertiary-fixed-dim": "#ffb95f",
+                        "on-primary-fixed": "#001b3f",
+                        "inverse-surface": "#2e3132",
+                        "inverse-primary": "#abc7ff",
+                        "error-container": "#ffdad6",
+                        "on-error-container": "#93000a",
+                        "tertiary-fixed": "#ffddb8",
+                        "background": "#f8f9fa",
+                        "on-tertiary-fixed": "#2a1700",
+                        "on-surface-variant": "#43474f",
+                        "on-error": "#ffffff",
+                        "on-primary-container": "#8aa8e0",
+                        "primary-fixed": "#d7e3ff",
+                        "on-secondary-fixed": "#002110",
+                        "on-background": "#191c1d",
+                        "primary": "#002653",
+                        "secondary": "#006d42",
+                        "tertiary-container": "#573500",
+                        "on-secondary-fixed-variant": "#005230",
+                        "error": "#ba1a1a",
+                        "outline": "#747780",
+                        "surface-tint": "#405e92",
+                        "primary-fixed-dim": "#abc7ff",
+                        "tertiary": "#3a2100",
+                        "primary-container": "#1a3c6e",
+                        "inverse-on-surface": "#f0f1f2",
+                        "on-primary": "#ffffff",
+                        "secondary-container": "#9af6be",
+                        "secondary-fixed-dim": "#7ed9a3",
+                        "on-tertiary-fixed-variant": "#653e00",
+                        "on-primary-fixed-variant": "#264679",
+                        "on-secondary": "#ffffff",
+                        "outline-variant": "#c4c6d0",
+                        "surface-container-high": "#e7e8e9",
+                        "secondary-fixed": "#9af6be",
+                        "on-tertiary": "#ffffff",
+                        "surface-container-lowest": "#ffffff",
+                        "surface-container-highest": "#e1e3e4",
+                        "on-tertiary-container": "#e89500"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "md": "16px",
+                        "base": "4px",
+                        "tap-target-min": "44px",
+                        "xl": "32px",
+                        "margin-mobile": "16px",
+                        "sm": "12px",
+                        "gutter-mobile": "12px",
+                        "xs": "8px",
+                        "lg": "24px"
+                    },
+                    "fontFamily": {
+                        "display-lg": ["Inter"],
+                        "display-lg-mobile": ["Inter"],
+                        "label-md": ["Inter"],
+                        "headline-sm": ["Inter"],
+                        "headline-md": ["Inter"],
+                        "label-sm": ["Inter"],
+                        "body-lg": ["Inter"],
+                        "body-md": ["Inter"]
+                    },
+                    "fontSize": {
+                        "display-lg": ["32px", { "lineHeight": "40px", "letterSpacing": "-0.02em", "fontWeight": "700" }],
+                        "display-lg-mobile": ["28px", { "lineHeight": "36px", "letterSpacing": "-0.02em", "fontWeight": "700" }],
+                        "label-md": ["14px", { "lineHeight": "20px", "letterSpacing": "0.01em", "fontWeight": "500" }],
+                        "headline-sm": ["20px", { "lineHeight": "28px", "fontWeight": "600" }],
+                        "headline-md": ["24px", { "lineHeight": "32px", "fontWeight": "600" }],
+                        "label-sm": ["12px", { "lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "600" }],
+                        "body-lg": ["18px", { "lineHeight": "28px", "fontWeight": "400" }],
+                        "body-md": ["16px", { "lineHeight": "24px", "fontWeight": "400" }]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        .tab-content { display: none; }
+        .tab-content.active { display: block; }
+        .tab-btn.active {
+            border-bottom: 2px solid #002653; /* primary */
+            color: #002653; /* primary */
+        }
+        .tab-btn {
+            color: #43474f; /* on-surface-variant */
+            border-bottom: 2px solid transparent;
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background text-on-background h-full flex flex-col font-body-md antialiased">
+<!-- TopAppBar -->
+<header class="bg-surface dark:bg-surface-dim w-full sticky top-0 z-50 border-b border-outline-variant dark:border-outline">
+<div class="flex items-center justify-between px-margin-mobile py-sm w-full max-w-7xl mx-auto">
+<button class="text-primary dark:text-primary-fixed hover:bg-surface-container-low dark:hover:bg-surface-container-highest transition-colors active:scale-95 duration-100 p-2 rounded-full flex items-center justify-center w-[44px] h-[44px]">
+<span class="material-symbols-outlined" data-icon="search">search</span>
+</button>
+<div class="font-headline-md text-headline-md text-primary dark:text-primary-fixed tracking-tight">
+                SahaVest
+            </div>
+<button class="text-primary dark:text-primary-fixed hover:bg-surface-container-low dark:hover:bg-surface-container-highest transition-colors active:scale-95 duration-100 p-2 rounded-full flex items-center justify-center w-[44px] h-[44px]">
+<span class="material-symbols-outlined" data-icon="account_circle">account_circle</span>
+</button>
+</div>
+</header>
+<!-- Main Content -->
+<main class="flex-grow w-full max-w-7xl mx-auto px-margin-mobile md:px-lg py-lg pb-32">
+<div class="mb-lg">
+<h1 class="font-display-lg-mobile text-display-lg-mobile md:font-display-lg md:text-display-lg text-primary mb-2">Consent Management</h1>
+<p class="font-body-md text-body-md text-on-surface-variant">Review and manage data access granted to Financial Information Providers (FIPs).</p>
+</div>
+<!-- Tabs -->
+<div class="flex border-b border-outline-variant mb-lg">
+<button class="tab-btn active font-label-md text-label-md px-md py-sm flex-1 text-center focus:outline-none transition-colors duration-200 min-h-[44px]" id="tab-active" onclick="switchTab('active')">
+                Active
+            </button>
+<button class="tab-btn font-label-md text-label-md px-md py-sm flex-1 text-center focus:outline-none transition-colors duration-200 min-h-[44px]" id="tab-revoked" onclick="switchTab('revoked')">
+                Revoked
+            </button>
+<button class="tab-btn font-label-md text-label-md px-md py-sm flex-1 text-center focus:outline-none transition-colors duration-200 min-h-[44px]" id="tab-expired" onclick="switchTab('expired')">
+                Expired
+            </button>
+</div>
+<!-- Active Tab Content -->
+<div class="tab-content active space-y-md" id="content-active">
+<!-- Consent Card 1 -->
+<div class="bg-surface-container-lowest rounded-lg border border-outline-variant p-md flex flex-col md:flex-row justify-between items-start md:items-center gap-md hover:shadow-sm transition-shadow duration-200">
+<div class="flex-1">
+<div class="flex items-center gap-xs mb-xs">
+<span class="material-symbols-outlined text-primary text-[20px]" data-icon="account_balance">account_balance</span>
+<h2 class="font-headline-sm text-headline-sm text-on-surface">Axis Bank Limited</h2>
+</div>
+<p class="font-body-md text-body-md text-on-surface-variant mb-sm">Access to Bank Statements (Last 6 Months)</p>
+<div class="grid grid-cols-2 gap-md font-label-md text-label-md text-on-surface-variant">
+<div>
+<span class="block text-outline text-[11px] uppercase tracking-wider mb-[2px]">Granted On</span>
+                            Oct 12, 2023
+                        </div>
+<div>
+<span class="block text-outline text-[11px] uppercase tracking-wider mb-[2px]">Expires On</span>
+                            Oct 12, 2024
+                        </div>
+</div>
+</div>
+<div class="w-full md:w-auto mt-sm md:mt-0">
+<button class="w-full md:w-auto min-w-[120px] h-[48px] px-md rounded-DEFAULT border border-error text-error hover:bg-error-container/20 transition-colors duration-200 font-label-md text-label-md flex items-center justify-center gap-xs">
+<span class="material-symbols-outlined text-[18px]" data-icon="block">block</span>
+                        Revoke
+                    </button>
+</div>
+</div>
+<!-- Consent Card 2 -->
+<div class="bg-surface-container-lowest rounded-lg border border-outline-variant p-md flex flex-col md:flex-row justify-between items-start md:items-center gap-md hover:shadow-sm transition-shadow duration-200">
+<div class="flex-1">
+<div class="flex items-center gap-xs mb-xs">
+<span class="material-symbols-outlined text-primary text-[20px]" data-icon="show_chart">show_chart</span>
+<h2 class="font-headline-sm text-headline-sm text-on-surface">Zerodha Broking Ltd</h2>
+</div>
+<p class="font-body-md text-body-md text-on-surface-variant mb-sm">Access to Mutual Fund Holdings</p>
+<div class="grid grid-cols-2 gap-md font-label-md text-label-md text-on-surface-variant">
+<div>
+<span class="block text-outline text-[11px] uppercase tracking-wider mb-[2px]">Granted On</span>
+                            Nov 05, 2023
+                        </div>
+<div>
+<span class="block text-outline text-[11px] uppercase tracking-wider mb-[2px]">Expires On</span>
+                            May 05, 2024
+                        </div>
+</div>
+</div>
+<div class="w-full md:w-auto mt-sm md:mt-0">
+<button class="w-full md:w-auto min-w-[120px] h-[48px] px-md rounded-DEFAULT border border-error text-error hover:bg-error-container/20 transition-colors duration-200 font-label-md text-label-md flex items-center justify-center gap-xs">
+<span class="material-symbols-outlined text-[18px]" data-icon="block">block</span>
+                        Revoke
+                    </button>
+</div>
+</div>
+</div>
+<!-- Revoked Tab Content -->
+<div class="tab-content" id="content-revoked">
+<div class="flex flex-col items-center justify-center py-xl text-center">
+<div class="w-16 h-16 rounded-full bg-surface-container flex items-center justify-center mb-md">
+<span class="material-symbols-outlined text-outline text-3xl" data-icon="history">history</span>
+</div>
+<h3 class="font-headline-sm text-headline-sm text-on-surface mb-xs">No Revoked Consents</h3>
+<p class="font-body-md text-body-md text-on-surface-variant max-w-sm">You haven't revoked any data access permissions recently.</p>
+</div>
+</div>
+<!-- Expired Tab Content -->
+<div class="tab-content" id="content-expired">
+<div class="flex flex-col items-center justify-center py-xl text-center">
+<div class="w-16 h-16 rounded-full bg-surface-container flex items-center justify-center mb-md">
+<span class="material-symbols-outlined text-outline text-3xl" data-icon="timer_off">timer_off</span>
+</div>
+<h3 class="font-headline-sm text-headline-sm text-on-surface mb-xs">No Expired Consents</h3>
+<p class="font-body-md text-body-md text-on-surface-variant max-w-sm">All your past consents have either been renewed or are still active.</p>
+</div>
+</div>
+</main>
+<!-- BottomNavBar (Mobile Only) -->
+<nav class="md:hidden bg-surface dark:bg-surface-dim fixed bottom-0 w-full z-50 border-t border-outline-variant dark:border-outline">
+<div class="flex justify-around items-center w-full h-[64px] px-2 pb-safe">
+<button class="flex flex-col items-center justify-center text-on-surface-variant dark:text-outline p-2 hover:bg-surface-container-high dark:hover:bg-surface-container-highest rounded-full active:scale-90 duration-200 ease-in-out min-w-[44px] min-h-[44px]">
+<span class="material-symbols-outlined mb-1" data-icon="dashboard">dashboard</span>
+<span class="font-label-sm text-label-sm">Dashboard</span>
+</button>
+<button class="flex flex-col items-center justify-center text-on-surface-variant dark:text-outline p-2 hover:bg-surface-container-high dark:hover:bg-surface-container-highest rounded-full active:scale-90 duration-200 ease-in-out min-w-[44px] min-h-[44px]">
+<span class="material-symbols-outlined mb-1" data-icon="account_balance_wallet">account_balance_wallet</span>
+<span class="font-label-sm text-label-sm">Portfolio</span>
+</button>
+<button class="flex flex-col items-center justify-center text-on-surface-variant dark:text-outline p-2 hover:bg-surface-container-high dark:hover:bg-surface-container-highest rounded-full active:scale-90 duration-200 ease-in-out min-w-[44px] min-h-[44px]">
+<span class="material-symbols-outlined mb-1" data-icon="shield">shield</span>
+<span class="font-label-sm text-label-sm">Protection</span>
+</button>
+<!-- Active Tab -->
+<button class="flex flex-col items-center justify-center bg-secondary-container dark:bg-on-secondary-fixed-variant text-on-secondary-container dark:text-secondary-fixed rounded-full px-4 py-1 active:scale-90 duration-200 ease-in-out min-w-[44px] min-h-[44px]">
+<span class="material-symbols-outlined mb-1" data-icon="person" data-weight="fill">person</span>
+<span class="font-label-sm text-label-sm">Profile</span>
+</button>
+</div>
+</nav>
+<script>
+        function switchTab(tabId) {
+            // Hide all content
+            document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
+            // Deactivate all buttons
+            document.querySelectorAll('.tab-btn').forEach(el => el.classList.remove('active'));
+            
+            // Show selected content
+            document.getElementById('content-' + tabId).classList.add('active');
+            // Activate selected button
+            document.getElementById('tab-' + tabId).classList.add('active');
+        }
+    </script>
+</body></html>

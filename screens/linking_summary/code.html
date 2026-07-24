@@ -1,0 +1,198 @@
+<!DOCTYPE html><html lang="en"><head>
+<meta charset="utf-8">
+<meta content="width=device-width, initial-scale=1.0" name="viewport">
+<title>SahaVest - Linking Status</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<style>
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .icon-fill {
+            font-variation-settings: 'FILL' 1, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+    </style>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "surface-variant": "#e1e3e4",
+                        "surface": "#f8f9fa",
+                        "surface-dim": "#d9dadb",
+                        "surface-bright": "#f8f9fa",
+                        "surface-container": "#edeeef",
+                        "on-secondary-container": "#087347",
+                        "on-surface": "#191c1d",
+                        "surface-container-low": "#f3f4f5",
+                        "tertiary-fixed-dim": "#ffb95f",
+                        "on-primary-fixed": "#001b3f",
+                        "inverse-surface": "#2e3132",
+                        "inverse-primary": "#abc7ff",
+                        "error-container": "#ffdad6",
+                        "on-error-container": "#93000a",
+                        "tertiary-fixed": "#ffddb8",
+                        "background": "#f8f9fa",
+                        "on-tertiary-fixed": "#2a1700",
+                        "on-surface-variant": "#43474f",
+                        "on-error": "#ffffff",
+                        "on-primary-container": "#8aa8e0",
+                        "primary-fixed": "#d7e3ff",
+                        "on-secondary-fixed": "#002110",
+                        "on-background": "#191c1d",
+                        "primary": "#002653",
+                        "secondary": "#006d42",
+                        "tertiary-container": "#573500",
+                        "on-secondary-fixed-variant": "#005230",
+                        "error": "#ba1a1a",
+                        "outline": "#747780",
+                        "surface-tint": "#405e92",
+                        "primary-fixed-dim": "#abc7ff",
+                        "tertiary": "#3a2100",
+                        "primary-container": "#1a3c6e",
+                        "inverse-on-surface": "#f0f1f2",
+                        "on-primary": "#ffffff",
+                        "secondary-container": "#9af6be",
+                        "secondary-fixed-dim": "#7ed9a3",
+                        "on-tertiary-fixed-variant": "#653e00",
+                        "on-primary-fixed-variant": "#264679",
+                        "on-secondary": "#ffffff",
+                        "outline-variant": "#c4c6d0",
+                        "surface-container-high": "#e7e8e9",
+                        "secondary-fixed": "#9af6be",
+                        "on-tertiary": "#ffffff",
+                        "surface-container-lowest": "#ffffff",
+                        "surface-container-highest": "#e1e3e4",
+                        "on-tertiary-container": "#e89500"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "md": "16px",
+                        "base": "4px",
+                        "tap-target-min": "44px",
+                        "xl": "32px",
+                        "margin-mobile": "16px",
+                        "sm": "12px",
+                        "gutter-mobile": "12px",
+                        "xs": "8px",
+                        "lg": "24px"
+                    },
+                    "fontFamily": {
+                        "display-lg": ["Inter"],
+                        "display-lg-mobile": ["Inter"],
+                        "label-md": ["Inter"],
+                        "headline-sm": ["Inter"],
+                        "headline-md": ["Inter"],
+                        "label-sm": ["Inter"],
+                        "body-lg": ["Inter"],
+                        "body-md": ["Inter"]
+                    },
+                    "fontSize": {
+                        "display-lg": ["32px", { "lineHeight": "40px", "letterSpacing": "-0.02em", "fontWeight": "700" }],
+                        "display-lg-mobile": ["28px", { "lineHeight": "36px", "letterSpacing": "-0.02em", "fontWeight": "700" }],
+                        "label-md": ["14px", { "lineHeight": "20px", "letterSpacing": "0.01em", "fontWeight": "500" }],
+                        "headline-sm": ["20px", { "lineHeight": "28px", "fontWeight": "600" }],
+                        "headline-md": ["24px", { "lineHeight": "32px", "fontWeight": "600" }],
+                        "label-sm": ["12px", { "lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "600" }],
+                        "body-lg": ["18px", { "lineHeight": "28px", "fontWeight": "400" }],
+                        "body-md": ["16px", { "lineHeight": "24px", "fontWeight": "400" }]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-surface text-on-surface antialiased min-h-screen flex flex-col items-center">
+<!-- Minimal Header for Transactional Flow -->
+<header class="w-full max-w-lg mx-auto pt-lg pb-md px-margin-mobile flex justify-center">
+<span class="font-headline-md text-headline-md text-primary tracking-tight">SahaVest</span>
+</header>
+<!-- Main Content Canvas -->
+<main class="flex-1 w-full max-w-lg mx-auto px-margin-mobile flex flex-col justify-center pb-xl">
+<!-- Status Indicator Graphic -->
+<div class="flex justify-center mb-lg">
+<div class="relative w-24 h-24 rounded-full bg-surface-container flex items-center justify-center border-4 border-surface-container-lowest shadow-sm">
+<span class="material-symbols-outlined icon-fill text-primary" style="font-size: 48px;">account_balance_wallet</span>
+<div class="absolute -bottom-2 -right-2 w-10 h-10 bg-surface-container-lowest rounded-full flex items-center justify-center shadow-sm">
+<span class="material-symbols-outlined icon-fill text-tertiary-fixed-dim" style="font-size: 24px;">info</span>
+</div>
+</div>
+</div>
+<!-- Messaging -->
+<div class="text-center mb-xl">
+<h1 class="font-headline-sm text-headline-sm text-on-surface mb-xs">Partial Linkage Complete</h1>
+<p class="font-body-md text-body-md text-on-surface-variant">
+                We've successfully secured connections to most of your accounts. You can proceed to view your active portfolio while we retry the remaining links.
+            </p>
+</div>
+<!-- Checklist Card -->
+<div class="bg-surface-container-lowest border border-outline-variant rounded-xl overflow-hidden mb-xl shadow-sm">
+<!-- Success Item 1: Bank -->
+<div class="flex items-center justify-between p-md border-b border-surface-variant">
+<div class="flex items-center gap-md">
+<div class="w-10 h-10 rounded-full bg-secondary-container/20 flex items-center justify-center">
+<span class="material-symbols-outlined icon-fill text-secondary">check_circle</span>
+</div>
+<div>
+<h3 class="font-label-md text-label-md text-on-surface">Bank Accounts</h3>
+<p class="font-label-sm text-label-sm text-on-surface-variant font-normal">Linked securely</p>
+</div>
+</div>
+<span class="font-label-sm text-label-sm text-secondary">Success</span>
+</div>
+<!-- Success Item 2: Demat -->
+<div class="flex items-center justify-between p-md border-b border-surface-variant">
+<div class="flex items-center gap-md">
+<div class="w-10 h-10 rounded-full bg-secondary-container/20 flex items-center justify-center">
+<span class="material-symbols-outlined icon-fill text-secondary">check_circle</span>
+</div>
+<div>
+<h3 class="font-label-md text-label-md text-on-surface">Demat Account</h3>
+<p class="font-label-sm text-label-sm text-on-surface-variant font-normal">Linked securely</p>
+</div>
+</div>
+<span class="font-label-sm text-label-sm text-secondary">Success</span>
+</div>
+<!-- Failed Item: Mutual Funds -->
+<div class="flex items-center justify-between p-md bg-error-container/10">
+<div class="flex items-center gap-md">
+<div class="w-10 h-10 rounded-full bg-error-container/50 flex items-center justify-center">
+<span class="material-symbols-outlined icon-fill text-error">error</span>
+</div>
+<div>
+<h3 class="font-label-md text-label-md text-on-surface">Mutual Funds</h3>
+<p class="font-label-sm text-label-sm text-error font-normal">Connection timed out</p>
+</div>
+</div>
+<button class="h-tap-target-min px-sm rounded-full flex items-center justify-center font-label-md text-label-md text-primary bg-primary/10 hover:bg-primary/20 transition-colors">
+                    Retry
+                </button>
+</div>
+</div>
+</main>
+<!-- Bottom Action Area (Sticky on mobile, fluid on desktop within container) -->
+<div class="w-full max-w-lg mx-auto px-margin-mobile pb-margin-mobile sticky bottom-0 bg-gradient-to-t from-surface via-surface to-transparent pt-lg">
+<button class="w-full h-tap-target-min bg-primary text-on-primary rounded-full flex items-center justify-center font-label-md text-label-md mb-sm hover:bg-primary-container transition-colors shadow-sm active:scale-[0.98]">
+            Continue to Dashboard
+        </button>
+<button class="w-full h-tap-target-min border border-outline-variant text-on-surface-variant rounded-full flex items-center justify-center font-label-md text-label-md hover:bg-surface-container-low transition-colors active:scale-[0.98]">
+            Retry Failed Linkages
+        </button>
+</div>
+</body></html>

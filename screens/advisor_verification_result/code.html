@@ -1,0 +1,371 @@
+<!DOCTYPE html><html class="light" lang="en"><head>
+<meta charset="utf-8">
+<meta content="width=device-width, initial-scale=1.0" name="viewport">
+<title>Advisor Verification Result - SahaVest</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com" rel="preconnect">
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<script id="tailwind-config">
+        tailwind.config = {
+          darkMode: "class",
+          theme: {
+            extend: {
+              "colors": {
+                      "secondary": "#006d42",
+                      "outline-variant": "#c4c6d0",
+                      "background": "#f8f9fa",
+                      "surface-container": "#edeeef",
+                      "surface-container-low": "#f3f4f5",
+                      "on-surface-variant": "#43474f",
+                      "on-tertiary-fixed": "#2a1700",
+                      "inverse-primary": "#abc7ff",
+                      "secondary-container": "#9af6be",
+                      "on-secondary": "#ffffff",
+                      "primary-fixed-dim": "#abc7ff",
+                      "primary": "#002653",
+                      "surface-container-highest": "#e1e3e4",
+                      "on-secondary-fixed-variant": "#005230",
+                      "on-secondary-container": "#087347",
+                      "on-primary-fixed": "#001b3f",
+                      "on-tertiary-container": "#e89500",
+                      "on-error": "#ffffff",
+                      "surface-bright": "#f8f9fa",
+                      "inverse-surface": "#2e3132",
+                      "outline": "#747780",
+                      "inverse-on-surface": "#f0f1f2",
+                      "primary-container": "#1a3c6e",
+                      "on-tertiary": "#ffffff",
+                      "on-secondary-fixed": "#002110",
+                      "on-primary": "#ffffff",
+                      "surface-tint": "#405e92",
+                      "secondary-fixed": "#9af6be",
+                      "on-error-container": "#93000a",
+                      "on-background": "#191c1d",
+                      "surface-container-lowest": "#ffffff",
+                      "surface-container-high": "#e7e8e9",
+                      "on-primary-container": "#8aa8e0",
+                      "error": "#ba1a1a",
+                      "on-primary-fixed-variant": "#264679",
+                      "secondary-fixed-dim": "#7ed9a3",
+                      "tertiary-fixed": "#ffddb8",
+                      "error-container": "#ffdad6",
+                      "tertiary-fixed-dim": "#ffb95f",
+                      "surface-variant": "#e1e3e4",
+                      "surface-dim": "#d9dadb",
+                      "on-surface": "#191c1d",
+                      "tertiary-container": "#573500",
+                      "on-tertiary-fixed-variant": "#653e00",
+                      "primary-fixed": "#d7e3ff",
+                      "surface": "#f8f9fa",
+                      "tertiary": "#3a2100"
+              },
+              "borderRadius": {
+                      "DEFAULT": "0.25rem",
+                      "lg": "0.5rem",
+                      "xl": "0.75rem",
+                      "full": "9999px"
+              },
+              "spacing": {
+                      "md": "16px",
+                      "sm": "12px",
+                      "base": "4px",
+                      "gutter-mobile": "12px",
+                      "xl": "32px",
+                      "tap-target-min": "44px",
+                      "xs": "8px",
+                      "margin-mobile": "16px",
+                      "lg": "24px"
+              },
+              "fontFamily": {
+                      "label-md": [
+                              "Inter"
+                      ],
+                      "label-sm": [
+                              "Inter"
+                      ],
+                      "body-md": [
+                              "Inter"
+                      ],
+                      "headline-md": [
+                              "Inter"
+                      ],
+                      "display-lg-mobile": [
+                              "Inter"
+                      ],
+                      "display-lg": [
+                              "Inter"
+                      ],
+                      "headline-sm": [
+                              "Inter"
+                      ],
+                      "body-lg": [
+                              "Inter"
+                      ]
+              },
+              "fontSize": {
+                      "label-md": [
+                              "14px",
+                              {
+                                      "lineHeight": "20px",
+                                      "letterSpacing": "0.01em",
+                                      "fontWeight": "500"
+                              }
+                      ],
+                      "label-sm": [
+                              "12px",
+                              {
+                                      "lineHeight": "16px",
+                                      "letterSpacing": "0.05em",
+                                      "fontWeight": "600"
+                              }
+                      ],
+                      "body-md": [
+                              "16px",
+                              {
+                                      "lineHeight": "24px",
+                                      "fontWeight": "400"
+                              }
+                      ],
+                      "headline-md": [
+                              "24px",
+                              {
+                                      "lineHeight": "32px",
+                                      "fontWeight": "600"
+                              }
+                      ],
+                      "display-lg-mobile": [
+                              "28px",
+                              {
+                                      "lineHeight": "36px",
+                                      "letterSpacing": "-0.02em",
+                                      "fontWeight": "700"
+                              }
+                      ],
+                      "display-lg": [
+                              "32px",
+                              {
+                                      "lineHeight": "40px",
+                                      "letterSpacing": "-0.02em",
+                                      "fontWeight": "700"
+                              }
+                      ],
+                      "headline-sm": [
+                              "20px",
+                              {
+                                      "lineHeight": "28px",
+                                      "fontWeight": "600"
+                              }
+                      ],
+                      "body-lg": [
+                              "18px",
+                              {
+                                      "lineHeight": "28px",
+                                      "fontWeight": "400"
+                              }
+                      ]
+              }
+      },
+          },
+        }
+      </script>
+<style>
+        .pb-safe { padding-bottom: env(safe-area-inset-bottom); }
+        .bg-pattern {
+            background-image: radial-gradient(var(--tw-colors-outline-variant) 1px, transparent 1px);
+            background-size: 24px 24px;
+            background-position: center;
+            opacity: 0.15;
+        }
+      </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background text-on-background font-body-md min-h-screen flex flex-col antialiased">
+<!-- TopAppBar -->
+<header class="w-full top-0 sticky bg-surface dark:bg-surface-dim border-b border-outline-variant dark:border-outline shadow-sm dark:shadow-none z-40 transition-colors duration-200">
+<div class="flex justify-between items-center h-14 px-margin-mobile">
+<div class="flex items-center gap-sm">
+<!-- Back Button Context -->
+<button aria-label="Go back" class="w-[44px] h-[44px] flex items-center justify-center rounded-full hover:bg-surface-container active:bg-surface-container-high transition-colors">
+<span class="material-symbols-outlined text-on-surface">arrow_back</span>
+</button>
+<div class="flex items-center">
+<span class="font-display-lg-mobile text-display-lg-mobile font-bold text-primary dark:text-primary-fixed-dim">SahaVest</span>
+</div>
+</div>
+<button aria-label="notifications" class="w-[44px] h-[44px] flex items-center justify-center rounded-full hover:bg-surface-container active:bg-surface-container-high transition-colors text-on-surface-variant dark:text-on-surface-variant">
+<span class="material-symbols-outlined">notifications</span>
+</button>
+</div>
+</header>
+<!-- Main Content Canvas -->
+<main class="flex-grow px-margin-mobile pt-lg pb-[96px] md:pb-xl max-w-[600px] mx-auto w-full relative">
+<!-- Background decorative pattern -->
+<div class="absolute inset-0 bg-pattern pointer-events-none z-[-1]"></div>
+<div class="flex flex-col gap-lg">
+<!-- Verification Header -->
+<div class="text-center">
+<h1 class="font-headline-md text-headline-md text-on-surface mb-xs">Verification Result</h1>
+<p class="font-body-md text-body-md text-on-surface-variant">Live query as of <span id="current-time">10:42 AM IST</span></p>
+</div>
+<!-- Primary Verification Card (Bento Style) -->
+<div class="bg-surface-container-lowest border border-outline-variant rounded-xl shadow-sm overflow-hidden relative group">
+<!-- Success Header -->
+<div class="bg-secondary-container px-md py-lg flex flex-col items-center justify-center text-center">
+<div class="w-16 h-16 bg-on-secondary rounded-full flex items-center justify-center mb-sm shadow-sm relative">
+<!-- Ripple effect decoration -->
+<div class="absolute inset-0 bg-secondary rounded-full animate-ping opacity-20"></div>
+<span class="material-symbols-outlined text-secondary" style="font-size: 36px; font-variation-settings: 'FILL' 1;">format_image_left</span>
+</div>
+<h2 class="font-headline-sm text-headline-sm text-on-secondary-container font-bold mb-base">Verified Advisor</h2>
+<p class="font-body-md text-body-md text-on-secondary-container opacity-90">Official SEBI Registration Found</p>
+</div>
+<!-- Advisor Details -->
+<div class="p-md bg-surface-container-lowest">
+<div class="flex items-center gap-md mb-lg">
+<div class="w-[64px] h-[64px] rounded-full overflow-hidden bg-surface-container shrink-0 border border-outline-variant">
+<img alt="Rohan Sharma" class="w-full h-full object-cover" data-alt="A professional headshot of an Indian financial advisor, male in his late 30s, wearing a crisp white shirt and dark blue tie. The background is a soft, out-of-focus modern office setting with cool white lighting reflecting a corporate, trustworthy aesthetic." src="https://lh3.googleusercontent.com/aida-public/AB6AXuB-Sqlyit83fjxLRli4CXhm5Uyv4fem1WkBhUFys1SsS64gnXETYy8GUkDzVBb7bMPhDVNXz_TW4XRH23D64XRqh6Fy9qhXISQGUj8ugOACGmXM5sYCS0fx-sTdKVsh7WkZVePhB44p8rcUK7Sgw8bvJ7J_0epxGQy8eMBk3vOCS2P51Sk07XavE6EuQJ8XRsWYF8BH-Antx4vNVGsIEHXKzdg4q-NdMqbCkgTKr0YWuIj4FsyCLBHuMDBFVwnjoH1BAiVDIv8IXf4">
+</div>
+<div>
+<h3 class="font-headline-sm text-headline-sm text-on-surface font-bold">Rohan Sharma</h3>
+<p class="font-label-md text-label-md text-on-surface-variant flex items-center gap-base mt-1">
+<span class="material-symbols-outlined" style="font-size: 16px;">business_center</span>
+                                Independent RIA
+                            </p>
+</div>
+</div>
+<!-- Data Grid -->
+<div class="grid grid-cols-2 gap-sm">
+<div class="bg-surface-container-low p-sm rounded-lg">
+<p class="font-label-sm text-label-sm text-on-surface-variant mb-1 uppercase tracking-wider">SEBI Reg No.</p>
+<p class="font-body-md text-body-md text-on-surface font-semibold font-mono">INA123456789</p>
+</div>
+<div class="bg-surface-container-low p-sm rounded-lg">
+<p class="font-label-sm text-label-sm text-on-surface-variant mb-1 uppercase tracking-wider">Validity</p>
+<div class="flex items-center gap-1">
+<span class="material-symbols-outlined text-secondary" style="font-size: 16px;">check_circle</span>
+<p class="font-body-md text-body-md text-on-surface font-semibold">Dec 2026</p>
+</div>
+</div>
+</div>
+</div>
+<!-- Trust Footer -->
+<div class="bg-surface-container px-md py-sm border-t border-outline-variant flex items-center justify-between">
+<div class="flex items-center gap-xs text-on-surface-variant">
+<span class="material-symbols-outlined" style="font-size: 18px;">database</span>
+<span class="font-label-sm text-label-sm">Source: SEBI Public Registry</span>
+</div>
+<button class="text-primary font-label-md text-label-md hover:underline underline-offset-4 focus:outline-none min-h-[44px] min-w-[44px] flex items-center">
+                        View Certificate
+                    </button>
+</div>
+</div>
+<!-- Registry Record Details -->
+<div class="mt-sm">
+<h3 class="font-headline-sm text-headline-sm text-on-surface mb-sm px-xs">Registry Details</h3>
+<div class="bg-surface-container-lowest border border-outline-variant rounded-xl shadow-sm">
+<ul class="flex flex-col">
+<li class="px-md py-sm border-b border-outline-variant last:border-b-0 flex justify-between items-center">
+<span class="font-body-md text-body-md text-on-surface-variant">Registered Entity</span>
+<span class="font-body-md text-body-md text-on-surface font-medium text-right max-w-[60%]">Rohan Sharma Advisory Pvt Ltd</span>
+</li>
+<li class="px-md py-sm border-b border-outline-variant last:border-b-0 flex justify-between items-center">
+<span class="font-body-md text-body-md text-on-surface-variant">Principal Officer</span>
+<span class="font-body-md text-body-md text-on-surface font-medium text-right max-w-[60%]">Rohan Sharma</span>
+</li>
+<li class="px-md py-sm border-b border-outline-variant last:border-b-0 flex justify-between items-start">
+<span class="font-body-md text-body-md text-on-surface-variant mt-1">Registered Address</span>
+<span class="font-body-md text-body-md text-on-surface font-medium text-right max-w-[60%]">402, Trade Square, Lower Parel, Mumbai 400013</span>
+</li>
+</ul>
+</div>
+</div>
+<!-- Action Area -->
+<div class="mt-md flex flex-col gap-sm">
+<button class="w-full h-[56px] bg-primary text-on-primary rounded-full font-label-md text-label-md font-bold flex items-center justify-center gap-xs hover:bg-primary-container active:scale-[0.98] transition-all shadow-sm">
+<span class="material-symbols-outlined">add_circle</span>
+                    Add to Watchlist
+                </button>
+<button class="w-full h-[48px] bg-surface text-primary border border-outline-variant rounded-full font-label-md text-label-md font-semibold flex items-center justify-center hover:bg-surface-container active:scale-[0.98] transition-all">
+                    Search Another Advisor
+                </button>
+</div>
+</div>
+</main>
+<!-- BottomNavBar -->
+<nav class="md:hidden fixed bottom-0 w-full z-50 bg-surface-container-lowest dark:bg-inverse-surface shadow-lg dark:shadow-none pb-safe">
+<!-- Subtle shadow/border replacement -->
+<div class="absolute top-0 left-0 right-0 h-[1px] bg-outline-variant opacity-50"></div>
+<div class="flex justify-around items-center h-16 w-full px-2">
+<a class="flex flex-col items-center justify-center text-on-surface-variant dark:text-on-surface-variant px-4 py-1 hover:bg-surface-container dark:hover:bg-surface-container-highest active:scale-95 transition-transform duration-150 rounded-lg min-w-[64px] min-h-[44px]" href="#">
+<span class="material-symbols-outlined mb-1">pie_chart</span>
+<span class="font-label-sm text-label-sm">Portfolio</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant dark:text-on-surface-variant px-4 py-1 hover:bg-surface-container dark:hover:bg-surface-container-highest active:scale-95 transition-transform duration-150 rounded-lg min-w-[64px] min-h-[44px]" href="#">
+<span class="material-symbols-outlined mb-1">search</span>
+<span class="font-label-sm text-label-sm">Explore</span>
+</a>
+<!-- Active State: Shield represents Verification/Security -->
+<a class="flex flex-col items-center justify-center bg-secondary-container dark:bg-secondary text-on-secondary-container dark:text-on-secondary rounded-full px-4 py-1 hover:bg-surface-container dark:hover:bg-surface-container-highest active:scale-95 transition-transform duration-150 min-w-[64px] min-h-[44px]" href="#">
+<span class="material-symbols-outlined mb-1" style="font-variation-settings: 'FILL' 1;">security</span>
+<span class="font-label-sm text-label-sm">Shield</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant dark:text-on-surface-variant px-4 py-1 hover:bg-surface-container dark:hover:bg-surface-container-highest active:scale-95 transition-transform duration-150 rounded-lg min-w-[64px] min-h-[44px]" href="#">
+<span class="material-symbols-outlined mb-1">person</span>
+<span class="font-label-sm text-label-sm">Profile</span>
+</a>
+</div>
+</nav>
+<!-- Desktop Side Nav Placeholder (Hidden on mobile) -->
+<nav class="hidden md:flex fixed left-0 top-14 bottom-0 w-64 bg-surface-container-lowest border-r border-outline-variant flex-col py-lg px-md gap-sm z-30">
+<a class="flex items-center gap-sm p-sm rounded-lg text-on-surface-variant hover:bg-surface-container transition-colors" href="#">
+<span class="material-symbols-outlined">pie_chart</span>
+<span class="font-label-md text-label-md">Portfolio</span>
+</a>
+<a class="flex items-center gap-sm p-sm rounded-lg text-on-surface-variant hover:bg-surface-container transition-colors" href="#">
+<span class="material-symbols-outlined">search</span>
+<span class="font-label-md text-label-md">Explore</span>
+</a>
+<a class="flex items-center gap-sm p-sm rounded-full bg-secondary-container text-on-secondary-container transition-colors" href="#">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">security</span>
+<span class="font-label-md text-label-md font-semibold">Shield</span>
+</a>
+<a class="flex items-center gap-sm p-sm rounded-lg text-on-surface-variant hover:bg-surface-container transition-colors mt-auto" href="#">
+<span class="material-symbols-outlined">person</span>
+<span class="font-label-md text-label-md">Profile</span>
+</a>
+</nav>
+<!-- Adjust main content margin for desktop nav -->
+<style>
+        @media (min-width: 768px) {
+            main {
+                margin-left: 16rem; /* 64 * 0.25rem = 16rem (w-64) */
+                max-width: calc(100% - 16rem);
+            }
+        }
+    </style>
+<script>
+        // Set current time for the timestamp
+        function updateTime() {
+            const now = new Date();
+            let hours = now.getHours();
+            let minutes = now.getMinutes();
+            const ampm = hours >= 12 ? 'PM' : 'AM';
+            
+            hours = hours % 12;
+            hours = hours ? hours : 12; 
+            minutes = minutes < 10 ? '0' + minutes : minutes;
+            
+            const timeString = hours + ':' + minutes + ' ' + ampm + ' IST';
+            document.getElementById('current-time').textContent = timeString;
+        }
+        
+        updateTime();
+    </script>
+</body></html>

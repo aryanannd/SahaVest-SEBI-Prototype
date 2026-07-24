@@ -1,0 +1,266 @@
+<!DOCTYPE html><html class="light" lang="en"><head>
+<meta charset="utf-8">
+<meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" name="viewport">
+<title>SahaVest - Trust Score History</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "secondary": "#006d42",
+                        "outline-variant": "#c4c6d0",
+                        "background": "#f8f9fa",
+                        "surface-container": "#edeeef",
+                        "surface-container-low": "#f3f4f5",
+                        "on-surface-variant": "#43474f",
+                        "on-tertiary-fixed": "#2a1700",
+                        "inverse-primary": "#abc7ff",
+                        "secondary-container": "#9af6be",
+                        "on-secondary": "#ffffff",
+                        "primary-fixed-dim": "#abc7ff",
+                        "primary": "#002653",
+                        "surface-container-highest": "#e1e3e4",
+                        "on-secondary-fixed-variant": "#005230",
+                        "on-secondary-container": "#087347",
+                        "on-primary-fixed": "#001b3f",
+                        "on-tertiary-container": "#e89500",
+                        "on-error": "#ffffff",
+                        "surface-bright": "#f8f9fa",
+                        "inverse-surface": "#2e3132",
+                        "outline": "#747780",
+                        "inverse-on-surface": "#f0f1f2",
+                        "primary-container": "#1a3c6e",
+                        "on-tertiary": "#ffffff",
+                        "on-secondary-fixed": "#002110",
+                        "on-primary": "#ffffff",
+                        "surface-tint": "#405e92",
+                        "secondary-fixed": "#9af6be",
+                        "on-error-container": "#93000a",
+                        "on-background": "#191c1d",
+                        "surface-container-lowest": "#ffffff",
+                        "surface-container-high": "#e7e8e9",
+                        "on-primary-container": "#8aa8e0",
+                        "error": "#ba1a1a",
+                        "on-primary-fixed-variant": "#264679",
+                        "secondary-fixed-dim": "#7ed9a3",
+                        "tertiary-fixed": "#ffddb8",
+                        "error-container": "#ffdad6",
+                        "tertiary-fixed-dim": "#ffb95f",
+                        "surface-variant": "#e1e3e4",
+                        "surface-dim": "#d9dadb",
+                        "on-surface": "#191c1d",
+                        "tertiary-container": "#573500",
+                        "on-tertiary-fixed-variant": "#653e00",
+                        "primary-fixed": "#d7e3ff",
+                        "surface": "#f8f9fa",
+                        "tertiary": "#3a2100"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "md": "16px",
+                        "sm": "12px",
+                        "base": "4px",
+                        "gutter-mobile": "12px",
+                        "xl": "32px",
+                        "tap-target-min": "44px",
+                        "xs": "8px",
+                        "margin-mobile": "16px",
+                        "lg": "24px"
+                    },
+                    "fontFamily": {
+                        "label-md": ["Inter"],
+                        "label-sm": ["Inter"],
+                        "body-md": ["Inter"],
+                        "headline-md": ["Inter"],
+                        "display-lg-mobile": ["Inter"],
+                        "display-lg": ["Inter"],
+                        "headline-sm": ["Inter"],
+                        "body-lg": ["Inter"]
+                    },
+                    "fontSize": {
+                        "label-md": ["14px", { "lineHeight": "20px", "letterSpacing": "0.01em", "fontWeight": "500" }],
+                        "label-sm": ["12px", { "lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "600" }],
+                        "body-md": ["16px", { "lineHeight": "24px", "fontWeight": "400" }],
+                        "headline-md": ["24px", { "lineHeight": "32px", "fontWeight": "600" }],
+                        "display-lg-mobile": ["28px", { "lineHeight": "36px", "letterSpacing": "-0.02em", "fontWeight": "700" }],
+                        "display-lg": ["32px", { "lineHeight": "40px", "letterSpacing": "-0.02em", "fontWeight": "700" }],
+                        "headline-sm": ["20px", { "lineHeight": "28px", "fontWeight": "600" }],
+                        "body-lg": ["18px", { "lineHeight": "28px", "fontWeight": "400" }]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        body { font-family: 'Inter', sans-serif; background-color: #f8f9fa; -webkit-font-smoothing: antialiased; }
+        .material-symbols-outlined { font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24; }
+        .material-symbols-outlined.fill { font-variation-settings: 'FILL' 1; }
+        
+        /* Hide scrollbar for clean UI */
+        ::-webkit-scrollbar { width: 0px; background: transparent; }
+        .pb-safe { padding-bottom: env(safe-area-inset-bottom, 16px); }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background text-on-background min-h-screen flex flex-col">
+<!-- TopAppBar -->
+<header class="w-full top-0 sticky bg-surface dark:bg-surface-dim border-b border-outline-variant dark:border-outline shadow-sm dark:shadow-none z-40">
+<div class="flex justify-between items-center h-14 px-margin-mobile max-w-3xl mx-auto w-full">
+<div class="flex items-center gap-xs">
+<button aria-label="Menu" class="h-tap-target-min w-tap-target-min flex items-center justify-center text-on-surface-variant hover:bg-surface-container rounded-full transition-colors duration-200">
+<span class="material-symbols-outlined">menu</span>
+</button>
+<span class="font-display-lg-mobile text-display-lg-mobile font-bold text-primary dark:text-primary-fixed-dim">SahaVest</span>
+</div>
+<button aria-label="Notifications" class="h-tap-target-min w-tap-target-min flex items-center justify-center text-primary dark:text-primary-fixed-dim hover:bg-surface-container rounded-full transition-colors duration-200">
+<span class="material-symbols-outlined">notifications</span>
+</button>
+</div>
+</header>
+<!-- Main Content -->
+<main class="flex-grow px-margin-mobile py-lg pb-24 max-w-3xl mx-auto w-full">
+<!-- Header Section -->
+<div class="mb-lg">
+<h1 class="font-headline-md text-headline-md text-on-background mb-xs">Trust Score History</h1>
+<p class="font-body-md text-body-md text-on-surface-variant">Review all past verifications and advisor checks.</p>
+</div>
+<!-- Filter Chips -->
+<div class="flex gap-sm mb-lg overflow-x-auto pb-xs">
+<button class="px-md py-xs rounded-full bg-primary text-on-primary font-label-md text-label-md whitespace-nowrap min-h-tap-target-min">All Checks</button>
+<button class="px-md py-xs rounded-full bg-surface-container text-on-surface-variant border border-outline-variant hover:bg-surface-container-high transition-colors font-label-md text-label-md whitespace-nowrap min-h-tap-target-min">Advisors</button>
+<button class="px-md py-xs rounded-full bg-surface-container text-on-surface-variant border border-outline-variant hover:bg-surface-container-high transition-colors font-label-md text-label-md whitespace-nowrap min-h-tap-target-min">Brokers</button>
+<button class="px-md py-xs rounded-full bg-surface-container text-on-surface-variant border border-outline-variant hover:bg-surface-container-high transition-colors font-label-md text-label-md whitespace-nowrap min-h-tap-target-min">Funds</button>
+</div>
+<!-- History List (Bento-inspired Cards) -->
+<div class="space-y-sm">
+<!-- Card 1: High Trust -->
+<a class="block bg-surface-container-lowest rounded-xl border border-outline-variant p-md hover:bg-surface-container-low transition-colors duration-200 active:scale-[0.98]" href="#">
+<div class="flex justify-between items-start mb-sm">
+<div>
+<h2 class="font-headline-sm text-headline-sm text-on-background">Rajesh Sharma Advisory</h2>
+<span class="font-label-sm text-label-sm text-on-surface-variant uppercase tracking-wider">Independent Advisor</span>
+</div>
+<div class="flex flex-col items-end">
+<span class="font-headline-md text-headline-md text-secondary">92</span>
+<span class="font-label-sm text-label-sm text-on-surface-variant">Score</span>
+</div>
+</div>
+<div class="flex items-center gap-xs mb-sm">
+<span class="material-symbols-outlined fill text-secondary text-[16px]">verified</span>
+<p class="font-body-md text-body-md text-on-surface-variant">Verified SEBI registered - No regulatory red flags.</p>
+</div>
+<div class="flex justify-between items-center pt-xs border-t border-outline-variant">
+<span class="font-label-sm text-label-sm text-on-surface-variant flex items-center gap-xs">
+<span class="material-symbols-outlined text-[14px]">calendar_today</span> Oct 12, 2023
+                    </span>
+<span class="material-symbols-outlined text-outline">chevron_right</span>
+</div>
+</a>
+<!-- Card 2: Medium Trust -->
+<a class="block bg-surface-container-lowest rounded-xl border border-outline-variant p-md hover:bg-surface-container-low transition-colors duration-200 active:scale-[0.98]" href="#">
+<div class="flex justify-between items-start mb-sm">
+<div>
+<h2 class="font-headline-sm text-headline-sm text-on-background">Apex Wealth Builders</h2>
+<span class="font-label-sm text-label-sm text-on-surface-variant uppercase tracking-wider">Mutual Fund Distributor</span>
+</div>
+<div class="flex flex-col items-end">
+<span class="font-headline-md text-headline-md text-on-tertiary-container">74</span>
+<span class="font-label-sm text-label-sm text-on-surface-variant">Score</span>
+</div>
+</div>
+<div class="flex items-center gap-xs mb-sm">
+<span class="material-symbols-outlined fill text-on-tertiary-container text-[16px]">warning</span>
+<p class="font-body-md text-body-md text-on-surface-variant">Minor past complaint resolved; high fee structure noted.</p>
+</div>
+<div class="flex justify-between items-center pt-xs border-t border-outline-variant">
+<span class="font-label-sm text-label-sm text-on-surface-variant flex items-center gap-xs">
+<span class="material-symbols-outlined text-[14px]">calendar_today</span> Sep 28, 2023
+                    </span>
+<span class="material-symbols-outlined text-outline">chevron_right</span>
+</div>
+</a>
+<!-- Card 3: Low Trust (Error state) -->
+<a class="block bg-surface-container-lowest rounded-xl border border-error p-md hover:bg-surface-container-low transition-colors duration-200 active:scale-[0.98]" href="#">
+<div class="flex justify-between items-start mb-sm">
+<div>
+<h2 class="font-headline-sm text-headline-sm text-on-background">Global FX Trading Ltd</h2>
+<span class="font-label-sm text-label-sm text-on-surface-variant uppercase tracking-wider">Forex Platform</span>
+</div>
+<div class="flex flex-col items-end">
+<span class="font-headline-md text-headline-md text-error">31</span>
+<span class="font-label-sm text-label-sm text-on-surface-variant">Score</span>
+</div>
+</div>
+<div class="flex items-center gap-xs mb-sm">
+<span class="material-symbols-outlined fill text-error text-[16px]">dangerous</span>
+<p class="font-body-md text-body-md text-on-surface-variant">Unregistered entity. High risk of capital loss.</p>
+</div>
+<div class="flex justify-between items-center pt-xs border-t border-outline-variant">
+<span class="font-label-sm text-label-sm text-on-surface-variant flex items-center gap-xs">
+<span class="material-symbols-outlined text-[14px]">calendar_today</span> Sep 05, 2023
+                    </span>
+<span class="material-symbols-outlined text-outline">chevron_right</span>
+</div>
+</a>
+<!-- Card 4: High Trust -->
+<a class="block bg-surface-container-lowest rounded-xl border border-outline-variant p-md hover:bg-surface-container-low transition-colors duration-200 active:scale-[0.98]" href="#">
+<div class="flex justify-between items-start mb-sm">
+<div>
+<h2 class="font-headline-sm text-headline-sm text-on-background">SafeGuard Bluechip Fund</h2>
+<span class="font-label-sm text-label-sm text-on-surface-variant uppercase tracking-wider">Equity Fund</span>
+</div>
+<div class="flex flex-col items-end">
+<span class="font-headline-md text-headline-md text-secondary">88</span>
+<span class="font-label-sm text-label-sm text-on-surface-variant">Score</span>
+</div>
+</div>
+<div class="flex items-center gap-xs mb-sm">
+<span class="material-symbols-outlined fill text-secondary text-[16px]">verified</span>
+<p class="font-body-md text-body-md text-on-surface-variant">Consistent top quartile performance, transparent holdings.</p>
+</div>
+<div class="flex justify-between items-center pt-xs border-t border-outline-variant">
+<span class="font-label-sm text-label-sm text-on-surface-variant flex items-center gap-xs">
+<span class="material-symbols-outlined text-[14px]">calendar_today</span> Aug 19, 2023
+                    </span>
+<span class="material-symbols-outlined text-outline">chevron_right</span>
+</div>
+</a>
+</div>
+</main>
+<!-- BottomNavBar -->
+<nav class="fixed bottom-0 w-full z-50 bg-surface-container-lowest dark:bg-inverse-surface border-t border-outline-variant dark:border-outline shadow-lg dark:shadow-none md:hidden">
+<div class="flex justify-around items-center h-16 w-full px-2 pb-safe max-w-3xl mx-auto">
+<a class="flex flex-col items-center justify-center text-on-surface-variant dark:text-on-surface-variant px-4 py-1 hover:bg-surface-container dark:hover:bg-surface-container-highest active:scale-95 transition-transform duration-150 min-h-tap-target-min min-w-tap-target-min" href="#">
+<span class="material-symbols-outlined mb-1 text-[24px]">pie_chart</span>
+<span class="font-label-sm text-label-sm">Portfolio</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant dark:text-on-surface-variant px-4 py-1 hover:bg-surface-container dark:hover:bg-surface-container-highest active:scale-95 transition-transform duration-150 min-h-tap-target-min min-w-tap-target-min" href="#">
+<span class="material-symbols-outlined mb-1 text-[24px]">search</span>
+<span class="font-label-sm text-label-sm">Explore</span>
+</a>
+<!-- Shield is Active for Trust Score/Verification -->
+<a class="flex flex-col items-center justify-center bg-secondary-container dark:bg-secondary text-on-secondary-container dark:text-on-secondary rounded-full px-4 py-1 hover:bg-surface-container dark:hover:bg-surface-container-highest active:scale-95 transition-transform duration-150 min-h-tap-target-min min-w-tap-target-min" href="#">
+<span class="material-symbols-outlined mb-1 text-[24px] fill">security</span>
+<span class="font-label-sm text-label-sm">Shield</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant dark:text-on-surface-variant px-4 py-1 hover:bg-surface-container dark:hover:bg-surface-container-highest active:scale-95 transition-transform duration-150 min-h-tap-target-min min-w-tap-target-min" href="#">
+<span class="material-symbols-outlined mb-1 text-[24px]">person</span>
+<span class="font-label-sm text-label-sm">Profile</span>
+</a>
+</div>
+</nav>
+</body></html>
