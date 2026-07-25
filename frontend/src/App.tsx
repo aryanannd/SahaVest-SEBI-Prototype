@@ -7,6 +7,9 @@ import { FundDetail } from './features/dashboard/FundDetail';
 import { PortfolioHub } from './features/portfolio/PortfolioHub';
 import { GoalsHub } from './features/portfolio/GoalsHub';
 import { ReturnsDetail } from './features/portfolio/ReturnsDetail';
+import { Simulator } from './features/twin/Simulator';
+import { ChatAssistant } from './features/twin/ChatAssistant';
+import { PortfolioAlerts } from './features/twin/PortfolioAlerts';
 
 // Placeholders for other tabs
 const Placeholder = ({ title }: { title: string }) => (
@@ -35,9 +38,11 @@ function App() {
             <Route path="/portfolio" element={<PortfolioHub />} />
             <Route path="/portfolio/returns" element={<ReturnsDetail />} />
             <Route path="/portfolio/goals" element={<GoalsHub />} />
+            <Route path="/twin/simulator" element={<Simulator />} />
+            <Route path="/chat" element={<ChatAssistant />} />
+            <Route path="/alerts" element={<PortfolioAlerts />} />
             <Route path="/learn" element={<Placeholder title="Learning Hub" />} />
             <Route path="/fraud" element={<Placeholder title="Fraud Checker" />} />
-            <Route path="/chat" element={<Placeholder title="Investor Twin" />} />
             <Route path="/audit" element={<Placeholder title="Audit Trail" />} />
             <Route path="*" element={<Navigate to="/dashboard" replace />} />
           </Routes>

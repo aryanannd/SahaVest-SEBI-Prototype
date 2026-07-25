@@ -18,7 +18,7 @@ export function Dashboard() {
   // Mock data for now
   const risk = "Moderate";
   const portfolio = { equity: 260000, mf: 192300 };
-  const flagged = false; // We can set this to true to test the fraud alert
+  const flagged = true; // Set to true to show the concentration alert
 
   const total = portfolio.equity + portfolio.mf;
   const data = [
@@ -68,11 +68,11 @@ export function Dashboard() {
 
       {flagged && (
         <button 
-          onClick={() => navigate('/fraud')} 
+          onClick={() => navigate('/alerts')} 
           className="w-full flex items-center gap-3 rounded-xl px-4 py-3 mb-4 text-left border border-error-container bg-[#FAECE7] text-[#4A1B0C] shadow-sm"
         >
           <AlertTriangle size={20} className="text-error" />
-          <span className="font-label-md">1 flagged tip needs your review</span>
+          <span className="font-label-md">3 MF folios overlap 60% in Banking sector</span>
         </button>
       )}
 
@@ -95,7 +95,7 @@ export function Dashboard() {
         ))}
       </div>
 
-      <button onClick={() => navigate('/twin')} className="w-full rounded-xl p-4 mb-4 flex items-center justify-between bg-primary text-on-primary shadow-sm hover:opacity-95 transition-opacity">
+      <button onClick={() => navigate('/twin/simulator')} className="w-full rounded-xl p-4 mb-4 flex items-center justify-between bg-primary text-on-primary shadow-sm hover:opacity-95 transition-opacity">
         <div className="text-left">
           <p className="font-label-md mb-0.5">Ask your Investor Twin</p>
           <p className="text-xs text-primary-fixed-dim">"What if I SIP ₹500 more?"</p>
