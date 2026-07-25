@@ -5,7 +5,7 @@ import { ChevronLeft, CheckCircle2, AlertTriangle } from 'lucide-react';
 export function FundDetail() {
   const { type } = useParams();
   const navigate = useNavigate();
-  const risk = "Moderate"; // Mocked user risk
+  const risk = "Conservative"; // Mocked user risk
 
   const [stage, setStage] = useState("detail"); // detail, warning, confirmed
   

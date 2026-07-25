@@ -10,6 +10,8 @@ import { ReturnsDetail } from './features/portfolio/ReturnsDetail';
 import { Simulator } from './features/twin/Simulator';
 import { ChatAssistant } from './features/twin/ChatAssistant';
 import { PortfolioAlerts } from './features/twin/PortfolioAlerts';
+import { ScamChecker } from './features/trust/ScamChecker';
+import { AdvisorVerification } from './features/trust/AdvisorVerification';
 
 // Placeholders for other tabs
 const Placeholder = ({ title }: { title: string }) => (
@@ -41,8 +43,9 @@ function App() {
             <Route path="/twin/simulator" element={<Simulator />} />
             <Route path="/chat" element={<ChatAssistant />} />
             <Route path="/alerts" element={<PortfolioAlerts />} />
+            <Route path="/fraud" element={<ScamChecker />} />
+            <Route path="/trust/advisor" element={<AdvisorVerification />} />
             <Route path="/learn" element={<Placeholder title="Learning Hub" />} />
-            <Route path="/fraud" element={<Placeholder title="Fraud Checker" />} />
             <Route path="/audit" element={<Placeholder title="Audit Trail" />} />
             <Route path="*" element={<Navigate to="/dashboard" replace />} />
           </Routes>
