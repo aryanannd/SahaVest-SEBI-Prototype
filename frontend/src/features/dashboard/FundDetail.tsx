@@ -1,108 +1,214 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { ChevronLeft, CheckCircle2, AlertTriangle } from 'lucide-react';
 
 export function FundDetail() {
   const { type } = useParams();
   const navigate = useNavigate();
-  const risk = "Conservative"; // Mocked user risk
 
-  const [stage, setStage] = useState("detail"); // detail, warning, confirmed
-  
-  const fund = type === "equity"
-    ? { name: "Blue Chip Growth Equity", riskLevel: "High" }
-    : { name: "Small Cap Opportunities Fund", riskLevel: "Very High" };
-
-  const mismatch = risk === "Conservative" && (fund.riskLevel === "High" || fund.riskLevel === "Very High");
-
-  const placeOrder = () => {
-    if (mismatch && stage === "detail") { 
-      setStage("warning"); 
-      return; 
-    }
-    setStage("confirmed");
-    // In a real app we'd log this simulated order to the audit trail
+  // Format type string
+  const formatType = (t: string | undefined) => {
+    if (!t) return 'Holdings';
+    if (t.toLowerCase() === 'mf') return 'Mutual Funds Holdings';
+    return t.charAt(0).toUpperCase() + t.slice(1) + ' Holdings';
   };
 
   return (
-    <div className="flex-1 flex flex-col bg-surface relative">
-      {/* Top Bar */}
-      <div className="flex items-center px-4 py-4 bg-primary text-on-primary">
-        <button onClick={() => navigate(-1)} className="p-1 -ml-1 mr-2 rounded-full hover:bg-surface-container-low/20 transition-colors">
-          <ChevronLeft size={24} />
-        </button>
-        <span className="font-headline-sm flex-1 truncate">{fund.name}</span>
-      </div>
-
-      <div className="flex-1 px-4 pt-6 overflow-y-auto pb-20">
-        <div className="rounded-xl p-4 mb-6 bg-surface-container-lowest border border-outline-variant shadow-sm flex flex-col gap-4">
-          <div className="flex justify-between items-center pb-4 border-b border-outline-variant/50">
-            <p className="font-label-sm text-on-surface-variant uppercase tracking-wider">Risk level</p>
-            <p className={`font-label-md ${fund.riskLevel.includes("Very") ? 'text-error' : 'text-on-surface'}`}>
-              {fund.riskLevel}
-            </p>
-          </div>
-          <div className="flex justify-between items-center">
-            <p className="font-label-sm text-on-surface-variant uppercase tracking-wider">Your risk profile</p>
-            <p className="font-label-md text-primary">{risk}</p>
-          </div>
+    <div className="bg-background text-on-background min-h-screen flex flex-col antialiased">
+      {/* TopAppBar */}
+      <header className="w-full sticky top-0 z-50 bg-surface border-b border-outline-variant">
+        <div className="flex items-center justify-between px-4 py-3 w-full max-w-7xl mx-auto h-[64px]">
+          <button 
+            onClick={() => navigate(-1)} 
+            aria-label="Go back" 
+            className="flex items-center justify-center min-w-[44px] min-h-[44px] text-primary hover:bg-surface-container-low transition-colors rounded-full active:scale-95 duration-100"
+          >
+            <span className="material-symbols-outlined text-[24px]">arrow_back</span>
+          </button>
+          <h1 className="font-headline-md text-primary tracking-tight truncate flex-1 text-center px-4">
+            {formatType(type)}
+          </h1>
+          <button 
+            aria-label="Account" 
+            className="flex items-center justify-center min-w-[44px] min-h-[44px] text-primary hover:bg-surface-container-low transition-colors rounded-full active:scale-95 duration-100"
+          >
+            <span className="material-symbols-outlined text-[24px]">more_vert</span>
+          </button>
         </div>
+      </header>
 
-        {stage === "confirmed" ? (
-          <div className="rounded-xl p-6 flex flex-col items-center gap-3 bg-secondary-container/20 border border-secondary-container">
-            <CheckCircle2 className="text-secondary" size={40} />
-            <p className="font-headline-sm text-on-secondary-container text-center">Order simulated successfully</p>
-            <p className="font-body-md text-on-secondary-container/80 text-center text-sm">
-              Logged to your audit trail. Real execution requires linking a broker — coming in a later phase.
-            </p>
-            <button 
-              onClick={() => navigate('/dashboard')}
-              className="mt-4 w-full h-[48px] bg-secondary text-on-secondary rounded-full font-label-md transition-transform active:scale-[0.98]"
-            >
-              Back to Dashboard
+      {/* Main Content Canvas */}
+      <main className="flex-1 w-full max-w-7xl mx-auto px-4 md:px-6 pb-24 md:pb-6 pt-4 md:pt-6 flex flex-col gap-6">
+        
+        {/* Search and Filter Bar */}
+        <div className="w-full relative sticky top-[64px] z-40 bg-background pt-2 pb-4">
+          <div className="relative w-full">
+            <span className="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-on-surface-variant">search</span>
+            <input 
+              className="w-full h-12 pl-12 pr-4 bg-surface rounded-full border border-outline-variant text-body-md text-on-surface focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary transition-shadow placeholder:text-on-surface-variant" 
+              placeholder="Search instruments..." 
+              type="text" 
+            />
+          </div>
+          
+          {/* Quick Filters */}
+          <div className="flex gap-2 mt-4 overflow-x-auto pb-2 scrollbar-hide">
+            <button className="px-4 py-2 min-h-[36px] bg-secondary-container text-on-secondary-container rounded-full font-label-md whitespace-nowrap border border-transparent">
+              All
+            </button>
+            <button className="px-4 py-2 min-h-[36px] bg-surface text-on-surface-variant rounded-full font-label-md whitespace-nowrap border border-outline-variant hover:bg-surface-container-low transition-colors">
+              Large Cap
+            </button>
+            <button className="px-4 py-2 min-h-[36px] bg-surface text-on-surface-variant rounded-full font-label-md whitespace-nowrap border border-outline-variant hover:bg-surface-container-low transition-colors">
+              Mid Cap
+            </button>
+            <button className="px-4 py-2 min-h-[36px] bg-surface text-on-surface-variant rounded-full font-label-md whitespace-nowrap border border-outline-variant hover:bg-surface-container-low transition-colors">
+              Small Cap
             </button>
           </div>
-        ) : (
-          <button 
-            onClick={placeOrder} 
-            className="w-full h-[56px] bg-primary text-on-primary rounded-full font-headline-sm transition-transform active:scale-[0.98] shadow-sm"
-          >
-            Invest ₹5,000 (simulated)
-          </button>
-        )}
-      </div>
+        </div>
 
-      {/* Warning Overlay */}
-      {stage === "warning" && (
-        <div className="absolute inset-0 z-50 flex flex-col justify-end px-4 pb-6 bg-[#0B2545]/60 backdrop-blur-sm animate-in fade-in duration-200">
-          <div className="rounded-2xl p-6 bg-surface-container-lowest shadow-xl animate-in slide-in-from-bottom-8 duration-300">
-            <div className="flex items-start gap-3 mb-4">
-              <AlertTriangle className="text-[#F5A623] shrink-0 mt-0.5" size={24} />
-              <div>
-                <p className="font-headline-sm text-primary mb-1">Suitability mismatch</p>
-                <p className="font-body-md text-on-surface-variant text-sm leading-relaxed">
-                  Your risk profile is <span className="font-semibold text-on-surface">{risk}</span>, but this fund is <span className="font-semibold text-on-surface">{fund.riskLevel}</span> risk. Funds like this have historically shown 25–40% drawdowns in bad years.
-                </p>
-              </div>
+        {/* Portfolio Summary Card (Glassmorphism inspired) */}
+        <div className="w-full bg-surface-container-low rounded-xl p-5 border border-outline-variant/50 relative overflow-hidden shadow-sm">
+          <div className="absolute -right-10 -top-10 w-40 h-40 bg-primary-container/10 rounded-full blur-2xl"></div>
+          <div class="absolute -left-10 -bottom-10 w-32 h-32 bg-secondary-container/20 rounded-full blur-xl"></div>
+          <div className="relative z-10 flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+            <div>
+              <h2 className="font-body-md text-on-surface-variant mb-1">Total {type === 'equity' ? 'Equity' : 'Asset'} Value</h2>
+              <p className="font-display-lg-mobile md:font-display-lg text-primary">₹14,85,230.50</p>
             </div>
-            
-            <div className="flex flex-col gap-3 mt-6">
-              <button 
-                onClick={() => setStage("confirmed")}
-                className="w-full h-[56px] bg-[#F5A623] text-[#412402] rounded-xl font-label-md transition-transform active:scale-[0.98] shadow-sm"
-              >
-                I understand the risk, proceed
-              </button>
-              <button 
-                onClick={() => setStage("detail")} 
-                className="w-full h-[56px] bg-surface-container-low text-on-surface-variant border border-outline-variant rounded-xl font-label-md transition-transform active:scale-[0.98]"
-              >
-                Cancel
-              </button>
+            <div className="text-left md:text-right">
+              <h2 className="font-body-md text-on-surface-variant mb-1">Day's Change</h2>
+              <p className="font-headline-sm text-secondary flex items-center md:justify-end gap-1">
+                <span className="material-symbols-outlined text-[20px]">trending_up</span>
+                +₹12,450.00 (+0.85%)
+              </p>
             </div>
           </div>
         </div>
-      )}
+
+        {/* Holdings List */}
+        <div className="w-full bg-surface rounded-xl border border-outline-variant/30 overflow-hidden shadow-sm">
+          {/* List Header (Desktop Only) */}
+          <div className="hidden md:grid grid-cols-12 gap-4 p-4 border-b border-outline-variant/50 bg-surface-container-low/50">
+            <div className="col-span-5 font-label-sm text-on-surface-variant uppercase tracking-wider">Instrument</div>
+            <div className="col-span-3 text-right font-label-sm text-on-surface-variant uppercase tracking-wider">Qty &amp; Avg. Price</div>
+            <div className="col-span-4 text-right font-label-sm text-on-surface-variant uppercase tracking-wider">Current Value &amp; Change</div>
+          </div>
+
+          {/* Holding Item 1 */}
+          <div 
+            onClick={() => navigate(`/fund/${type}/HDFC`)} 
+            className="group border-b border-outline-variant/30 last:border-0 hover:bg-surface-container-low transition-colors cursor-pointer"
+          >
+            <div className="p-4 flex flex-col md:grid md:grid-cols-12 gap-3 md:gap-4 md:items-center">
+              <div className="md:col-span-5 flex items-center justify-between md:justify-start">
+                <div className="flex items-center gap-3">
+                  <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center text-primary font-headline-sm">H</div>
+                  <div>
+                    <h3 className="font-headline-sm text-on-surface">HDFC Bank Ltd.</h3>
+                    <p className="font-body-md text-on-surface-variant md:hidden">150 Qty · Avg: ₹1,450.00</p>
+                  </div>
+                </div>
+                <span className="material-symbols-outlined text-outline md:hidden">chevron_right</span>
+              </div>
+              <div className="hidden md:block md:col-span-3 text-right">
+                <p className="font-body-md text-on-surface">150</p>
+                <p className="font-label-sm text-on-surface-variant">Avg. ₹1,450.00</p>
+              </div>
+              <div className="flex justify-between md:col-span-4 md:text-right items-end md:items-center">
+                <div className="md:hidden">
+                  <p className="font-label-sm text-on-surface-variant uppercase">Value &amp; Change</p>
+                </div>
+                <div className="text-right">
+                  <p className="font-headline-sm text-on-surface">₹2,25,000.00</p>
+                  <p className="font-body-md text-secondary flex items-center justify-end gap-1">
+                    <span className="material-symbols-outlined text-[16px]">arrow_upward</span>
+                    ₹1,200 (+0.54%)
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* Holding Item 2 */}
+          <div 
+            onClick={() => navigate(`/fund/${type}/RELIANCE`)} 
+            className="group border-b border-outline-variant/30 last:border-0 hover:bg-surface-container-low transition-colors cursor-pointer"
+          >
+            <div className="p-4 flex flex-col md:grid md:grid-cols-12 gap-3 md:gap-4 md:items-center">
+              <div className="md:col-span-5 flex items-center justify-between md:justify-start">
+                <div className="flex items-center gap-3">
+                  <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center text-primary font-headline-sm">R</div>
+                  <div>
+                    <h3 className="font-headline-sm text-on-surface">Reliance Industries</h3>
+                    <p className="font-body-md text-on-surface-variant md:hidden">50 Qty · Avg: ₹2,100.50</p>
+                  </div>
+                </div>
+                <span className="material-symbols-outlined text-outline md:hidden">chevron_right</span>
+              </div>
+              <div className="hidden md:block md:col-span-3 text-right">
+                <p className="font-body-md text-on-surface">50</p>
+                <p className="font-label-sm text-on-surface-variant">Avg. ₹2,100.50</p>
+              </div>
+              <div className="flex justify-between md:col-span-4 md:text-right items-end md:items-center">
+                <div className="md:hidden">
+                  <p className="font-label-sm text-on-surface-variant uppercase">Value &amp; Change</p>
+                </div>
+                <div className="text-right">
+                  <p className="font-headline-sm text-on-surface">₹1,05,025.00</p>
+                  <p className="font-body-md text-error flex items-center justify-end gap-1">
+                    <span className="material-symbols-outlined text-[16px]">arrow_downward</span>
+                    -₹450 (-0.42%)
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* Holding Item 3 */}
+          <div 
+            onClick={() => navigate(`/fund/${type}/INFY`)} 
+            className="group border-b border-outline-variant/30 last:border-0 hover:bg-surface-container-low transition-colors cursor-pointer"
+          >
+            <div className="p-4 flex flex-col md:grid md:grid-cols-12 gap-3 md:gap-4 md:items-center">
+              <div className="md:col-span-5 flex items-center justify-between md:justify-start">
+                <div className="flex items-center gap-3">
+                  <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center text-primary font-headline-sm">I</div>
+                  <div>
+                    <h3 className="font-headline-sm text-on-surface">Infosys Ltd.</h3>
+                    <p className="font-body-md text-on-surface-variant md:hidden">200 Qty · Avg: ₹1,250.00</p>
+                  </div>
+                </div>
+                <span className="material-symbols-outlined text-outline md:hidden">chevron_right</span>
+              </div>
+              <div className="hidden md:block md:col-span-3 text-right">
+                <p className="font-body-md text-on-surface">200</p>
+                <p className="font-label-sm text-on-surface-variant">Avg. ₹1,250.00</p>
+              </div>
+              <div className="flex justify-between md:col-span-4 md:text-right items-end md:items-center">
+                <div className="md:hidden">
+                  <p className="font-label-sm text-on-surface-variant uppercase">Value &amp; Change</p>
+                </div>
+                <div className="text-right">
+                  <p className="font-headline-sm text-on-surface">₹3,04,000.00</p>
+                  <p className="font-body-md text-secondary flex items-center justify-end gap-1">
+                    <span className="material-symbols-outlined text-[16px]">arrow_upward</span>
+                    ₹5,200 (+1.74%)
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* Load More */}
+          <div className="p-4 flex justify-center border-t border-outline-variant/30">
+            <button className="text-primary font-label-md hover:underline flex items-center gap-1 min-h-[44px]">
+              Load More Holdings
+              <span className="material-symbols-outlined text-[18px]">expand_more</span>
+            </button>
+          </div>
+        </div>
+      </main>
     </div>
   );
 }
