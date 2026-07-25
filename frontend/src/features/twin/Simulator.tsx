@@ -1,5 +1,5 @@
 import React, { useState, useMemo } from 'react';
-import { Activity, Play } from 'lucide-react';
+import { Activity, Play, ArrowLeft } from 'lucide-react';
 import { LineChart, Line, XAxis, YAxis, Tooltip, ResponsiveContainer } from 'recharts';
 import { useNavigate } from 'react-router-dom';
 
@@ -25,9 +25,14 @@ export function Simulator() {
 
   return (
     <div className="flex-1 flex flex-col bg-surface overflow-y-auto px-4 pt-6 pb-20">
-      <div className="mb-6">
-        <h1 className="font-display-lg-mobile text-primary mb-2">Investor Twin Simulator</h1>
-        <p className="font-body-md text-on-surface-variant text-sm">Model potential futures based on historical data. Adjust your inputs to see how your portfolio might evolve.</p>
+      <div className="flex items-center gap-3 mb-6">
+        <button onClick={() => navigate(-1)} className="p-2 -ml-2 rounded-full hover:bg-surface-container-low transition-colors">
+          <ArrowLeft size={24} className="text-on-surface" />
+        </button>
+        <div>
+          <h1 className="font-display-lg-mobile text-primary mb-1">Investor Twin Simulator</h1>
+          <p className="font-body-md text-on-surface-variant text-sm">Model potential futures based on historical data.</p>
+        </div>
       </div>
 
       {!simulated ? (

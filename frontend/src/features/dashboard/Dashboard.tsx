@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Search, User, TrendingUp, Shield, Activity, Lock, Wallet, ArrowUpRight } from 'lucide-react';
+import { Search, User, TrendingUp, Shield, Activity, Lock, Wallet, ArrowUpRight, Link, FileBadge, ShieldCheck, Compass, ArrowUp, Landmark, Gem, Minus } from "lucide-react";
 
 export function Dashboard() {
   const navigate = useNavigate();
@@ -14,11 +14,11 @@ export function Dashboard() {
         <header className="w-full sticky top-0 z-50 bg-surface border-b border-outline-variant flat no-shadows">
           <div className="flex items-center justify-between px-4 py-3 w-full max-w-7xl mx-auto">
             <button aria-label="Search" className="text-primary hover:bg-surface-container-low transition-colors active:scale-95 duration-100 p-2 rounded-full">
-              <span className="material-symbols-outlined">search</span>
+              <Search />
             </button>
             <h1 className="font-headline-md text-primary tracking-tight">SahaVest</h1>
             <button aria-label="Account" className="text-primary hover:bg-surface-container-low transition-colors active:scale-95 duration-100 p-2 rounded-full">
-              <span className="material-symbols-outlined">account_circle</span>
+              <User />
             </button>
           </div>
         </header>
@@ -40,7 +40,7 @@ export function Dashboard() {
             onClick={() => setHasLinkedAccounts(true)}
             className="bg-primary text-on-primary w-full h-[48px] rounded-lg font-label-md hover:opacity-90 active:scale-95 transition-all shadow-sm flex items-center justify-center gap-2"
           >
-            <span className="material-symbols-outlined text-[20px]">link</span>
+            <Link className="text-[20px]" />
             Link Accounts Now
           </button>
         </main>
@@ -54,11 +54,11 @@ export function Dashboard() {
       <header className="w-full sticky top-0 z-50 bg-surface border-b border-outline-variant">
         <div className="flex items-center justify-between px-4 py-3 w-full max-w-7xl mx-auto">
           <button className="h-[44px] w-[44px] flex items-center justify-center text-on-surface-variant hover:bg-surface-container-low transition-colors active:scale-95 duration-100 rounded-full">
-            <span className="material-symbols-outlined">search</span>
+            <Search />
           </button>
           <div className="font-headline-md text-primary tracking-tight">SahaVest</div>
           <button className="h-[44px] w-[44px] flex items-center justify-center text-on-surface-variant hover:bg-surface-container-low transition-colors active:scale-95 duration-100 rounded-full">
-            <span className="material-symbols-outlined">account_circle</span>
+            <User />
           </button>
         </div>
       </header>
@@ -69,7 +69,7 @@ export function Dashboard() {
           <h2 className="font-label-md text-on-surface-variant">Total Net Worth</h2>
           <div className="font-display-lg-mobile md:font-display-lg text-primary">₹14,50,000</div>
           <div className="flex items-center justify-center gap-1 text-secondary font-label-md">
-            <span className="material-symbols-outlined text-[16px]">trending_up</span>
+            <TrendingUp className="text-[16px]" />
             <span>+2.4% (1M)</span>
           </div>
           <div className="font-label-sm text-outline pt-3">Last updated: 5 mins ago</div>
@@ -141,21 +141,21 @@ export function Dashboard() {
         <section className="flex flex-wrap justify-center gap-4 py-3">
           <button onClick={() => navigate('/fraud')} className="flex flex-col items-center gap-2 p-3 bg-surface-container-lowest rounded-xl border border-outline-variant shadow-[0px_4px_12px_rgba(0,0,0,0.04)] min-w-[100px] active:scale-95 transition-transform">
             <div className="w-10 h-10 rounded-full bg-error-container text-on-error-container flex items-center justify-center">
-              <span className="material-symbols-outlined">policy</span>
+              <FileBadge />
             </div>
             <span className="font-label-sm text-on-surface">Scam Checker</span>
           </button>
           
           <button onClick={() => navigate('/trust')} className="flex flex-col items-center gap-2 p-3 bg-surface-container-lowest rounded-xl border border-outline-variant shadow-[0px_4px_12px_rgba(0,0,0,0.04)] min-w-[100px] active:scale-95 transition-transform">
             <div className="w-10 h-10 rounded-full bg-secondary-container text-on-secondary-container flex items-center justify-center">
-              <span className="material-symbols-outlined">verified_user</span>
+              <ShieldCheck />
             </div>
             <span className="font-label-sm text-on-surface">Trust Score</span>
           </button>
           
           <button onClick={() => navigate('/twin/simulator')} className="flex flex-col items-center gap-2 p-3 bg-surface-container-lowest rounded-xl border border-outline-variant shadow-[0px_4px_12px_rgba(0,0,0,0.04)] min-w-[100px] active:scale-95 transition-transform">
             <div className="w-10 h-10 rounded-full bg-primary-fixed text-on-primary-fixed flex items-center justify-center">
-              <span className="material-symbols-outlined">explore</span>
+              <Compass />
             </div>
             <span className="font-label-sm text-on-surface">Simulator</span>
           </button>
@@ -169,13 +169,13 @@ export function Dashboard() {
             {/* Equity Card */}
             <div onClick={() => navigate('/fund/equity')} className="cursor-pointer bg-surface-container-lowest rounded-xl p-4 border border-outline-variant shadow-[0px_4px_12px_rgba(0,0,0,0.04)] flex flex-col gap-3 active:scale-[0.98] transition-transform">
               <div className="flex items-center gap-3">
-                <span className="material-symbols-outlined text-primary bg-primary-fixed p-2 rounded-full">trending_up</span>
+                <TrendingUp className="text-primary bg-primary-fixed p-2 rounded-full" />
                 <h4 className="font-headline-sm text-on-surface">Equity</h4>
                 <span className="ml-auto bg-surface-container-low px-2 py-1 rounded font-label-sm text-on-surface-variant">50%</span>
               </div>
               <div className="font-display-lg-mobile text-primary">₹7,25,000</div>
               <div className="flex items-center gap-2 text-secondary font-label-sm">
-                <span className="material-symbols-outlined text-[14px]">arrow_upward</span>
+                <ArrowUp className="text-[14px]" />
                 <span>+4.2% Total Returns</span>
               </div>
             </div>
@@ -183,13 +183,13 @@ export function Dashboard() {
             {/* Debt Card */}
             <div onClick={() => navigate('/fund/debt')} className="cursor-pointer bg-surface-container-lowest rounded-xl p-4 border border-outline-variant shadow-[0px_4px_12px_rgba(0,0,0,0.04)] flex flex-col gap-3 active:scale-[0.98] transition-transform">
               <div className="flex items-center gap-3">
-                <span className="material-symbols-outlined text-secondary bg-secondary-fixed p-2 rounded-full">account_balance</span>
+                <Landmark className="text-secondary bg-secondary-fixed p-2 rounded-full" />
                 <h4 className="font-headline-sm text-on-surface">Debt</h4>
                 <span className="ml-auto bg-surface-container-low px-2 py-1 rounded font-label-sm text-on-surface-variant">30%</span>
               </div>
               <div className="font-display-lg-mobile text-primary">₹4,35,000</div>
               <div className="flex items-center gap-2 text-secondary font-label-sm">
-                <span className="material-symbols-outlined text-[14px]">arrow_upward</span>
+                <ArrowUp className="text-[14px]" />
                 <span>+6.5% Yield</span>
               </div>
             </div>
@@ -197,13 +197,13 @@ export function Dashboard() {
             {/* Gold Card */}
             <div onClick={() => navigate('/fund/gold')} className="cursor-pointer bg-surface-container-lowest rounded-xl p-4 border border-outline-variant shadow-[0px_4px_12px_rgba(0,0,0,0.04)] flex flex-col gap-3 active:scale-[0.98] transition-transform">
               <div className="flex items-center gap-3">
-                <span className="material-symbols-outlined text-tertiary-container bg-tertiary-fixed p-2 rounded-full">diamond</span>
+                <Gem className="text-tertiary-container bg-tertiary-fixed p-2 rounded-full" />
                 <h4 className="font-headline-sm text-on-surface">Gold</h4>
                 <span className="ml-auto bg-surface-container-low px-2 py-1 rounded font-label-sm text-on-surface-variant">15%</span>
               </div>
               <div className="font-display-lg-mobile text-primary">₹2,17,500</div>
               <div className="flex items-center gap-2 text-on-surface-variant font-label-sm">
-                <span className="material-symbols-outlined text-[14px]">horizontal_rule</span>
+                <Minus className="text-[14px]" />
                 <span>Stable</span>
               </div>
             </div>

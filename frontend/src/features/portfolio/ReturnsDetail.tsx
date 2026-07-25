@@ -1,4 +1,5 @@
 import React from 'react';
+import { ArrowLeft, TrendingUp, Activity, PieChart, Gem, Globe2, Info } from "lucide-react";
 import { useNavigate } from 'react-router-dom';
 
 export function ReturnsDetail() {
@@ -12,7 +13,7 @@ export function ReturnsDetail() {
           onClick={() => navigate(-1)}
           className="p-2 -ml-2 rounded-full hover:bg-surface-container-low transition-colors flex items-center justify-center min-w-[44px] min-h-[44px]"
         >
-          <span className="material-symbols-outlined text-on-surface text-[24px]">arrow_back</span>
+          <ArrowLeft className="text-on-surface text-[24px]" />
         </button>
         <h1 className="font-headline-sm text-on-surface">Returns Detail</h1>
         <div className="w-[44px]"></div> {/* Spacer for centering */}
@@ -38,7 +39,7 @@ export function ReturnsDetail() {
               <span className="font-label-sm text-on-surface-variant uppercase tracking-wider">Total Portfolio XIRR</span>
               <div className="flex items-baseline gap-3">
                 <span className="font-display-lg-mobile md:font-display-lg text-secondary">14.82%</span>
-                <span className="material-symbols-outlined text-secondary text-[24px]">trending_up</span>
+                <TrendingUp className="text-secondary text-[24px]" />
               </div>
             </div>
             <div className="flex flex-col gap-1 relative z-10 md:text-right">
@@ -53,7 +54,7 @@ export function ReturnsDetail() {
             <div className="flex items-center justify-between border-b border-surface-variant pb-3">
               <div className="flex items-center gap-3">
                 <div className="w-10 h-10 rounded-full bg-primary-fixed flex items-center justify-center text-on-primary-fixed">
-                  <span className="material-symbols-outlined icon-fill">monitoring</span>
+                  <Activity />
                 </div>
                 <h3 className="font-headline-sm text-on-surface">Direct Equity</h3>
               </div>
@@ -75,7 +76,7 @@ export function ReturnsDetail() {
             <div className="flex items-center justify-between border-b border-surface-variant pb-3">
               <div className="flex items-center gap-3">
                 <div className="w-10 h-10 rounded-full bg-tertiary-fixed flex items-center justify-center text-on-tertiary-fixed">
-                  <span className="material-symbols-outlined icon-fill">pie_chart</span>
+                  <PieChart />
                 </div>
                 <h3 className="font-headline-sm text-on-surface">Mutual Funds</h3>
               </div>
@@ -97,7 +98,7 @@ export function ReturnsDetail() {
             <div className="flex items-center justify-between border-b border-surface-variant pb-3">
               <div className="flex items-center gap-3">
                 <div className="w-10 h-10 rounded-full bg-surface-tint/20 flex items-center justify-center text-surface-tint">
-                  <span className="material-symbols-outlined icon-fill">diamond</span>
+                  <Gem />
                 </div>
                 <h3 className="font-headline-sm text-on-surface">Digital Gold (SGB)</h3>
               </div>
@@ -119,7 +120,7 @@ export function ReturnsDetail() {
             <div className="flex items-center justify-between border-b border-surface-variant pb-3">
               <div className="flex items-center gap-3">
                 <div className="w-10 h-10 rounded-full bg-error-container flex items-center justify-center text-on-error-container">
-                  <span className="material-symbols-outlined icon-fill">public</span>
+                  <Globe2 />
                 </div>
                 <h3 className="font-headline-sm text-on-surface">International Equity</h3>
               </div>
@@ -139,7 +140,7 @@ export function ReturnsDetail() {
 
         {/* Disclaimer */}
         <div className="mt-8 bg-surface-container rounded-lg p-4 flex items-start gap-3">
-          <span className="material-symbols-outlined text-outline mt-0.5">info</span>
+          <Info className="text-outline mt-0.5" />
           <p className="font-label-md text-on-surface-variant">
             XIRR may be less accurate for portfolios with less than 3 months of history.
           </p>

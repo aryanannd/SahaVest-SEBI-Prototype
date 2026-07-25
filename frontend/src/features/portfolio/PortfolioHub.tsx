@@ -1,4 +1,5 @@
 import React from 'react';
+import { ArrowLeft, MoreVertical, ArrowUp, TrendingUp, PieChart, Landmark, PiggyBank, Gem, Globe } from "lucide-react";
 import { useNavigate } from 'react-router-dom';
 
 export function PortfolioHub() {
@@ -9,11 +10,11 @@ export function PortfolioHub() {
       {/* TopAppBar */}
       <header className="w-full sticky top-0 z-50 bg-surface border-b border-outline-variant flex items-center justify-between px-4 py-3 max-w-7xl mx-auto">
         <button onClick={() => navigate(-1)} className="w-[44px] h-[44px] flex items-center justify-center text-on-surface-variant hover:bg-surface-container-low transition-colors rounded-full active:scale-95 duration-100">
-          <span className="material-symbols-outlined" style={{fontVariationSettings: "'FILL' 0"}}>arrow_back</span>
+          <ArrowLeft />
         </button>
         <h1 className="font-headline-md text-primary tracking-tight">SahaVest</h1>
         <div className="w-[44px] h-[44px] flex items-center justify-center text-primary cursor-pointer hover:bg-surface-container-low transition-colors rounded-full active:scale-95 duration-100">
-          <span className="material-symbols-outlined" style={{fontVariationSettings: "'FILL' 0"}}>more_vert</span>
+          <MoreVertical />
         </div>
       </header>
 
@@ -38,7 +39,7 @@ export function PortfolioHub() {
           <div className="flex items-baseline gap-2">
             <span className="font-display-lg text-on-surface">₹24,50,000</span>
             <span className="font-label-md text-secondary bg-secondary-container px-2 py-1 rounded-full flex items-center gap-1">
-              <span className="material-symbols-outlined text-[14px]">arrow_upward</span> 12.4%
+              <ArrowUp className="text-[14px]" /> 12.4%
             </span>
           </div>
         </div>
@@ -50,7 +51,7 @@ export function PortfolioHub() {
           <button onClick={() => navigate('/fund/equity')} className="bg-surface-container-lowest rounded-xl p-4 border border-outline-variant shadow-sm flex items-center justify-between hover:bg-surface-container-low transition-colors active:scale-[0.98] duration-200 text-left min-h-[44px] group">
             <div className="flex items-center gap-4">
               <div className="w-12 h-12 rounded-full bg-[#002653] flex items-center justify-center text-white shrink-0">
-                <span className="material-symbols-outlined">trending_up</span>
+                <TrendingUp />
               </div>
               <div className="flex flex-col">
                 <span className="font-headline-sm text-on-surface">Equity</span>
@@ -72,7 +73,7 @@ export function PortfolioHub() {
           <button onClick={() => navigate('/fund/mf')} className="bg-surface-container-lowest rounded-xl p-4 border border-outline-variant shadow-sm flex items-center justify-between hover:bg-surface-container-low transition-colors active:scale-[0.98] duration-200 text-left min-h-[44px] group">
             <div className="flex items-center gap-4">
               <div className="w-12 h-12 rounded-full bg-[#006d42] flex items-center justify-center text-white shrink-0">
-                <span className="material-symbols-outlined">pie_chart</span>
+                <PieChart />
               </div>
               <div className="flex flex-col">
                 <span className="font-headline-sm text-on-surface">Mutual Funds</span>
@@ -94,7 +95,7 @@ export function PortfolioHub() {
           <button onClick={() => navigate('/fund/bonds')} className="bg-surface-container-lowest rounded-xl p-4 border border-outline-variant shadow-sm flex items-center justify-between hover:bg-surface-container-low transition-colors active:scale-[0.98] duration-200 text-left min-h-[44px] group">
             <div className="flex items-center gap-4">
               <div className="w-12 h-12 rounded-full bg-[#ffb95f] flex items-center justify-center text-white shrink-0">
-                <span className="material-symbols-outlined">account_balance</span>
+                <Landmark />
               </div>
               <div className="flex flex-col">
                 <span className="font-headline-sm text-on-surface">Bonds</span>
@@ -116,7 +117,7 @@ export function PortfolioHub() {
           <button onClick={() => navigate('/fund/nps')} className="bg-surface-container-lowest rounded-xl p-4 border border-outline-variant shadow-sm flex items-center justify-between hover:bg-surface-container-low transition-colors active:scale-[0.98] duration-200 text-left min-h-[44px] group">
             <div className="flex items-center gap-4">
               <div className="w-12 h-12 rounded-full bg-[#405e92] flex items-center justify-center text-white shrink-0">
-                <span className="material-symbols-outlined">savings</span>
+                <PiggyBank />
               </div>
               <div className="flex flex-col">
                 <span className="font-headline-sm text-on-surface">NPS</span>
@@ -138,7 +139,7 @@ export function PortfolioHub() {
           <button onClick={() => navigate('/fund/sgb')} className="bg-surface-container-lowest rounded-xl p-4 border border-outline-variant shadow-sm flex items-center justify-between hover:bg-surface-container-low transition-colors active:scale-[0.98] duration-200 text-left min-h-[44px] group">
             <div className="flex items-center gap-4">
               <div className="w-12 h-12 rounded-full bg-[#e89500] flex items-center justify-center text-white shrink-0">
-                <span className="material-symbols-outlined">diamond</span>
+                <Gem />
               </div>
               <div className="flex flex-col">
                 <span className="font-headline-sm text-on-surface">SGB</span>
@@ -160,7 +161,7 @@ export function PortfolioHub() {
           <button onClick={() => navigate('/fund/reit')} className="bg-surface-container-lowest rounded-xl p-4 border border-outline-variant shadow-sm flex items-center justify-between hover:bg-surface-container-low transition-colors active:scale-[0.98] duration-200 text-left min-h-[44px] group">
             <div className="flex items-center gap-4">
               <div className="w-12 h-12 rounded-full bg-[#573500] flex items-center justify-center text-white shrink-0">
-                <span className="material-symbols-outlined">domain</span>
+                <Globe />
               </div>
               <div className="flex flex-col">
                 <span className="font-headline-sm text-on-surface">REIT/InvIT</span>
@@ -178,6 +179,43 @@ export function PortfolioHub() {
             </div>
           </button>
         </div>
+
+        {/* Exposure & Concentration Risk Analytics */}
+        <section className="bg-error-container/20 rounded-xl p-4 border border-error/20 shadow-sm flex flex-col gap-3 mt-4">
+          <div className="flex items-center justify-between">
+            <h3 className="font-headline-sm text-on-surface flex items-center gap-2">
+              <span className="w-8 h-8 rounded-full bg-error-container text-on-error-container flex items-center justify-center">
+                <TrendingUp className="w-4 h-4" />
+              </span>
+              Concentration Risk Alert
+            </h3>
+          </div>
+          <p className="font-body-md text-on-surface-variant">
+            You have a <span className="font-semibold text-error">42% overexposure</span> to the Banking & Financial Services sector across your Equity and Mutual Fund holdings.
+          </p>
+          <button onClick={() => navigate('/portfolio')} className="text-primary font-label-sm uppercase tracking-wider text-left hover:underline">
+            View Risk Analysis Details →
+          </button>
+        </section>
+
+        {/* CAS PDF Parsing (For Bonds / SGB) */}
+        <section className="bg-surface-container-lowest rounded-xl p-4 border border-outline-variant shadow-sm flex flex-col gap-3 mt-2">
+          <div className="flex items-center gap-3">
+            <div className="w-10 h-10 rounded-full bg-surface-container-highest flex items-center justify-center text-on-surface-variant">
+              <Landmark className="w-5 h-5" />
+            </div>
+            <div className="flex flex-col flex-1">
+              <span className="font-headline-sm text-on-surface">Missing Bonds & SGB Data?</span>
+              <span className="font-body-md text-on-surface-variant text-sm mt-1">
+                Account Aggregators don't support Bonds/SGB yet. Upload your NSDL/CDSL CAS PDF to parse and add them automatically.
+              </span>
+            </div>
+          </div>
+          <button className="bg-primary/10 text-primary w-full h-[48px] rounded-lg font-label-md hover:bg-primary/20 transition-all flex items-center justify-center gap-2 mt-2">
+            <Globe className="w-5 h-5" />
+            Upload CAS PDF
+          </button>
+        </section>
       </main>
     </div>
   );

@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { ArrowLeft, TrendingUp, CheckCircle2, AlertTriangle } from "lucide-react";
 import { useParams, useNavigate } from 'react-router-dom';
 
 export function HoldingDetail() {
@@ -37,7 +38,7 @@ export function HoldingDetail() {
             aria-label="Go Back" 
             className="w-[44px] h-[44px] flex items-center justify-center text-on-surface-variant hover:bg-surface-container-low transition-colors rounded-full active:scale-95 duration-100"
           >
-            <span className="material-symbols-outlined">arrow_back</span>
+            <ArrowLeft />
           </button>
           <h1 className="font-headline-md text-primary tracking-tight truncate px-2">{name}</h1>
           <div className="w-[44px] h-[44px]"></div> {/* Spacer for alignment */}
@@ -57,7 +58,7 @@ export function HoldingDetail() {
             <h2 className="font-display-lg-mobile md:font-display-lg text-primary mb-1">₹2,845.30</h2>
             <div className="flex items-center gap-2">
               <span className="text-secondary font-label-md flex items-center">
-                <span className="material-symbols-outlined text-[16px] mr-1">trending_up</span>
+                <TrendingUp className="text-[16px] mr-1" />
                 +45.20 (1.61%)
               </span>
               <span className="text-outline font-label-sm">ISIN: INE002A01018</span>
@@ -80,7 +81,7 @@ export function HoldingDetail() {
         {/* Confirmation State UI overlaying main content or showing instead of content - here we show at top if confirmed */}
         {stage === "confirmed" && (
           <div className="col-span-4 md:col-span-8 rounded-xl p-6 flex flex-col items-center gap-3 bg-secondary-container/20 border border-secondary-container">
-            <span className="material-symbols-outlined text-[40px] text-secondary">check_circle</span>
+            <CheckCircle2 className="text-[40px] text-secondary" />
             <p className="font-headline-sm text-on-secondary-container text-center">Order simulated successfully</p>
             <p className="font-body-md text-on-secondary-container/80 text-center text-sm">
               Logged to your audit trail. Real execution requires linking a broker — coming in a later phase.
@@ -170,7 +171,7 @@ export function HoldingDetail() {
         <div className="absolute inset-0 z-50 flex flex-col justify-end px-4 pb-6 bg-[#0B2545]/60 backdrop-blur-sm animate-in fade-in duration-200">
           <div className="rounded-2xl p-6 bg-surface-container-lowest shadow-xl animate-in slide-in-from-bottom-8 duration-300">
             <div className="flex items-start gap-3 mb-4">
-              <span className="material-symbols-outlined text-[#F5A623] shrink-0 mt-0.5 text-[24px]">warning</span>
+              <AlertTriangle className="text-[#F5A623] shrink-0 mt-0.5 text-[24px]" />
               <div>
                 <p className="font-headline-sm text-primary mb-1">Suitability mismatch</p>
                 <p className="font-body-md text-on-surface-variant text-sm leading-relaxed">

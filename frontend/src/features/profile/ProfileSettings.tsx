@@ -6,6 +6,8 @@ export function ProfileSettings() {
   const navigate = useNavigate();
 
   const handleLogout = () => {
+    localStorage.clear();
+    sessionStorage.clear();
     navigate('/onboarding');
   };
 

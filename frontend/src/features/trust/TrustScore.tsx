@@ -1,5 +1,5 @@
 import React from 'react';
-import { ShieldCheck, Info, TrendingUp, Download, Search } from 'lucide-react';
+import { ShieldCheck, Info, TrendingUp, Download, Search, ArrowLeft } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 
 export function TrustScore() {
@@ -8,7 +8,7 @@ export function TrustScore() {
     <div className="flex-1 flex flex-col bg-surface overflow-y-auto px-4 pt-4 pb-20">
       <div className="flex items-center gap-3 mb-6">
         <button onClick={() => navigate(-1)} className="p-2 -ml-2 rounded-full hover:bg-surface-container-low transition-colors">
-          <span className="material-symbols-outlined text-on-surface">arrow_back</span>
+          <ArrowLeft size={24} className="text-on-surface" />
         </button>
         <h1 className="font-headline-sm text-primary">Trust Detail</h1>
       </div>

@@ -1,10 +1,18 @@
 import React, { useState } from 'react';
 import { Scale, ArrowLeft, Send, CheckCircle2 } from 'lucide-react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 
 export function Grievance() {
   const navigate = useNavigate();
+  const location = useLocation();
+  const state = location.state as any;
+  
+  const initialDescription = state?.source === 'scam_check' 
+    ? `Reporting suspicious scam tip:\n"${state.tip}"\n\nRed flags: Guaranteed returns, urgency, unregistered entity.` 
+    : '';
+
   const [submitted, setSubmitted] = useState(false);
+  const [description, setDescription] = useState(initialDescription);
 
   return (
     <div className="flex-1 flex flex-col bg-surface overflow-y-auto px-4 pt-4 pb-20">
@@ -52,6 +60,8 @@ export function Grievance() {
               <label className="font-label-sm text-on-surface-variant uppercase tracking-wider mb-1.5 block">Description</label>
               <textarea 
                 rows={4}
+                value={description}
+                onChange={(e) => setDescription(e.target.value)}
                 placeholder="Briefly describe the issue..."
                 className="w-full bg-surface-container-lowest border border-outline-variant rounded-xl p-3 font-body-md text-on-surface outline-none focus:border-primary resize-none"
               ></textarea>

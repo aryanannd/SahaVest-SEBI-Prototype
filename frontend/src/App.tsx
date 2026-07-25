@@ -8,7 +8,10 @@ import { FundDetail } from './features/dashboard/FundDetail';
 import { HoldingDetail } from './features/dashboard/HoldingDetail';
 import { PortfolioHub } from './features/portfolio/PortfolioHub';
 import { GoalsHub } from './features/portfolio/GoalsHub';
+import { GoalDetail } from './features/portfolio/GoalDetail';
 import { ReturnsDetail } from './features/portfolio/ReturnsDetail';
+import { TaxSummary } from './features/portfolio/TaxSummary';
+import { PerformanceHistory } from './features/portfolio/PerformanceHistory';
 import { Simulator } from './features/twin/Simulator';
 import { ChatAssistant } from './features/twin/ChatAssistant';
 import { PortfolioAlerts } from './features/twin/PortfolioAlerts';
@@ -39,6 +42,9 @@ function App() {
               <Route path="/portfolio" element={<PortfolioHub />} />
               <Route path="/portfolio/returns" element={<ReturnsDetail />} />
               <Route path="/portfolio/goals" element={<GoalsHub />} />
+              <Route path="/portfolio/goals/:id" element={<GoalDetail />} />
+              <Route path="/portfolio/tax" element={<TaxSummary />} />
+              <Route path="/portfolio/performance" element={<PerformanceHistory />} />
               <Route path="/twin/simulator" element={<Simulator />} />
               <Route path="/chat" element={<ChatAssistant />} />
               <Route path="/alerts" element={<PortfolioAlerts />} />

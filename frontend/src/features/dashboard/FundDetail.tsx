@@ -1,4 +1,5 @@
 import React from 'react';
+import { ArrowLeft, MoreVertical, Search, TrendingUp, ChevronRight, ArrowUp, ArrowDown, ChevronDown } from "lucide-react";
 import { useParams, useNavigate } from 'react-router-dom';
 
 export function FundDetail() {
@@ -22,7 +23,7 @@ export function FundDetail() {
             aria-label="Go back" 
             className="flex items-center justify-center min-w-[44px] min-h-[44px] text-primary hover:bg-surface-container-low transition-colors rounded-full active:scale-95 duration-100"
           >
-            <span className="material-symbols-outlined text-[24px]">arrow_back</span>
+            <ArrowLeft className="text-[24px]" />
           </button>
           <h1 className="font-headline-md text-primary tracking-tight truncate flex-1 text-center px-4">
             {formatType(type)}
@@ -31,7 +32,7 @@ export function FundDetail() {
             aria-label="Account" 
             className="flex items-center justify-center min-w-[44px] min-h-[44px] text-primary hover:bg-surface-container-low transition-colors rounded-full active:scale-95 duration-100"
           >
-            <span className="material-symbols-outlined text-[24px]">more_vert</span>
+            <MoreVertical className="text-[24px]" />
           </button>
         </div>
       </header>
@@ -42,7 +43,7 @@ export function FundDetail() {
         {/* Search and Filter Bar */}
         <div className="w-full relative sticky top-[64px] z-40 bg-background pt-2 pb-4">
           <div className="relative w-full">
-            <span className="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-on-surface-variant">search</span>
+            <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-on-surface-variant" />
             <input 
               className="w-full h-12 pl-12 pr-4 bg-surface rounded-full border border-outline-variant text-body-md text-on-surface focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary transition-shadow placeholder:text-on-surface-variant" 
               placeholder="Search instruments..." 
@@ -79,7 +80,7 @@ export function FundDetail() {
             <div className="text-left md:text-right">
               <h2 className="font-body-md text-on-surface-variant mb-1">Day's Change</h2>
               <p className="font-headline-sm text-secondary flex items-center md:justify-end gap-1">
-                <span className="material-symbols-outlined text-[20px]">trending_up</span>
+                <TrendingUp className="text-[20px]" />
                 +₹12,450.00 (+0.85%)
               </p>
             </div>
@@ -109,7 +110,7 @@ export function FundDetail() {
                     <p className="font-body-md text-on-surface-variant md:hidden">150 Qty · Avg: ₹1,450.00</p>
                   </div>
                 </div>
-                <span className="material-symbols-outlined text-outline md:hidden">chevron_right</span>
+                <ChevronRight className="text-outline md:hidden" />
               </div>
               <div className="hidden md:block md:col-span-3 text-right">
                 <p className="font-body-md text-on-surface">150</p>
@@ -122,7 +123,7 @@ export function FundDetail() {
                 <div className="text-right">
                   <p className="font-headline-sm text-on-surface">₹2,25,000.00</p>
                   <p className="font-body-md text-secondary flex items-center justify-end gap-1">
-                    <span className="material-symbols-outlined text-[16px]">arrow_upward</span>
+                    <ArrowUp className="text-[16px]" />
                     ₹1,200 (+0.54%)
                   </p>
                 </div>
@@ -144,7 +145,7 @@ export function FundDetail() {
                     <p className="font-body-md text-on-surface-variant md:hidden">50 Qty · Avg: ₹2,100.50</p>
                   </div>
                 </div>
-                <span className="material-symbols-outlined text-outline md:hidden">chevron_right</span>
+                <ChevronRight className="text-outline md:hidden" />
               </div>
               <div className="hidden md:block md:col-span-3 text-right">
                 <p className="font-body-md text-on-surface">50</p>
@@ -157,7 +158,7 @@ export function FundDetail() {
                 <div className="text-right">
                   <p className="font-headline-sm text-on-surface">₹1,05,025.00</p>
                   <p className="font-body-md text-error flex items-center justify-end gap-1">
-                    <span className="material-symbols-outlined text-[16px]">arrow_downward</span>
+                    <ArrowDown className="text-[16px]" />
                     -₹450 (-0.42%)
                   </p>
                 </div>
@@ -179,7 +180,7 @@ export function FundDetail() {
                     <p className="font-body-md text-on-surface-variant md:hidden">200 Qty · Avg: ₹1,250.00</p>
                   </div>
                 </div>
-                <span className="material-symbols-outlined text-outline md:hidden">chevron_right</span>
+                <ChevronRight className="text-outline md:hidden" />
               </div>
               <div className="hidden md:block md:col-span-3 text-right">
                 <p className="font-body-md text-on-surface">200</p>
@@ -192,7 +193,7 @@ export function FundDetail() {
                 <div className="text-right">
                   <p className="font-headline-sm text-on-surface">₹3,04,000.00</p>
                   <p className="font-body-md text-secondary flex items-center justify-end gap-1">
-                    <span className="material-symbols-outlined text-[16px]">arrow_upward</span>
+                    <ArrowUp className="text-[16px]" />
                     ₹5,200 (+1.74%)
                   </p>
                 </div>
@@ -204,7 +205,7 @@ export function FundDetail() {
           <div className="p-4 flex justify-center border-t border-outline-variant/30">
             <button className="text-primary font-label-md hover:underline flex items-center gap-1 min-h-[44px]">
               Load More Holdings
-              <span className="material-symbols-outlined text-[18px]">expand_more</span>
+              <ChevronDown className="text-[18px]" />
             </button>
           </div>
         </div>
