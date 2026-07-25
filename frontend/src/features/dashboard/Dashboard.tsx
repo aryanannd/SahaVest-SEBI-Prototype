@@ -1,117 +1,216 @@
-import React from 'react';
-import { Bell, TrendingUp, Wallet, Lock, BookOpen, AlertTriangle } from 'lucide-react';
-import { PieChart, Pie, Cell, ResponsiveContainer } from 'recharts';
+import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-
-const NAVY = "#0B2545";
-const TEAL = "#13A89E";
-
-const LOCKED_ASSETS = [
-  { label: "Bonds", sub: "NSE goBID" },
-  { label: "SGB", sub: "RBI Retail Direct" },
-  { label: "NPS", sub: "PFRDA" },
-  { label: "REIT/InvIT", sub: "Exchange listed" },
-];
+import { Search, User, TrendingUp, Shield, Activity, Lock, Wallet, ArrowUpRight } from 'lucide-react';
 
 export function Dashboard() {
   const navigate = useNavigate();
-  // Mock data for now
-  const risk = "Moderate";
-  const portfolio = { equity: 260000, mf: 192300 };
-  const flagged = true; // Set to true to show the concentration alert
+  // Using local state to toggle between dashboard_1 (empty) and dashboard_2 (populated)
+  const [hasLinkedAccounts, setHasLinkedAccounts] = useState(true);
 
-  const total = portfolio.equity + portfolio.mf;
-  const data = [
-    { name: "Equity", value: portfolio.equity },
-    { name: "Mutual Funds", value: portfolio.mf },
-  ];
-  const colors = [TEAL, NAVY];
+  if (!hasLinkedAccounts) {
+    return (
+      <div className="flex-1 flex flex-col bg-surface pb-[80px] md:pb-0 text-on-background">
+        {/* TopAppBar */}
+        <header className="w-full sticky top-0 z-50 bg-surface border-b border-outline-variant flat no-shadows">
+          <div className="flex items-center justify-between px-4 py-3 w-full max-w-7xl mx-auto">
+            <button aria-label="Search" className="text-primary hover:bg-surface-container-low transition-colors active:scale-95 duration-100 p-2 rounded-full">
+              <span className="material-symbols-outlined">search</span>
+            </button>
+            <h1 className="font-headline-md text-primary tracking-tight">SahaVest</h1>
+            <button aria-label="Account" className="text-primary hover:bg-surface-container-low transition-colors active:scale-95 duration-100 p-2 rounded-full">
+              <span className="material-symbols-outlined">account_circle</span>
+            </button>
+          </div>
+        </header>
+
+        {/* Main Content Canvas (Empty State) */}
+        <main className="flex-grow flex flex-col items-center justify-center p-4 max-w-md mx-auto text-center w-full pb-32">
+          <div className="mb-8 w-48 h-48 rounded-full bg-surface-container-low flex items-center justify-center shadow-sm relative overflow-hidden border border-outline-variant/30">
+            <img 
+              alt="Secure Vault Illustration" 
+              className="w-full h-full object-cover opacity-80" 
+              src="https://lh3.googleusercontent.com/aida-public/AB6AXuAfqaayInJL_4WrbotpVPyVNxMUH_nXZIsgFmxiAMqXQT3UwWbNJijbLI9YJ792Bgw7OLseiFiPE7jgeW5wzEN--zeRRCqa3nynR3E8QW8NPQEgrXWVngcuFcUszeQIB28Bq3_n5eYWh97vZAsY4_lz_14sDHc6vmn6z-Q55Sf39gCaqzftANBipMSQ5XQ-CvvUZQACBo4kWrZlCFsAm65FqVjIMLIDe_fdMWpO6XXrIi13mntmYqbvSz3EFhmTq3vW2o2ecsEIlvE" 
+            />
+          </div>
+          <h2 className="font-headline-sm text-on-surface mb-2">Welcome to Guided Prosperity</h2>
+          <p className="font-body-md text-on-surface-variant mb-8 px-4">
+            Your investment journey starts here. Link your accounts to see your unified net worth and gain crystal-clear insights.
+          </p>
+          <button 
+            onClick={() => setHasLinkedAccounts(true)}
+            className="bg-primary text-on-primary w-full h-[48px] rounded-lg font-label-md hover:opacity-90 active:scale-95 transition-all shadow-sm flex items-center justify-center gap-2"
+          >
+            <span className="material-symbols-outlined text-[20px]">link</span>
+            Link Accounts Now
+          </button>
+        </main>
+      </div>
+    );
+  }
 
   return (
-    <div className="flex-1 flex flex-col bg-surface overflow-y-auto px-4 pt-4 pb-20">
-      <div className="flex items-center justify-between mb-4">
-        <div>
-          <p className="font-label-sm text-on-surface-variant uppercase tracking-wider">Total net worth</p>
-          <p className="font-display-lg-mobile text-primary">₹{total.toLocaleString("en-IN")}</p>
+    <div className="flex-1 flex flex-col bg-surface text-on-surface pb-[80px] md:pb-0 overflow-y-auto">
+      {/* TopAppBar */}
+      <header className="w-full sticky top-0 z-50 bg-surface border-b border-outline-variant">
+        <div className="flex items-center justify-between px-4 py-3 w-full max-w-7xl mx-auto">
+          <button className="h-[44px] w-[44px] flex items-center justify-center text-on-surface-variant hover:bg-surface-container-low transition-colors active:scale-95 duration-100 rounded-full">
+            <span className="material-symbols-outlined">search</span>
+          </button>
+          <div className="font-headline-md text-primary tracking-tight">SahaVest</div>
+          <button className="h-[44px] w-[44px] flex items-center justify-center text-on-surface-variant hover:bg-surface-container-low transition-colors active:scale-95 duration-100 rounded-full">
+            <span className="material-symbols-outlined">account_circle</span>
+          </button>
         </div>
-        <button className="p-2 rounded-full hover:bg-surface-container-low transition-colors">
-          <Bell size={24} className="text-primary" />
-        </button>
-      </div>
+      </header>
 
-      <div className="rounded-2xl p-4 mb-4 flex items-center bg-surface-container-lowest border border-outline-variant shadow-sm">
-        <div style={{ width: 100, height: 100 }}>
-          <ResponsiveContainer>
-            <PieChart>
-              <Pie data={data} innerRadius={30} outerRadius={46} paddingAngle={2} dataKey="value" stroke="none">
-                {data.map((_, i) => <Cell key={i} fill={colors[i]} />)}
-              </Pie>
-            </PieChart>
-          </ResponsiveContainer>
-        </div>
-        <div className="ml-4 flex flex-col gap-2 flex-1">
-          {data.map((d, i) => (
-            <div key={i} className="flex items-center justify-between text-sm">
-              <div className="flex items-center gap-2">
-                <span className="w-2.5 h-2.5 rounded-full" style={{ background: colors[i] }} />
-                <span className="text-on-surface font-medium">{d.name}</span>
+      <main className="max-w-7xl mx-auto px-4 md:px-8 py-6 space-y-8 w-full">
+        {/* Net Worth Header Area */}
+        <section className="text-center space-y-2 pt-4">
+          <h2 className="font-label-md text-on-surface-variant">Total Net Worth</h2>
+          <div className="font-display-lg-mobile md:font-display-lg text-primary">₹14,50,000</div>
+          <div className="flex items-center justify-center gap-1 text-secondary font-label-md">
+            <span className="material-symbols-outlined text-[16px]">trending_up</span>
+            <span>+2.4% (1M)</span>
+          </div>
+          <div className="font-label-sm text-outline pt-3">Last updated: 5 mins ago</div>
+        </section>
+
+        {/* Donut Chart & Legend Bento */}
+        <section className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          {/* Chart Card */}
+          <div className="bg-surface-container-lowest rounded-xl shadow-[0px_4px_12px_rgba(0,0,0,0.04)] border border-outline-variant p-4 flex flex-col items-center justify-center aspect-square md:aspect-auto">
+            <div className="relative w-48 h-48">
+              <svg className="w-full h-full transform -rotate-90" viewBox="0 0 100 100">
+                {/* Background Circle */}
+                <circle cx="50" cy="50" fill="transparent" r="40" stroke="#f3f4f5" strokeWidth="12"></circle>
+                {/* Equity Segment (50%) */}
+                <circle className="transition-all duration-1000 ease-out" cx="50" cy="50" fill="transparent" r="40" stroke="#002653" strokeDasharray="125.6 251.2" strokeDashoffset="0" strokeWidth="12"></circle>
+                {/* Debt Segment (30%) */}
+                <circle className="transition-all duration-1000 ease-out" cx="50" cy="50" fill="transparent" r="40" stroke="#006d42" strokeDasharray="75.36 251.2" strokeDashoffset="-125.6" strokeWidth="12"></circle>
+                {/* Gold Segment (15%) */}
+                <circle className="transition-all duration-1000 ease-out" cx="50" cy="50" fill="transparent" r="40" stroke="#e89500" strokeDasharray="37.68 251.2" strokeDashoffset="-200.96" strokeWidth="12"></circle>
+                {/* Cash Segment (5%) */}
+                <circle className="transition-all duration-1000 ease-out" cx="50" cy="50" fill="transparent" r="40" stroke="#abc7ff" strokeDasharray="12.56 251.2" strokeDashoffset="-238.64" strokeWidth="12"></circle>
+              </svg>
+              {/* Center Content */}
+              <div className="absolute inset-0 flex flex-col items-center justify-center pointer-events-none">
+                <span className="font-headline-sm text-primary">4</span>
+                <span className="font-label-sm text-on-surface-variant">Asset Classes</span>
               </div>
-              <span className="text-on-surface font-semibold">₹{(d.value/1000).toFixed(1)}k</span>
             </div>
-          ))}
-          <div className="mt-1 pt-2 border-t border-outline-variant/30 flex justify-between items-center">
-            <span className="text-[11px] text-on-surface-variant font-medium">Risk Profile</span>
-            <span className="text-[11px] font-bold text-primary">{risk}</span>
           </div>
-        </div>
-      </div>
 
-      {flagged && (
-        <button 
-          onClick={() => navigate('/alerts')} 
-          className="w-full flex items-center gap-3 rounded-xl px-4 py-3 mb-4 text-left border border-error-container bg-[#FAECE7] text-[#4A1B0C] shadow-sm"
-        >
-          <AlertTriangle size={20} className="text-error" />
-          <span className="font-label-md">3 MF folios overlap 60% in Banking sector</span>
-        </button>
-      )}
-
-      <p className="font-label-md text-primary mb-3">Quick access</p>
-      <div className="grid grid-cols-3 gap-3 mb-5">
-        <button onClick={() => navigate('/fund/equity')} className="rounded-xl p-3 flex flex-col items-start gap-2 bg-surface-container-lowest border border-outline-variant shadow-sm hover:bg-surface-container-low transition-colors">
-          <TrendingUp size={20} className="text-secondary" />
-          <span className="font-label-sm text-on-surface text-left">Equity</span>
-        </button>
-        <button onClick={() => navigate('/fund/mf')} className="rounded-xl p-3 flex flex-col items-start gap-2 bg-surface-container-lowest border border-outline-variant shadow-sm hover:bg-surface-container-low transition-colors">
-          <Wallet size={20} className="text-secondary" />
-          <span className="font-label-sm text-on-surface text-left">Mutual funds</span>
-        </button>
-        {LOCKED_ASSETS.map((a) => (
-          <div key={a.label} className="rounded-xl p-3 flex flex-col items-start gap-1 bg-surface-container-lowest border border-outline-variant shadow-sm opacity-60">
-            <Lock size={16} className="text-on-surface-variant" />
-            <span className="font-label-sm text-on-surface">{a.label}</span>
-            <span className="text-[10px] text-on-surface-variant leading-tight">Coming soon</span>
+          {/* Legend/Details */}
+          <div className="flex flex-col gap-3 justify-center">
+            <div onClick={() => navigate('/fund/equity')} className="cursor-pointer bg-surface-container-lowest rounded-lg p-3 border border-outline-variant flex items-center justify-between active:scale-[0.98] transition-transform">
+              <div className="flex items-center gap-3">
+                <div className="w-3 h-3 rounded-full bg-primary"></div>
+                <span className="font-body-md text-on-surface">Equity</span>
+              </div>
+              <div className="text-right">
+                <div className="font-headline-sm text-primary">50%</div>
+                <div className="font-label-sm text-on-surface-variant">₹7,25,000</div>
+              </div>
+            </div>
+            
+            <div onClick={() => navigate('/fund/debt')} className="cursor-pointer bg-surface-container-lowest rounded-lg p-3 border border-outline-variant flex items-center justify-between active:scale-[0.98] transition-transform">
+              <div className="flex items-center gap-3">
+                <div className="w-3 h-3 rounded-full bg-secondary"></div>
+                <span className="font-body-md text-on-surface">Debt</span>
+              </div>
+              <div className="text-right">
+                <div className="font-headline-sm text-primary">30%</div>
+                <div className="font-label-sm text-on-surface-variant">₹4,35,000</div>
+              </div>
+            </div>
+            
+            <div onClick={() => navigate('/fund/gold')} className="cursor-pointer bg-surface-container-lowest rounded-lg p-3 border border-outline-variant flex items-center justify-between active:scale-[0.98] transition-transform">
+              <div className="flex items-center gap-3">
+                <div className="w-3 h-3 rounded-full bg-tertiary-container"></div>
+                <span className="font-body-md text-on-surface">Gold</span>
+              </div>
+              <div className="text-right">
+                <div className="font-headline-sm text-primary">15%</div>
+                <div className="font-label-sm text-on-surface-variant">₹2,17,500</div>
+              </div>
+            </div>
           </div>
-        ))}
-      </div>
+        </section>
 
-      <button onClick={() => navigate('/twin/simulator')} className="w-full rounded-xl p-4 mb-4 flex items-center justify-between bg-primary text-on-primary shadow-sm hover:opacity-95 transition-opacity">
-        <div className="text-left">
-          <p className="font-label-md mb-0.5">Ask your Investor Twin</p>
-          <p className="text-xs text-primary-fixed-dim">"What if I SIP ₹500 more?"</p>
-        </div>
-        <TrendingUp className="text-secondary-fixed" size={24} />
-      </button>
+        {/* Quick Actions Row */}
+        <section className="flex flex-wrap justify-center gap-4 py-3">
+          <button onClick={() => navigate('/fraud')} className="flex flex-col items-center gap-2 p-3 bg-surface-container-lowest rounded-xl border border-outline-variant shadow-[0px_4px_12px_rgba(0,0,0,0.04)] min-w-[100px] active:scale-95 transition-transform">
+            <div className="w-10 h-10 rounded-full bg-error-container text-on-error-container flex items-center justify-center">
+              <span className="material-symbols-outlined">policy</span>
+            </div>
+            <span className="font-label-sm text-on-surface">Scam Checker</span>
+          </button>
+          
+          <button onClick={() => navigate('/trust')} className="flex flex-col items-center gap-2 p-3 bg-surface-container-lowest rounded-xl border border-outline-variant shadow-[0px_4px_12px_rgba(0,0,0,0.04)] min-w-[100px] active:scale-95 transition-transform">
+            <div className="w-10 h-10 rounded-full bg-secondary-container text-on-secondary-container flex items-center justify-center">
+              <span className="material-symbols-outlined">verified_user</span>
+            </div>
+            <span className="font-label-sm text-on-surface">Trust Score</span>
+          </button>
+          
+          <button onClick={() => navigate('/twin/simulator')} className="flex flex-col items-center gap-2 p-3 bg-surface-container-lowest rounded-xl border border-outline-variant shadow-[0px_4px_12px_rgba(0,0,0,0.04)] min-w-[100px] active:scale-95 transition-transform">
+            <div className="w-10 h-10 rounded-full bg-primary-fixed text-on-primary-fixed flex items-center justify-center">
+              <span className="material-symbols-outlined">explore</span>
+            </div>
+            <span className="font-label-sm text-on-surface">Simulator</span>
+          </button>
+        </section>
 
-      <button onClick={() => navigate('/learn')} className="w-full rounded-xl p-4 flex items-center justify-between bg-surface-container-lowest border border-outline-variant shadow-sm hover:bg-surface-container-low transition-colors">
-        <div className="text-left flex-1 mr-4">
-          <p className="font-label-md text-primary mb-2">Continue learning: MF basics</p>
-          <div className="w-full h-1.5 rounded-full bg-surface-variant overflow-hidden">
-            <div className="h-full rounded-full bg-secondary w-[40%]" />
+        {/* Detailed Summary Cards */}
+        <section className="space-y-4">
+          <h3 className="font-headline-sm text-primary">Asset Details</h3>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+            
+            {/* Equity Card */}
+            <div onClick={() => navigate('/fund/equity')} className="cursor-pointer bg-surface-container-lowest rounded-xl p-4 border border-outline-variant shadow-[0px_4px_12px_rgba(0,0,0,0.04)] flex flex-col gap-3 active:scale-[0.98] transition-transform">
+              <div className="flex items-center gap-3">
+                <span className="material-symbols-outlined text-primary bg-primary-fixed p-2 rounded-full">trending_up</span>
+                <h4 className="font-headline-sm text-on-surface">Equity</h4>
+                <span className="ml-auto bg-surface-container-low px-2 py-1 rounded font-label-sm text-on-surface-variant">50%</span>
+              </div>
+              <div className="font-display-lg-mobile text-primary">₹7,25,000</div>
+              <div className="flex items-center gap-2 text-secondary font-label-sm">
+                <span className="material-symbols-outlined text-[14px]">arrow_upward</span>
+                <span>+4.2% Total Returns</span>
+              </div>
+            </div>
+
+            {/* Debt Card */}
+            <div onClick={() => navigate('/fund/debt')} className="cursor-pointer bg-surface-container-lowest rounded-xl p-4 border border-outline-variant shadow-[0px_4px_12px_rgba(0,0,0,0.04)] flex flex-col gap-3 active:scale-[0.98] transition-transform">
+              <div className="flex items-center gap-3">
+                <span className="material-symbols-outlined text-secondary bg-secondary-fixed p-2 rounded-full">account_balance</span>
+                <h4 className="font-headline-sm text-on-surface">Debt</h4>
+                <span className="ml-auto bg-surface-container-low px-2 py-1 rounded font-label-sm text-on-surface-variant">30%</span>
+              </div>
+              <div className="font-display-lg-mobile text-primary">₹4,35,000</div>
+              <div className="flex items-center gap-2 text-secondary font-label-sm">
+                <span className="material-symbols-outlined text-[14px]">arrow_upward</span>
+                <span>+6.5% Yield</span>
+              </div>
+            </div>
+
+            {/* Gold Card */}
+            <div onClick={() => navigate('/fund/gold')} className="cursor-pointer bg-surface-container-lowest rounded-xl p-4 border border-outline-variant shadow-[0px_4px_12px_rgba(0,0,0,0.04)] flex flex-col gap-3 active:scale-[0.98] transition-transform">
+              <div className="flex items-center gap-3">
+                <span className="material-symbols-outlined text-tertiary-container bg-tertiary-fixed p-2 rounded-full">diamond</span>
+                <h4 className="font-headline-sm text-on-surface">Gold</h4>
+                <span className="ml-auto bg-surface-container-low px-2 py-1 rounded font-label-sm text-on-surface-variant">15%</span>
+              </div>
+              <div className="font-display-lg-mobile text-primary">₹2,17,500</div>
+              <div className="flex items-center gap-2 text-on-surface-variant font-label-sm">
+                <span className="material-symbols-outlined text-[14px]">horizontal_rule</span>
+                <span>Stable</span>
+              </div>
+            </div>
+
           </div>
-        </div>
-        <BookOpen className="text-secondary" size={24} />
-      </button>
+        </section>
+      </main>
     </div>
   );
 }
