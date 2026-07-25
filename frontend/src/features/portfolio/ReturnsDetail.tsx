@@ -1,5 +1,5 @@
 import React from 'react';
-import { ArrowUpRight, Activity, PieChart, Diamond, Globe } from 'lucide-react';
+import { ArrowUpRight, Activity, PieChart, Diamond, Globe, ArrowLeft } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 
 export function ReturnsDetail() {
@@ -7,9 +7,14 @@ export function ReturnsDetail() {
 
   return (
     <div className="flex-1 flex flex-col bg-surface overflow-y-auto px-4 pt-6 pb-20">
-      <div className="mb-6">
-        <h1 className="font-display-lg-mobile text-on-surface mb-2">XIRR & Returns</h1>
-        <p className="font-body-md text-on-surface-variant">Detailed performance breakdown.</p>
+      <div className="flex items-center gap-3 mb-6">
+        <button onClick={() => navigate('/portfolio')} className="p-2 -ml-2 rounded-full hover:bg-surface-container-low transition-colors">
+          <ArrowLeft size={24} className="text-on-surface" />
+        </button>
+        <div>
+          <h1 className="font-display-lg-mobile text-on-surface mb-1">XIRR & Returns</h1>
+          <p className="font-body-md text-on-surface-variant text-sm">Detailed performance breakdown.</p>
+        </div>
       </div>
 
       <div className="bg-surface-container-lowest rounded-xl border border-outline-variant p-6 mb-6 relative overflow-hidden shadow-sm">

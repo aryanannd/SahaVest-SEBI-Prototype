@@ -118,7 +118,7 @@ export function ScamChecker() {
           </div>
           
           <div className="flex flex-col gap-3">
-            <button className="bg-surface-container text-on-surface font-label-md py-3 rounded-full border border-outline-variant transition-transform active:scale-95">
+            <button onClick={() => navigate('/grievance')} className="bg-surface-container text-on-surface font-label-md py-3 rounded-full border border-outline-variant transition-transform active:scale-95">
               Report to SCORES
             </button>
           </div>

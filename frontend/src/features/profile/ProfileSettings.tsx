@@ -5,12 +5,12 @@ import { useNavigate } from 'react-router-dom';
 export function ProfileSettings() {
   const navigate = useNavigate();
 
-  const handleLogout = async () => {
+  const handleLogout = () => {
     navigate('/onboarding');
   };
 
   return (
-    <div className="flex-1 flex flex-col bg-surface overflow-y-auto px-4 pt-4 pb-24">
+    <div className="flex-1 flex flex-col bg-surface overflow-y-auto px-4 pt-4 pb-32">
       <h1 className="font-headline-md text-on-surface mb-6">Profile & Settings</h1>
 
       {/* User Info Card */}
