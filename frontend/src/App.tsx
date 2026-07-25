@@ -1,17 +1,17 @@
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import { OnboardingFlow } from './features/onboarding/OnboardingFlow';
 import { PhoneFrame } from './components/layout/PhoneFrame';
+import { BottomNav } from './components/layout/BottomNav';
+import { Dashboard } from './features/dashboard/Dashboard';
+import { FundDetail } from './features/dashboard/FundDetail';
 
-function DashboardPlaceholder() {
-  return (
-    <div className="flex-1 flex flex-col items-center justify-center p-6 bg-surface h-full">
-      <h1 className="font-headline-md text-primary mb-2">Dashboard</h1>
-      <p className="font-body-md text-on-surface-variant text-center">
-        Onboarding complete! Your risk profile has been saved. The Dashboard feature cluster will be built next.
-      </p>
-    </div>
-  );
-}
+// Placeholders for other tabs
+const Placeholder = ({ title }: { title: string }) => (
+  <div className="flex-1 flex flex-col items-center justify-center p-6 bg-surface h-full pb-20">
+    <h1 className="font-headline-md text-primary mb-2">{title}</h1>
+    <p className="font-body-md text-on-surface-variant text-center">Coming in a later cluster.</p>
+  </div>
+);
 
 function App() {
   return (
@@ -24,11 +24,19 @@ function App() {
           <span>100%</span>
         </div>
 
-        <Routes>
-          <Route path="/onboarding" element={<OnboardingFlow />} />
-          <Route path="/dashboard" element={<DashboardPlaceholder />} />
-          <Route path="*" element={<Navigate to="/onboarding" replace />} />
-        </Routes>
+        <div className="flex-1 flex flex-col relative overflow-hidden">
+          <Routes>
+            <Route path="/onboarding" element={<OnboardingFlow />} />
+            <Route path="/dashboard" element={<Dashboard />} />
+            <Route path="/fund/:type" element={<FundDetail />} />
+            <Route path="/learn" element={<Placeholder title="Learning Hub" />} />
+            <Route path="/fraud" element={<Placeholder title="Fraud Checker" />} />
+            <Route path="/chat" element={<Placeholder title="Investor Twin" />} />
+            <Route path="/audit" element={<Placeholder title="Audit Trail" />} />
+            <Route path="*" element={<Navigate to="/dashboard" replace />} />
+          </Routes>
+          <BottomNav />
+        </div>
       </PhoneFrame>
     </BrowserRouter>
   );
