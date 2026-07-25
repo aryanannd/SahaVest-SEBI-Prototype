@@ -18,14 +18,9 @@ import { LearningHub } from './features/learning/LearningHub';
 import { Quiz } from './features/learning/Quiz';
 import { BrokerRedirect } from './features/trade/BrokerRedirect';
 import { OrderSuccess } from './features/trade/OrderSuccess';
-
-// Placeholders for other tabs
-const Placeholder = ({ title }: { title: string }) => (
-  <div className="flex-1 flex flex-col items-center justify-center p-6 bg-surface h-full pb-20">
-    <h1 className="font-headline-md text-primary mb-2">{title}</h1>
-    <p className="font-body-md text-on-surface-variant text-center">Coming in a later cluster.</p>
-  </div>
-);
+import { AuditTrail } from './features/compliance/AuditTrail';
+import { Grievance } from './features/compliance/Grievance';
+import { PrivacyCenter } from './features/compliance/PrivacyCenter';
 
 function App() {
   return (
@@ -57,7 +52,9 @@ function App() {
             <Route path="/learn/quiz" element={<Quiz />} />
             <Route path="/trade/redirect" element={<BrokerRedirect />} />
             <Route path="/trade/success" element={<OrderSuccess />} />
-            <Route path="/audit" element={<Placeholder title="Audit Trail" />} />
+            <Route path="/audit" element={<AuditTrail />} />
+            <Route path="/grievance" element={<Grievance />} />
+            <Route path="/privacy" element={<PrivacyCenter />} />
             <Route path="*" element={<Navigate to="/dashboard" replace />} />
           </Routes>
           <BottomNav />
