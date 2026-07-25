@@ -35,8 +35,6 @@ export function OnboardingFlow() {
     setIsProcessing(true);
     const risk = calculateRiskScore();
     try {
-      // In a real app we'd get the user session from Supabase auth. 
-      // For this demo, we'll assume we have a session or just update/create a mock user.
       const { data: { user } } = await supabase.auth.getUser();
       if (user) {
         await supabase.from('users').update({ risk_profile: risk }).eq('id', user.id);
@@ -52,13 +50,45 @@ export function OnboardingFlow() {
 
   const handleMobileAuth = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (MOCK_OTP && otp === '123456') {
-      // Mock successful login - bypass real supabase auth
-      setStep(step + 1);
-    } else {
-      // Real flow (not fully implemented for demo)
-      alert("Please use the mock OTP 123456");
+    setIsProcessing(true);
+    try {
+      if (MOCK_OTP && otp === '123456') {
+        // Use demo-login bypass endpoint which returns a real session
+        const res = await fetch('http://localhost:3000/api/auth/demo-login', { method: 'POST' });
+        const data = await res.json();
+        if (data.session) {
+          // Set the session into the Supabase client so it works globally
+          await supabase.auth.setSession({
+            access_token: data.session.access_token,
+            refresh_token: data.session.refresh_token
+          });
+          setStep(step + 1);
+        } else {
+          alert("Demo login failed");
+        }
+      } else {
+        // Real OTP verify (to be fully integrated next)
+        const res = await fetch('http://localhost:3000/api/auth/verify', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ mobile: phone, otp })
+        });
+        const data = await res.json();
+        if (data.session) {
+          await supabase.auth.setSession({
+            access_token: data.session.access_token,
+            refresh_token: data.session.refresh_token
+          });
+          setStep(step + 1);
+        } else {
+          alert("Invalid OTP");
+        }
+      }
+    } catch (e) {
+      console.error(e);
+      alert("Error during login");
     }
+    setIsProcessing(false);
   };
 
   const handleDigilocker = () => {
