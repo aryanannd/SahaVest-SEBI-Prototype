@@ -17,13 +17,20 @@ export function ChatAssistant() {
 
     setTimeout(() => {
       let botResponse = "I'm a demo bot, but in the real app, I'd analyze your portfolio and give a personalized, educational answer based on SEBI-compliant guidelines.";
+      let actionRoute = "";
+      let actionText = "";
+
       if (userMsg.text.toLowerCase().includes('tax') || userMsg.text.toLowerCase().includes('elss')) {
         botResponse = "Based on your current investments, you have ₹1.2L in ELSS this year. You can invest ₹30,000 more to max out your Section 80C limit of ₹1.5L.";
       } else if (userMsg.text.toLowerCase().includes('risk')) {
         botResponse = "Your profile is Moderate, but your recent ₹50k investment in Small Cap funds slightly increased your overall portfolio risk. Make sure this aligns with your goals!";
+      } else if (userMsg.text.toLowerCase().includes('buy') && userMsg.text.toLowerCase().includes('bond')) {
+        botResponse = "I can help you initiate a purchase of Sovereign Gold Bonds (SGB) via your connected Zerodha account. 10 units of SGB Series IV 2023-24 currently cost ~₹62,450. Would you like to proceed?";
+        actionRoute = "/trade/redirect";
+        actionText = "Proceed to Broker";
       }
 
-      setMessages(prev => [...prev, { id: Date.now() + 1, type: 'bot', text: botResponse }]);
+      setMessages(prev => [...prev, { id: Date.now() + 1, type: 'bot', text: botResponse, actionRoute, actionText }]);
     }, 1000);
   };
 
@@ -43,6 +50,15 @@ export function ChatAssistant() {
                 : 'bg-surface-container-lowest border border-outline-variant text-on-surface rounded-tl-sm'
             }`}>
               <p className="font-body-md text-[15px]">{m.text}</p>
+              
+              {m.actionRoute && m.actionText && (
+                <button
+                  onClick={() => window.location.href = m.actionRoute}
+                  className="mt-3 w-full bg-primary text-on-primary font-label-md py-2 rounded-lg transition-transform active:scale-95 shadow-sm"
+                >
+                  {m.actionText}
+                </button>
+              )}
             </div>
           </div>
         ))}

@@ -16,6 +16,8 @@ import { RegistryVerification } from './features/trust/RegistryVerification';
 import { TrustScore } from './features/trust/TrustScore';
 import { LearningHub } from './features/learning/LearningHub';
 import { Quiz } from './features/learning/Quiz';
+import { BrokerRedirect } from './features/trade/BrokerRedirect';
+import { OrderSuccess } from './features/trade/OrderSuccess';
 
 // Placeholders for other tabs
 const Placeholder = ({ title }: { title: string }) => (
@@ -53,6 +55,8 @@ function App() {
             <Route path="/trust/score" element={<TrustScore />} />
             <Route path="/learn" element={<LearningHub />} />
             <Route path="/learn/quiz" element={<Quiz />} />
+            <Route path="/trade/redirect" element={<BrokerRedirect />} />
+            <Route path="/trade/success" element={<OrderSuccess />} />
             <Route path="/audit" element={<Placeholder title="Audit Trail" />} />
             <Route path="*" element={<Navigate to="/dashboard" replace />} />
           </Routes>
