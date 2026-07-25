@@ -12,6 +12,8 @@ import { ChatAssistant } from './features/twin/ChatAssistant';
 import { PortfolioAlerts } from './features/twin/PortfolioAlerts';
 import { ScamChecker } from './features/trust/ScamChecker';
 import { AdvisorVerification } from './features/trust/AdvisorVerification';
+import { RegistryVerification } from './features/trust/RegistryVerification';
+import { TrustScore } from './features/trust/TrustScore';
 
 // Placeholders for other tabs
 const Placeholder = ({ title }: { title: string }) => (
@@ -45,6 +47,8 @@ function App() {
             <Route path="/alerts" element={<PortfolioAlerts />} />
             <Route path="/fraud" element={<ScamChecker />} />
             <Route path="/trust/advisor" element={<AdvisorVerification />} />
+            <Route path="/trust/registry" element={<RegistryVerification />} />
+            <Route path="/trust/score" element={<TrustScore />} />
             <Route path="/learn" element={<Placeholder title="Learning Hub" />} />
             <Route path="/audit" element={<Placeholder title="Audit Trail" />} />
             <Route path="*" element={<Navigate to="/dashboard" replace />} />

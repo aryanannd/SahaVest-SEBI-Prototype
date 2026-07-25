@@ -65,7 +65,7 @@ export function AdvisorVerification() {
             <h2 className="font-headline-sm text-[#0D532A]">Verified Advisor</h2>
           </div>
           
-          <div className="space-y-3">
+          <div className="space-y-3 mb-4">
             <div>
               <p className="text-[11px] text-[#0D532A]/70 uppercase tracking-wider">Registration Number</p>
               <p className="font-label-md text-[#0D532A]">{regNo.toUpperCase()}</p>
@@ -77,6 +77,13 @@ export function AdvisorVerification() {
               </div>
             </div>
           </div>
+
+          <button 
+            onClick={() => navigate('/trust/registry')}
+            className="w-full bg-white text-[#2E8B57] font-label-md py-3 rounded-xl border border-[#2E8B57]/30 hover:bg-[#2E8B57]/5 transition-colors"
+          >
+            View Full Registry Details
+          </button>
         </div>
       )}
 
