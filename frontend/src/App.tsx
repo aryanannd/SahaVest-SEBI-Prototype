@@ -4,6 +4,9 @@ import { PhoneFrame } from './components/layout/PhoneFrame';
 import { BottomNav } from './components/layout/BottomNav';
 import { Dashboard } from './features/dashboard/Dashboard';
 import { FundDetail } from './features/dashboard/FundDetail';
+import { PortfolioHub } from './features/portfolio/PortfolioHub';
+import { GoalsHub } from './features/portfolio/GoalsHub';
+import { ReturnsDetail } from './features/portfolio/ReturnsDetail';
 
 // Placeholders for other tabs
 const Placeholder = ({ title }: { title: string }) => (
@@ -29,6 +32,9 @@ function App() {
             <Route path="/onboarding" element={<OnboardingFlow />} />
             <Route path="/dashboard" element={<Dashboard />} />
             <Route path="/fund/:type" element={<FundDetail />} />
+            <Route path="/portfolio" element={<PortfolioHub />} />
+            <Route path="/portfolio/returns" element={<ReturnsDetail />} />
+            <Route path="/portfolio/goals" element={<GoalsHub />} />
             <Route path="/learn" element={<Placeholder title="Learning Hub" />} />
             <Route path="/fraud" element={<Placeholder title="Fraud Checker" />} />
             <Route path="/chat" element={<Placeholder title="Investor Twin" />} />

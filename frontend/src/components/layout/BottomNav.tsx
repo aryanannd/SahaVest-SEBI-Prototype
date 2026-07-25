@@ -1,5 +1,5 @@
 import React from 'react';
-import { Home, BookOpen, ShieldAlert, MessageCircle, ScrollText } from 'lucide-react';
+import { Home, BookOpen, ShieldAlert, MessageCircle, ScrollText, Wallet } from 'lucide-react';
 import { useLocation, useNavigate } from 'react-router-dom';
 
 export function BottomNav() {
@@ -10,7 +10,7 @@ export function BottomNav() {
 
   const items = [
     { id: "/dashboard", icon: Home, label: "Home" },
-    { id: "/learn", icon: BookOpen, label: "Learn" },
+    { id: "/portfolio", icon: Wallet, label: "Portfolio" },
     { id: "/fraud", icon: ShieldAlert, label: "Check tip" },
     { id: "/chat", icon: MessageCircle, label: "Ask AI" },
     { id: "/audit", icon: ScrollText, label: "Audit" },
