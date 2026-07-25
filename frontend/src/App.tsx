@@ -21,6 +21,7 @@ import { OrderSuccess } from './features/trade/OrderSuccess';
 import { AuditTrail } from './features/compliance/AuditTrail';
 import { Grievance } from './features/compliance/Grievance';
 import { PrivacyCenter } from './features/compliance/PrivacyCenter';
+import { ProfileSettings } from './features/profile/ProfileSettings';
 
 function App() {
   return (
@@ -55,6 +56,7 @@ function App() {
             <Route path="/audit" element={<AuditTrail />} />
             <Route path="/grievance" element={<Grievance />} />
             <Route path="/privacy" element={<PrivacyCenter />} />
+            <Route path="/profile" element={<ProfileSettings />} />
             <Route path="*" element={<Navigate to="/dashboard" replace />} />
           </Routes>
           <BottomNav />

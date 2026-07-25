@@ -1,5 +1,5 @@
 import React from 'react';
-import { Home, BookOpen, ShieldAlert, MessageCircle, ScrollText, Wallet } from 'lucide-react';
+import { Home, BookOpen, ShieldAlert, MessageCircle, ScrollText, Wallet, User } from 'lucide-react';
 import { useLocation, useNavigate } from 'react-router-dom';
 
 export function BottomNav() {
@@ -13,7 +13,7 @@ export function BottomNav() {
     { id: "/portfolio", icon: Wallet, label: "Portfolio" },
     { id: "/fraud", icon: ShieldAlert, label: "Check tip" },
     { id: "/chat", icon: MessageCircle, label: "Ask AI" },
-    { id: "/audit", icon: ScrollText, label: "Audit" },
+    { id: "/profile", icon: User, label: "Profile" },
   ];
 
   // Don't show bottom nav on onboarding or deep screens
