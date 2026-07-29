@@ -1721,6 +1721,164 @@ app.post('/api/trust/alerts/:id/read', async (req: Request, res: Response) => {
   }
 });
 
+// ==========================================
+// 5. Profile & Security Endpoints
+// ==========================================
+
+app.get('/api/profile/me', async (req: Request, res: Response) => {
+  try {
+    let userId = '716691b9-939e-4118-aafb-9246a3923250';
+    const authHeader = req.headers.authorization;
+    if (authHeader) {
+      const token = authHeader.replace('Bearer ', '');
+      const { data: { user } } = await supabase.auth.getUser(token);
+      if (user) userId = user.id;
+    }
+
+    const { data: profile, error } = await supabase
+      .from('users')
+      .select('full_name, email, phone, dob, marital_status, annual_income, kyc_status')
+      .eq('id', userId)
+      .single();
+      
+    const { data: nominees } = await supabase
+      .from('nominees')
+      .select('*')
+      .eq('user_id', userId);
+
+    if (error) {
+      // Mock data fallback
+      return res.json({
+        profile: {
+          full_name: 'Demo User',
+          email: 'demo@sahavest.com',
+          phone: '+91 9876543210',
+          kyc_status: 'pending'
+        },
+        nominees: []
+      });
+    }
+
+    res.json({ profile: profile || {}, nominees: nominees || [] });
+  } catch (err) {
+    res.status(500).json({ error: 'Internal server error' });
+  }
+});
+
+app.put('/api/profile/me', async (req: Request, res: Response) => {
+  try {
+    let userId = '716691b9-939e-4118-aafb-9246a3923250';
+    const authHeader = req.headers.authorization;
+    if (authHeader) {
+      const token = authHeader.replace('Bearer ', '');
+      const { data: { user } } = await supabase.auth.getUser(token);
+      if (user) userId = user.id;
+    }
+
+    // Only update allowed fields
+    const { full_name, email, phone, dob, marital_status, annual_income, kyc_status } = req.body;
+    const updates: any = {};
+    if (full_name !== undefined) updates.full_name = full_name;
+    if (email !== undefined) updates.email = email;
+    if (phone !== undefined) updates.phone = phone;
+    if (dob !== undefined) updates.dob = dob;
+    if (marital_status !== undefined) updates.marital_status = marital_status;
+    if (annual_income !== undefined) updates.annual_income = annual_income;
+    if (kyc_status !== undefined) updates.kyc_status = kyc_status;
+
+    const { error } = await supabase
+      .from('users')
+      .update(updates)
+      .eq('id', userId);
+
+    if (error) throw error;
+    res.json({ success: true });
+  } catch (err) {
+    res.status(500).json({ error: 'Internal server error' });
+  }
+});
+
+app.get('/api/profile/security/me', async (req: Request, res: Response) => {
+  try {
+    let userId = '716691b9-939e-4118-aafb-9246a3923250';
+    const authHeader = req.headers.authorization;
+    if (authHeader) {
+      const token = authHeader.replace('Bearer ', '');
+      const { data: { user } } = await supabase.auth.getUser(token);
+      if (user) userId = user.id;
+    }
+
+    const { data, error } = await supabase
+      .from('users')
+      .select('two_factor_enabled, biometric_enabled, app_pin')
+      .eq('id', userId)
+      .single();
+
+    if (error) {
+      return res.json({ two_factor_enabled: false, biometric_enabled: false, has_pin: false });
+    }
+
+    res.json({
+      two_factor_enabled: data.two_factor_enabled,
+      biometric_enabled: data.biometric_enabled,
+      has_pin: !!data.app_pin
+    });
+  } catch (err) {
+    res.status(500).json({ error: 'Internal server error' });
+  }
+});
+
+app.put('/api/profile/security', async (req: Request, res: Response) => {
+  try {
+    let userId = '716691b9-939e-4118-aafb-9246a3923250';
+    const authHeader = req.headers.authorization;
+    if (authHeader) {
+      const token = authHeader.replace('Bearer ', '');
+      const { data: { user } } = await supabase.auth.getUser(token);
+      if (user) userId = user.id;
+    }
+
+    const { two_factor_enabled, biometric_enabled, app_pin } = req.body;
+    const updates: any = {};
+    if (two_factor_enabled !== undefined) updates.two_factor_enabled = two_factor_enabled;
+    if (biometric_enabled !== undefined) updates.biometric_enabled = biometric_enabled;
+    if (app_pin !== undefined) updates.app_pin = app_pin;
+
+    const { error } = await supabase
+      .from('users')
+      .update(updates)
+      .eq('id', userId);
+
+    if (error) throw error;
+    res.json({ success: true });
+  } catch (err) {
+    res.status(500).json({ error: 'Internal server error' });
+  }
+});
+
+app.delete('/api/profile/nominees/:id', async (req: Request, res: Response) => {
+  try {
+    let userId = '716691b9-939e-4118-aafb-9246a3923250';
+    const authHeader = req.headers.authorization;
+    if (authHeader) {
+      const token = authHeader.replace('Bearer ', '');
+      const { data: { user } } = await supabase.auth.getUser(token);
+      if (user) userId = user.id;
+    }
+
+    const { error } = await supabase
+      .from('nominees')
+      .delete()
+      .eq('id', req.params.id)
+      .eq('user_id', userId);
+
+    if (error) throw error;
+    res.json({ success: true });
+  } catch (err) {
+    res.status(500).json({ error: 'Internal server error' });
+  }
+});
+
 Sentry.setupExpressErrorHandler(app);
 
 app.listen(PORT, () => {
