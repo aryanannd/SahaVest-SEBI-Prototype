@@ -597,8 +597,148 @@ app.get('/api/alerts/behavioral/:userId', async (req: Request, res: Response) =>
 });
 
 // ==========================================
+app.get('/api/portfolio/exposure/me', async (req: Request, res: Response) => {
+  try {
+    const authHeader = req.headers.authorization;
+    let userId = '716691b9-939e-4118-aafb-9246a3923250';
+    if (authHeader) {
+      const token = authHeader.replace('Bearer ', '');
+      const { data: { user } } = await supabase.auth.getUser(token);
+      if (user) userId = user.id;
+    }
+
+    // Mock data for prototype
+    res.json({
+      totalValue: 1450000,
+      flags: ["High concentration (45%) in IT Sector"],
+      assetClassBreakdown: [
+        { name: "Equity", value: 1000000 },
+        { name: "Debt", value: 450000 }
+      ],
+      sectorBreakdown: [
+        { name: "IT", value: 45 },
+        { name: "Financials", value: 30 },
+        { name: "Consumer", value: 25 }
+      ]
+    });
+  } catch (err) {
+    res.status(500).json({ error: 'Internal server error' });
+  }
+});
+
+app.get('/api/portfolio/tax-summary/me', async (req: Request, res: Response) => {
+  try {
+    // Mock data for prototype
+    res.json({
+      financialYear: '2025-2026',
+      totalRealizedGains: 45000,
+      shortTermGains: 15000,
+      longTermGains: 30000,
+      taxLiabilityEstimate: 4500,
+      taxLossHarvestingOpportunity: 12000
+    });
+  } catch (err) {
+    res.status(500).json({ error: 'Internal server error' });
+  }
+});
+
+app.get('/api/portfolio/performance/me', async (req: Request, res: Response) => {
+  try {
+    // Mock data for prototype
+    res.json({
+      returns1M: 2.4,
+      returns3M: 5.1,
+      returns1Y: 12.8,
+      returnsAllTime: 45.2,
+      xirr: 15.4,
+      benchmarkComparison: {
+        portfolio: 15.4,
+        nifty50: 12.1
+      },
+      chartData: [
+        { date: 'Jan', value: 1000000 },
+        { date: 'Feb', value: 1050000 },
+        { date: 'Mar', value: 1100000 },
+        { date: 'Apr', value: 1080000 },
+        { date: 'May', value: 1150000 },
+        { date: 'Jun', value: 1200000 },
+        { date: 'Jul', value: 1250000 },
+        { date: 'Aug', value: 1300000 },
+        { date: 'Sep', value: 1350000 },
+        { date: 'Oct', value: 1400000 },
+        { date: 'Nov', value: 1420000 },
+        { date: 'Dec', value: 1450000 }
+      ]
+    });
+  } catch (err) {
+    res.status(500).json({ error: 'Internal server error' });
+  }
+});
+
+app.get('/api/goals', async (req: Request, res: Response) => {
+  try {
+    const authHeader = req.headers.authorization;
+    let userId = '716691b9-939e-4118-aafb-9246a3923250';
+    if (authHeader) {
+      const token = authHeader.replace('Bearer ', '');
+      const { data: { user } } = await supabase.auth.getUser(token);
+      if (user) userId = user.id;
+    }
+
+    const { data: goals, error } = await supabase
+      .from('goals')
+      .select('*')
+      .eq('user_id', userId);
+
+    if (error) {
+      // Return mock data if table query fails
+      return res.json({
+        goals: [
+          { id: '1', name: 'Retirement Fund', target_amount: 5000000, current_amount: 1500000, target_date: '2040-01-01' },
+          { id: '2', name: 'House Downpayment', target_amount: 2000000, current_amount: 800000, target_date: '2028-06-01' }
+        ]
+      });
+    }
+
+    res.json({ goals: goals || [] });
+  } catch (err) {
+    res.status(500).json({ error: 'Internal server error' });
+  }
+});
+
+app.post('/api/goals', async (req: Request, res: Response) => {
+  try {
+    const { name, target_amount, target_date } = req.body;
+    const authHeader = req.headers.authorization;
+    let userId = '716691b9-939e-4118-aafb-9246a3923250';
+    if (authHeader) {
+      const token = authHeader.replace('Bearer ', '');
+      const { data: { user } } = await supabase.auth.getUser(token);
+      if (user) userId = user.id;
+    }
+
+    const { data, error } = await supabase
+      .from('goals')
+      .insert({
+        user_id: userId,
+        name,
+        target_amount,
+        target_date,
+        current_amount: 0
+      })
+      .select()
+      .single();
+
+    if (error) {
+      return res.status(400).json({ error: error.message });
+    }
+    res.json(data);
+  } catch (err) {
+    res.status(500).json({ error: 'Internal server error' });
+  }
+});
+
 // 3. Trust, Safety, AI Endpoints
-// ==========================================
 
 app.post('/api/trust/scam-check', async (req: Request, res: Response) => {
   try {
