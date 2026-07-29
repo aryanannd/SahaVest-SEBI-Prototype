@@ -626,6 +626,27 @@ app.get('/api/portfolio/exposure/me', async (req: Request, res: Response) => {
   }
 });
 
+app.post('/api/trade/intent', async (req: Request, res: Response) => {
+  try {
+    const { holding_id, txn_type, amount, units } = req.body;
+    const authHeader = req.headers.authorization;
+    let userId = '716691b9-939e-4118-aafb-9246a3923250';
+    if (authHeader) {
+      const token = authHeader.replace('Bearer ', '');
+      const { data: { user } } = await supabase.auth.getUser(token);
+      if (user) userId = user.id;
+    }
+
+    // Insert trade intent into db for auditing (mock)
+    console.log(`[TRADE INTENT] User ${userId} wants to ${txn_type} ${units} units of ${holding_id} for ${amount}`);
+    
+    // In a real app, this would return a broker-specific redirect URL
+    res.json({ redirect_url: true, broker: 'zerodha', intent_id: 'INT123456' });
+  } catch (err) {
+    res.status(500).json({ error: 'Internal server error' });
+  }
+});
+
 app.get('/api/portfolio/tax-summary/me', async (req: Request, res: Response) => {
   try {
     // Mock data for prototype
