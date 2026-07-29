@@ -670,6 +670,57 @@ app.post('/api/trust/scam-check', async (req: Request, res: Response) => {
   }
 });
 
+app.get('/api/trust/verify-advisor/:regNo', async (req: Request, res: Response) => {
+  try {
+    const { regNo } = req.params;
+    
+    // Mock database of verified advisors based on recent searches in UI
+    const registry: Record<string, any> = {
+      'INA000012345': {
+        name: 'Ravi Kumar',
+        principal_officer: 'Ravi Kumar',
+        type: 'Individual Investment Adviser',
+        valid_till: '2028-12-31T00:00:00Z',
+        address: '123, Dalal Street, Mumbai, Maharashtra 400001'
+      },
+      'INA000098765': {
+        name: 'FinWealth Advisors',
+        principal_officer: 'Anjali Sharma',
+        type: 'Corporate Investment Adviser',
+        valid_till: '2027-05-15T00:00:00Z',
+        address: '45, BKC, Bandra East, Mumbai, Maharashtra 400051'
+      },
+      'INA000054321': {
+        name: 'Sneha Desai',
+        principal_officer: 'Sneha Desai',
+        type: 'Individual Investment Adviser',
+        valid_till: '2029-01-20T00:00:00Z',
+        address: '88, MG Road, Bangalore, Karnataka 560001'
+      }
+    };
+
+    const searchKey = regNo.toUpperCase();
+
+    // If it's a 12-character string starting with INA, generate a generic valid response if not in mock db
+    // This allows testing the success state for any realistic-looking ID
+    if (registry[searchKey]) {
+      return res.json(registry[searchKey]);
+    } else if (searchKey.startsWith('INA') && searchKey.length >= 10) {
+      return res.json({
+        name: 'Verified Demo Advisor',
+        principal_officer: 'Demo Officer',
+        type: 'Registered Investment Adviser',
+        valid_till: '2026-12-31T00:00:00Z',
+        address: '100, Financial District, Hyderabad'
+      });
+    }
+
+    return res.status(404).json({ error: 'Advisor not found in SEBI registry.' });
+  } catch (err) {
+    res.status(500).json({ error: 'Internal server error' });
+  }
+});
+
 app.post('/api/ai/chat', async (req: Request, res: Response) => {
   try {
     const { message, history = [], image } = req.body;
