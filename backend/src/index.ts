@@ -1693,6 +1693,34 @@ app.get('/api/profile/notifications/me', async (req: Request, res: Response) => 
   }
 });
 
+app.post('/api/trust/alerts/:id/read', async (req: Request, res: Response) => {
+  try {
+    let userId = '716691b9-939e-4118-aafb-9246a3923250';
+    const authHeader = req.headers.authorization;
+    if (authHeader) {
+      const token = authHeader.replace('Bearer ', '');
+      const { data: { user } } = await supabase.auth.getUser(token);
+      if (user) userId = user.id;
+    }
+
+    const { error } = await supabase
+      .from('behavioral_alerts')
+      .update({ is_read: true })
+      .eq('id', req.params.id)
+      .eq('user_id', userId);
+
+    if (error) {
+      console.error(error);
+      return res.status(500).json({ error: 'Failed to update alert' });
+    }
+
+    res.json({ success: true });
+  } catch (error) {
+    console.error("Behavioral alerts error:", error);
+    res.status(500).json({ error: 'Internal server error updating alert' });
+  }
+});
+
 Sentry.setupExpressErrorHandler(app);
 
 app.listen(PORT, () => {
