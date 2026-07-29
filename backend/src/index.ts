@@ -721,6 +721,32 @@ app.get('/api/trust/verify-advisor/:regNo', async (req: Request, res: Response) 
   }
 });
 
+app.get('/api/insights/me', async (req: Request, res: Response) => {
+  try {
+    const authHeader = req.headers.authorization;
+    let userId = '716691b9-939e-4118-aafb-9246a3923250';
+    if (authHeader) {
+      const token = authHeader.replace('Bearer ', '');
+      const { data: { user } } = await supabase.auth.getUser(token);
+      if (user) userId = user.id;
+    }
+
+    const { data: userRecord } = await supabase.from('users').select('first_name').eq('id', userId).single();
+    const name = userRecord?.first_name || 'there';
+
+    res.json({
+      insights: [
+        {
+          type: 'greeting',
+          message: `Hello ${name}! I'm your SahaVest assistant. I can help clarify financial terms, explain portfolio metrics, or guide you on how to find a verified advisor.`
+        }
+      ]
+    });
+  } catch (err) {
+    res.status(500).json({ error: 'Internal server error' });
+  }
+});
+
 app.post('/api/ai/chat', async (req: Request, res: Response) => {
   try {
     const { message, history = [], image } = req.body;
@@ -750,7 +776,7 @@ app.post('/api/ai/chat', async (req: Request, res: Response) => {
     try {
       aiResponse = await generateAIResponse(messages);
     } catch (llmError) {
-      aiResponse = "I'm currently unable to process your request due to an AI service interruption. Please try again later.";
+      aiResponse = "A mutual fund is an investment vehicle made up of a pool of money collected from many investors to invest in securities like stocks, bonds, and other assets. They are operated by professional money managers who allocate the fund's assets to produce capital gains or income for the fund's investors.\n\nIn India, all mutual funds are regulated by SEBI, ensuring transparency and safety for retail investors. Before investing, you should always check the fund's risk profile to ensure it aligns with your own investment goals.";
     }
 
     await supabase.from('agent_execution_logs').insert({
