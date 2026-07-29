@@ -7,6 +7,7 @@ export function OtpVerification() {
   const navigate = useNavigate();
   const location = useLocation();
   const phone = location.state?.phone || '';
+  const email = location.state?.email || '';
   
   const [otp, setOtp] = useState(['', '', '', '', '', '']);
   const [error, setError] = useState(false);
@@ -56,23 +57,38 @@ export function OtpVerification() {
               access_token: data.session.access_token,
               refresh_token: data.session.refresh_token
             });
-            navigate('/onboarding/welcome');
+            navigate('/onboarding/risk-profiling');
           } else {
             setError(true);
           }
         } else {
-          const res = await fetch(`${import.meta.env.VITE_API_BASE_URL || 'http://localhost:3000/api'}/auth/verify`, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ mobile: phone, otp: otpValue })
-          });
-          const data = await res.json();
-          if (data.session) {
-            await supabase.auth.setSession({
-              access_token: data.session.access_token,
-              refresh_token: data.session.refresh_token
+          let sessionData, authError;
+          if (email) {
+            const res = await supabase.auth.verifyOtp({ email, token: otpValue, type: 'email' });
+            sessionData = res.data?.session;
+            authError = res.error;
+          } else {
+            const res = await fetch(`${import.meta.env.VITE_API_BASE_URL || 'http://localhost:3000/api'}/auth/verify`, {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({ mobile: phone, otp: otpValue })
             });
-            navigate('/onboarding/welcome');
+            const data = await res.json();
+            if (data.session) {
+              sessionData = data.session;
+              await supabase.auth.setSession({
+                access_token: data.session.access_token,
+                refresh_token: data.session.refresh_token
+              });
+            } else {
+              authError = new Error('Invalid OTP');
+            }
+          }
+          
+          if (authError) {
+            setError(true);
+          } else if (sessionData) {
+            navigate('/onboarding/risk-profiling');
           } else {
             setError(true);
           }
@@ -110,7 +126,7 @@ export function OtpVerification() {
           <h1 className="font-display-lg-mobile md:font-display-lg text-on-surface tracking-tight">Verify OTP</h1>
           <p className="font-body-lg text-on-surface-variant">
             Enter the 6-digit code sent to<br />
-            <span className="font-headline-sm text-on-surface">+91 9XXXXX1234</span>
+            <span className="font-headline-sm text-on-surface">{email ? email : (phone ? `+91 ${phone.slice(0,5)} ${phone.slice(5)}` : '+91 9XXXXX1234')}</span>
           </p>
         </div>
 

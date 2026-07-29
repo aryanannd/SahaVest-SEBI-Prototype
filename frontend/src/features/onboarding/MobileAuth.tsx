@@ -1,38 +1,69 @@
 import React, { useState } from 'react';
-import { ArrowLeft, Check, ArrowRight } from 'lucide-react';
+import { ArrowLeft, Check, ArrowRight, Mail, Phone, Loader2 } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
+import { supabase } from '../../lib/supabaseClient';
 
 export function MobileAuth() {
   const navigate = useNavigate();
+  const [authMode, setAuthMode] = useState<'mobile' | 'email'>('mobile');
   const [mobileNumber, setMobileNumber] = useState('');
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
   const [agreed, setAgreed] = useState(false);
-
+  const [authError, setAuthError] = useState('');
   const [isProcessing, setIsProcessing] = useState(false);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (agreed && mobileNumber.length >= 10) {
-      setIsProcessing(true);
-      const isMock = import.meta.env.VITE_MOCK_OTP === 'true';
-      if (isMock) {
-        navigate('/onboarding/otp', { state: { phone: mobileNumber } });
-      } else {
-        try {
-          const res = await fetch(`${import.meta.env.VITE_API_BASE_URL || 'http://localhost:3000/api'}/auth/otp`, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ mobile: mobileNumber })
-          });
-          if (res.ok) {
-            navigate('/onboarding/otp', { state: { phone: mobileNumber } });
-          } else {
-            alert('Failed to send OTP');
+    setAuthError('');
+    if (!agreed) return;
+
+    if (authMode === 'mobile') {
+      if (mobileNumber.length >= 10) {
+        setIsProcessing(true);
+        const isMock = import.meta.env.VITE_MOCK_OTP === 'true';
+        if (isMock) {
+          navigate('/onboarding/otp', { state: { phone: mobileNumber } });
+        } else {
+          try {
+            const res = await fetch(`${import.meta.env.VITE_API_BASE_URL || 'http://localhost:3000/api'}/auth/otp`, {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({ mobile: mobileNumber })
+            });
+            if (res.ok) {
+              navigate('/onboarding/otp', { state: { phone: mobileNumber } });
+            } else {
+              setAuthError('Failed to send OTP');
+            }
+          } catch (err) {
+            setAuthError('Error sending OTP');
           }
-        } catch (err) {
-          alert('Error sending OTP');
         }
+        setIsProcessing(false);
       }
-      setIsProcessing(false);
+    } else {
+      // Email Mode
+      if (email) {
+        setIsProcessing(true);
+        const isMock = import.meta.env.VITE_MOCK_OTP === 'true';
+        
+        if (isMock && email === 'demo@example.com') {
+          navigate('/onboarding/otp', { state: { email } });
+        } else {
+          try {
+            const { error } = await supabase.auth.signInWithOtp({ email });
+            if (error) {
+              setAuthError(error.message);
+            } else {
+              navigate('/onboarding/otp', { state: { email } });
+            }
+          } catch (err) {
+            setAuthError('An unexpected error occurred');
+          }
+        }
+        setIsProcessing(false);
+      }
     }
   };
 
@@ -51,33 +82,81 @@ export function MobileAuth() {
 
         {/* Header Section */}
         <header className="mt-8 md:mt-0 mb-6">
-          <h1 className="font-display-lg-mobile text-on-surface mb-2">Enter Mobile Number</h1>
-          <p className="font-body-md text-on-surface-variant">We will send an OTP for verification</p>
+          <h1 className="font-display-lg-mobile text-on-surface mb-2">
+            {authMode === 'mobile' ? 'Enter Mobile Number' : 'Enter Email Address'}
+          </h1>
+          <p className="font-body-md text-on-surface-variant">
+            {authMode === 'mobile' ? 'We will send an OTP for verification' : 'We will send a confirmation code to your email'}
+          </p>
         </header>
+
+        {/* Auth Mode Toggle */}
+        <div className="flex bg-surface-container-low p-1 rounded-lg mb-6">
+          <button
+            type="button"
+            onClick={() => setAuthMode('mobile')}
+            className={`flex-1 flex items-center justify-center gap-2 py-2 rounded-md text-sm font-medium transition-colors ${authMode === 'mobile' ? 'bg-surface text-on-surface shadow-sm' : 'text-on-surface-variant hover:text-on-surface'}`}
+          >
+            <Phone size={16} />
+            Mobile
+          </button>
+          <button
+            type="button"
+            onClick={() => setAuthMode('email')}
+            className={`flex-1 flex items-center justify-center gap-2 py-2 rounded-md text-sm font-medium transition-colors ${authMode === 'email' ? 'bg-surface text-on-surface shadow-sm' : 'text-on-surface-variant hover:text-on-surface'}`}
+          >
+            <Mail size={16} />
+            Email
+          </button>
+        </div>
+
+        {authError && (
+          <div className="mb-4 p-3 bg-error-container text-on-error-container text-sm rounded-lg">
+            {authError}
+          </div>
+        )}
 
         {/* Form Section */}
         <form className="flex-1 flex flex-col" onSubmit={handleSubmit}>
           {/* Input Group */}
-          <div className="mb-auto">
-            <label className="block font-label-md text-on-surface mb-1" htmlFor="mobile-number">Mobile Number</label>
-            <div className="relative flex items-center bg-surface-container-lowest border border-outline-variant rounded-lg focus-within:border-primary focus-within:ring-1 focus-within:ring-primary transition-shadow h-[56px] overflow-hidden">
-              <div className="flex items-center justify-center h-full px-4 bg-surface-container-low border-r border-outline-variant text-on-surface font-body-lg">
-                +91
+          <div className="mb-auto space-y-4">
+            {authMode === 'mobile' ? (
+              <div>
+                <label className="block font-label-md text-on-surface mb-1" htmlFor="mobile-number">Mobile Number</label>
+                <div className="relative flex items-center bg-surface-container-lowest border border-outline-variant rounded-lg focus-within:border-primary focus-within:ring-1 focus-within:ring-primary transition-shadow h-[56px] overflow-hidden">
+                  <div className="flex items-center justify-center h-full px-4 bg-surface-container-low border-r border-outline-variant text-on-surface font-body-lg">
+                    +91
+                  </div>
+                  <input 
+                    autoComplete="tel-national" 
+                    className="flex-1 h-full bg-transparent border-none focus:ring-0 px-4 font-body-lg text-on-surface placeholder:text-outline outline-none" 
+                    id="mobile-number" 
+                    inputMode="numeric" 
+                    maxLength={10} 
+                    pattern="[0-9]*" 
+                    placeholder="99999 99999" 
+                    required={authMode === 'mobile'} 
+                    type="tel"
+                    value={mobileNumber}
+                    onChange={(e) => setMobileNumber(e.target.value)}
+                  />
+                </div>
               </div>
-              <input 
-                autoComplete="tel-national" 
-                className="flex-1 h-full bg-transparent border-none focus:ring-0 px-4 font-body-lg text-on-surface placeholder:text-outline outline-none" 
-                id="mobile-number" 
-                inputMode="numeric" 
-                maxLength={10} 
-                pattern="[0-9]*" 
-                placeholder="99999 99999" 
-                required 
-                type="tel"
-                value={mobileNumber}
-                onChange={(e) => setMobileNumber(e.target.value)}
-              />
-            </div>
+            ) : (
+              <div>
+                <label className="block font-label-md text-on-surface mb-1" htmlFor="email-input">Email Address</label>
+                <input 
+                  autoComplete="email" 
+                  className="w-full h-[56px] bg-surface-container-lowest border border-outline-variant rounded-lg px-4 font-body-lg text-on-surface placeholder:text-outline outline-none focus:border-primary focus:ring-1 focus:ring-primary transition-shadow" 
+                  id="email-input" 
+                  type="email"
+                  placeholder="demo@example.com" 
+                  required={authMode === 'email'}
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                />
+              </div>
+            )}
           </div>
 
           {/* Bottom Actions */}
@@ -101,12 +180,18 @@ export function MobileAuth() {
 
             {/* CTA Button */}
             <button 
-              disabled={!agreed || mobileNumber.length < 10}
+              disabled={!agreed || isProcessing || (authMode === 'mobile' ? mobileNumber.length < 10 : (!email || !password))}
               className="w-full h-[56px] bg-primary text-on-primary font-headline-sm rounded-full flex items-center justify-center gap-2 hover:bg-primary/90 active:scale-[0.98] transition-all disabled:opacity-30 disabled:pointer-events-none shadow-sm" 
               type="submit"
             >
-              Send OTP
-              <ArrowRight size={20} />
+              {isProcessing ? (
+                <Loader2 size={20} className="animate-spin" />
+              ) : (
+                <>
+                  {authMode === 'mobile' ? 'Send OTP' : 'Continue'}
+                  <ArrowRight size={20} />
+                </>
+              )}
             </button>
           </div>
         </form>
