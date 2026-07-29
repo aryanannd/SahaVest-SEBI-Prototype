@@ -22,7 +22,7 @@ export function BottomNav() {
   }
 
   return (
-    <nav className="fixed md:absolute bottom-0 w-full z-50 border-t border-outline-variant bg-surface flex justify-around items-center h-[64px] px-2 pb-safe">
+    <nav className="fixed md:absolute bottom-0 w-full z-50 border-t border-outline-variant bg-surface flex justify-around items-center h-[72px] px-2 pb-safe shadow-[0_-4px_6px_-1px_rgba(0,0,0,0.05)]">
       {items.map((it) => {
         const Icon = it.icon;
         const active = currentPath.startsWith(it.id);
@@ -30,10 +30,22 @@ export function BottomNav() {
           <button 
             key={it.id} 
             onClick={() => navigate(it.id)} 
-            className={`flex flex-col items-center justify-center p-2 rounded-full active:scale-90 duration-200 ease-in-out ${active ? 'bg-secondary-container text-on-secondary-container' : 'text-on-surface-variant hover:bg-surface-container-high'}`}
+            className="group relative flex flex-col items-center justify-center w-16 h-full pt-1 pb-2 active:scale-95 transition-transform duration-200 ease-out"
           >
-            <Icon size={20} className={active ? 'fill-secondary-container' : ''} />
-            <span className="font-label-sm mt-1">{it.label}</span>
+            {/* Pill Background Indicator */}
+            <div className={`absolute top-2 w-14 h-8 rounded-full transition-all duration-300 ease-in-out ${active ? 'bg-secondary-container scale-100 opacity-100' : 'bg-transparent scale-50 opacity-0 group-hover:bg-surface-container-high group-hover:scale-100 group-hover:opacity-100'}`} />
+            
+            {/* Icon */}
+            <Icon 
+              size={24} 
+              strokeWidth={active ? 2.5 : 2}
+              className={`relative z-10 transition-colors duration-300 ${active ? 'text-on-secondary-container fill-secondary-container/50' : 'text-on-surface-variant group-hover:text-on-surface'}`} 
+            />
+            
+            {/* Label */}
+            <span className={`relative z-10 font-label-sm mt-1 transition-colors duration-300 ${active ? 'text-on-surface font-semibold' : 'text-on-surface-variant group-hover:text-on-surface'}`}>
+              {it.label}
+            </span>
           </button>
         );
       })}

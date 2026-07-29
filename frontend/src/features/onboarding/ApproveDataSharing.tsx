@@ -1,3 +1,4 @@
+import { Header } from '../../components/common/Header';
 import React from 'react';
 import { Search, UserCircle, Shield, BarChart2, Landmark, TrendingUp, CheckCircle2, Calendar, Clock, Info } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
@@ -16,9 +17,7 @@ export function ApproveDataSharing() {
         >
           <Search size={24} />
         </button>
-        <div className="font-headline-md tracking-tight text-primary">
-          SahaVest
-        </div>
+        <Header />
         <button 
           onClick={() => {}}
           className="text-on-surface-variant hover:bg-surface-container-low transition-colors active:scale-95 duration-100 p-2 rounded-full flex items-center justify-center min-w-[44px] min-h-[44px]"

@@ -1,11 +1,11 @@
 import * as Sentry from '@sentry/node';
 import { nodeProfilingIntegration } from '@sentry/profiling-node';
-import express, { Request, Response } from 'express';
+import express, { type Request, type Response } from 'express';
 import dotenv from 'dotenv';
 import cors from 'cors';
 import crypto from 'crypto';
 import { supabase } from './lib/supabase';
-import { generateAIResponse, Message } from './lib/llm';
+import { generateAIResponse, type Message } from './lib/llm';
 import { createSetuConsent, getSetuConsentStatus } from './lib/setu';
 import { portfolioSyncQueue } from './lib/queue';
 import multer from 'multer';
@@ -181,7 +181,8 @@ app.post('/api/aa/consent', async (req: Request, res: Response) => {
 
 app.get('/api/aa/consent/:id/status', async (req: Request, res: Response) => {
   try {
-    const { id } = req.params;
+    const id = typeof req.params.id === 'string' ? req.params.id : '';
+    if (!id) return res.status(400).json({ error: 'Missing id' });
     const { data, error } = await supabase.from('aa_consents').select('status, aa_provider').eq('consent_id', id).single();
     if (error || !data) return res.status(404).json({ error: 'Consent not found' });
     
@@ -937,7 +938,7 @@ app.get('/api/trust/verify-advisor/:regNo', async (req: Request, res: Response) 
       }
     };
 
-    const searchKey = regNo.toUpperCase();
+    const searchKey = typeof regNo === 'string' ? regNo.toUpperCase() : '';
 
     // If it's a 12-character string starting with INA, generate a generic valid response if not in mock db
     // This allows testing the success state for any realistic-looking ID
@@ -1057,7 +1058,7 @@ const mockIntermediaries = [
 app.get('/api/trust/verify-advisor/:regNo', async (req: Request, res: Response) => {
   try {
     const { regNo } = req.params;
-    const queryRegNo = regNo.toUpperCase().trim();
+    const queryRegNo = typeof regNo === 'string' ? regNo.toUpperCase().trim() : '';
 
     const { data, error } = await supabase
       .from('intermediaries')
@@ -1419,7 +1420,7 @@ app.post('/api/learning-progress', async (req: Request, res: Response) => {
       result = { data, error };
     }
     
-    if (result.error) return res.status(500).json({ error: 'DB Error' });
+    if (result.error || !result.data || result.data.length === 0) return res.status(500).json({ error: 'DB Error' });
     res.json({ progress: result.data[0] });
   } catch (err) {
     res.status(500).json({ error: 'Internal server error' });

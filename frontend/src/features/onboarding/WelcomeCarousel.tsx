@@ -28,12 +28,12 @@ export function WelcomeCarousel() {
     if (currentSlide < slides.length - 1) {
       setCurrentSlide(currentSlide + 1);
     } else {
-      navigate('/onboarding/kyc-consent');
+      navigate('/onboarding/account-aggregator');
     }
   };
 
   const handleSkip = () => {
-    navigate('/onboarding/kyc-consent');
+    navigate('/onboarding/account-aggregator');
   };
 
   return (

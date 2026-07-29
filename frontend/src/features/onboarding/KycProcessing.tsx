@@ -1,6 +1,7 @@
 import React, { useEffect } from 'react';
 import { Shield, CheckCircle2, Upload } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
+import { Header } from '../../components/common/Header';
 
 export function KycProcessing() {
   const navigate = useNavigate();
@@ -17,7 +18,7 @@ export function KycProcessing() {
     <div className="bg-background text-on-background h-screen flex flex-col font-sans">
       {/* Top Navigation */}
       <header className="w-full flex items-center justify-center py-6 border-b border-surface-variant bg-surface sticky top-0 z-50">
-        <div className="font-headline-md text-primary tracking-tight">SahaVest</div>
+        <Header />
       </header>
 
       {/* Main Content */}

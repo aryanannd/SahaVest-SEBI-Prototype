@@ -136,7 +136,7 @@ export function OtpVerification() {
             {[0, 1, 2, 3, 4, 5].map((index) => (
               <input 
                 key={index}
-                ref={(el) => inputRefs.current[index] = el}
+                ref={(el) => { inputRefs.current[index] = el; }}
                 aria-label={`Digit ${index + 1}`} 
                 className={`otp-input w-full h-[56px] text-center font-headline-md bg-surface rounded-lg transition-all text-on-surface outline-none border ${
                   error 

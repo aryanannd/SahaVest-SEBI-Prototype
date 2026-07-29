@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Sparkles, BadgeCheck } from 'lucide-react';
 import { supabase } from '../../lib/supabaseClient';
 import { useNavigate } from 'react-router-dom';
+import { Header } from '../../components/common/Header';
 
 const MOCK_OTP = import.meta.env.VITE_MOCK_OTP === 'true';
 const AA_LIVE = import.meta.env.VITE_AA_LIVE === 'true';
@@ -115,7 +116,7 @@ export function OnboardingFlow() {
       <div className="w-16 h-16 rounded-2xl flex items-center justify-center bg-secondary">
         <Sparkles color="#fff" size={32} />
       </div>
-      <h1 className="font-display-lg text-display-lg text-primary text-center">SahaVest</h1>
+      <Header />
       <p className="font-body-md text-on-surface-variant text-center">
         One app for every investment you make, and every risk you should know about.
       </p>

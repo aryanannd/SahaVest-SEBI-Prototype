@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { X, TrendingUp, Landmark, PersonStanding, Shield, ArrowLeft, ArrowRight } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { supabase } from '../../lib/supabaseClient';
+import { Header } from '../../components/common/Header';
 
 export function RiskProfiling() {
   const navigate = useNavigate();
@@ -18,7 +19,7 @@ export function RiskProfiling() {
           >
             <X size={24} />
           </button>
-          <span className="font-headline-md text-primary tracking-tight">SahaVest</span>
+          <Header />
           <div className="w-[44px]"></div> {/* Spacer to balance flex layout */}
         </div>
       </header>

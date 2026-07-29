@@ -1,6 +1,7 @@
 import React from 'react';
 import { Scale, Clock, X } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
+import { Header } from '../../components/common/Header';
 
 export function RiskProfileResult() {
   const navigate = useNavigate();
@@ -16,7 +17,7 @@ export function RiskProfileResult() {
           >
             <X size={24} className="text-primary" />
           </button>
-          <h1 className="font-headline-md text-primary tracking-tight">SahaVest</h1>
+          <Header />
           <div className="w-10 h-10"></div> {/* Placeholder to balance header */}
         </div>
       </header>
@@ -52,7 +53,7 @@ export function RiskProfileResult() {
           {/* Actions */}
           <div className="w-full flex flex-col space-y-4 pt-6">
             <button 
-              onClick={() => navigate('/onboarding/account-aggregator')}
+              onClick={() => navigate('/onboarding/welcome')}
               className="w-full h-[56px] rounded-lg bg-primary text-on-primary font-label-md hover:bg-on-primary-fixed-variant transition-colors active:scale-[0.98]"
             >
               Continue

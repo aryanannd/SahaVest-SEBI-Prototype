@@ -62,6 +62,13 @@ export default {
         "xl": "0.75rem",
         "full": "9999px"
       },
+      maxWidth: {
+        xs: '20rem',
+        sm: '24rem',
+        md: '28rem',
+        lg: '32rem',
+        xl: '36rem',
+      },
       spacing: {
         "lg": "24px",
         "xs": "8px",

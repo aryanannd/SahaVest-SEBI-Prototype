@@ -1,22 +1,42 @@
+import { Header } from '../../components/common/Header';
 import React from 'react';
-import { ArrowLeft, TrendingUp, Activity, PieChart, Gem, Globe2, Info } from "lucide-react";
 import { useNavigate } from 'react-router-dom';
+import { ArrowLeft, User, TrendingUp, Activity, PieChart, Gem, Globe, Info } from "lucide-react";
 
 export function ReturnsDetail() {
   const navigate = useNavigate();
 
   return (
     <div className="bg-background text-on-background min-h-screen flex flex-col font-body-md antialiased selection:bg-primary-container selection:text-on-primary-container">
-      {/* Mobile Header (Minimal Contextual) */}
+      {/* TopAppBar */}
+      <header className="bg-surface dark:bg-surface-dim text-primary dark:text-primary-fixed w-full sticky top-0 z-50 border-b border-outline-variant dark:border-outline hidden md:block">
+        <div className="flex items-center justify-between px-4 py-3 w-full max-w-7xl mx-auto h-[64px]">
+          <div className="flex items-center gap-4">
+            <button 
+              onClick={() => navigate(-1)}
+              className="p-2 rounded-full hover:bg-surface-container-low dark:hover:bg-surface-container-highest transition-colors flex items-center justify-center min-w-[44px] min-h-[44px]"
+            >
+              <ArrowLeft />
+            </button>
+            <Header />
+          </div>
+          
+          <button className="p-2 rounded-full hover:bg-surface-container-low dark:hover:bg-surface-container-highest transition-colors flex items-center justify-center min-w-[44px] min-h-[44px]">
+            <User />
+          </button>
+        </div>
+      </header>
+
+      {/* Mobile Header */}
       <header className="md:hidden flex items-center justify-between px-4 py-3 bg-surface w-full sticky top-0 z-50 border-b border-outline-variant">
         <button 
           onClick={() => navigate(-1)}
           className="p-2 -ml-2 rounded-full hover:bg-surface-container-low transition-colors flex items-center justify-center min-w-[44px] min-h-[44px]"
         >
-          <ArrowLeft className="text-on-surface text-[24px]" />
+          <ArrowLeft className="text-on-surface" />
         </button>
         <h1 className="font-headline-sm text-on-surface">Returns Detail</h1>
-        <div className="w-[44px]"></div> {/* Spacer for centering */}
+        <div className="w-[44px]"></div>
       </header>
 
       {/* Main Canvas */}
@@ -24,7 +44,7 @@ export function ReturnsDetail() {
         
         {/* Hero Section */}
         <section className="flex flex-col gap-2 md:gap-4 mb-4">
-          <h1 className="font-display-lg-mobile md:font-display-lg text-on-surface">XIRR &amp; Returns</h1>
+          <h1 className="font-display-lg-mobile md:font-display-lg text-on-surface">XIRR & Returns</h1>
           <p className="font-body-md text-on-surface-variant max-w-2xl">A detailed breakdown of your annualized performance across all invested asset classes.</p>
         </section>
 
@@ -33,15 +53,16 @@ export function ReturnsDetail() {
           
           {/* Global Portfolio Summary Card */}
           <div className="col-span-4 md:col-span-8 bg-surface-container-lowest rounded-xl border border-outline-variant shadow-sm p-6 flex flex-col md:flex-row md:items-center justify-between gap-6 relative overflow-hidden">
-            {/* Abstract visual element */}
             <div className="absolute right-0 top-0 w-64 h-64 bg-primary-fixed-dim opacity-20 rounded-full blur-3xl -translate-y-1/2 translate-x-1/3"></div>
+            
             <div className="flex flex-col gap-1 relative z-10">
               <span className="font-label-sm text-on-surface-variant uppercase tracking-wider">Total Portfolio XIRR</span>
               <div className="flex items-baseline gap-3">
                 <span className="font-display-lg-mobile md:font-display-lg text-secondary">14.82%</span>
-                <TrendingUp className="text-secondary text-[24px]" />
+                <TrendingUp className="text-secondary" size={24} />
               </div>
             </div>
+            
             <div className="flex flex-col gap-1 relative z-10 md:text-right">
               <span className="font-label-sm text-on-surface-variant uppercase tracking-wider">Absolute Returns</span>
               <div className="font-headline-md text-secondary">+₹3,42,890</div>
@@ -49,12 +70,13 @@ export function ReturnsDetail() {
           </div>
 
           {/* Asset Class Cards */}
+          
           {/* Equity Card */}
           <div className="col-span-4 md:col-span-4 bg-surface-container-lowest rounded-xl border border-outline-variant shadow-sm p-4 flex flex-col gap-4">
             <div className="flex items-center justify-between border-b border-surface-variant pb-3">
               <div className="flex items-center gap-3">
                 <div className="w-10 h-10 rounded-full bg-primary-fixed flex items-center justify-center text-on-primary-fixed">
-                  <Activity />
+                  <Activity size={20} />
                 </div>
                 <h3 className="font-headline-sm text-on-surface">Direct Equity</h3>
               </div>
@@ -76,7 +98,7 @@ export function ReturnsDetail() {
             <div className="flex items-center justify-between border-b border-surface-variant pb-3">
               <div className="flex items-center gap-3">
                 <div className="w-10 h-10 rounded-full bg-tertiary-fixed flex items-center justify-center text-on-tertiary-fixed">
-                  <PieChart />
+                  <PieChart size={20} />
                 </div>
                 <h3 className="font-headline-sm text-on-surface">Mutual Funds</h3>
               </div>
@@ -98,7 +120,7 @@ export function ReturnsDetail() {
             <div className="flex items-center justify-between border-b border-surface-variant pb-3">
               <div className="flex items-center gap-3">
                 <div className="w-10 h-10 rounded-full bg-surface-tint/20 flex items-center justify-center text-surface-tint">
-                  <Gem />
+                  <Gem size={20} />
                 </div>
                 <h3 className="font-headline-sm text-on-surface">Digital Gold (SGB)</h3>
               </div>
@@ -120,7 +142,7 @@ export function ReturnsDetail() {
             <div className="flex items-center justify-between border-b border-surface-variant pb-3">
               <div className="flex items-center gap-3">
                 <div className="w-10 h-10 rounded-full bg-error-container flex items-center justify-center text-on-error-container">
-                  <Globe2 />
+                  <Globe size={20} />
                 </div>
                 <h3 className="font-headline-sm text-on-surface">International Equity</h3>
               </div>
@@ -136,15 +158,17 @@ export function ReturnsDetail() {
               </div>
             </div>
           </div>
+
         </div>
 
         {/* Disclaimer */}
         <div className="mt-8 bg-surface-container rounded-lg p-4 flex items-start gap-3">
-          <Info className="text-outline mt-0.5" />
+          <Info className="text-outline mt-0.5 shrink-0" size={20} />
           <p className="font-label-md text-on-surface-variant">
             XIRR may be less accurate for portfolios with less than 3 months of history.
           </p>
         </div>
+
       </main>
     </div>
   );

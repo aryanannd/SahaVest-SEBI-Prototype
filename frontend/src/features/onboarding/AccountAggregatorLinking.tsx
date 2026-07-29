@@ -13,10 +13,13 @@ export function AccountAggregatorLinking() {
     const file = e.target.files?.[0];
     if (!file) return;
 
+    const password = prompt('Enter CAS Password (usually your PAN in uppercase):') || '';
+
     setUploading(true);
     const formData = new FormData();
     formData.append('casFile', file);
     formData.append('userId', 'me');
+    formData.append('password', password);
 
     try {
       const { data: { session } } = await supabase.auth.getSession();
@@ -30,13 +33,16 @@ export function AccountAggregatorLinking() {
       });
       const data = await res.json();
       if (res.ok) {
+        if (data.partialDataWarning) {
+          alert(data.partialDataWarning);
+        }
         setUploadSuccess(true);
         setTimeout(() => {
           navigate('/onboarding/linking-summary');
         }, 1500);
       } else {
         console.error('Upload failed:', data.error);
-        alert('Failed to parse CAS file.');
+        alert(data.error || 'Failed to parse CAS file.');
       }
     } catch (err) {
       console.error(err);

@@ -1,6 +1,7 @@
 import React, { useEffect } from 'react';
 import { ShieldCheck, TrendingUp, Loader2 } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
+import { Header } from '../../components/common/Header';
 
 export function SplashCover() {
   const navigate = useNavigate();
@@ -28,9 +29,7 @@ export function SplashCover() {
 
         {/* Typography */}
         <div className="space-y-3">
-          <h1 className="font-display-lg-mobile text-on-primary md:font-display-lg">
-            SahaVest
-          </h1>
+          <Header />
           <p className="font-body-md text-primary-fixed-dim max-w-sm mx-auto opacity-90">
             Ek jagah dekho, safe rehke badho
           </p>

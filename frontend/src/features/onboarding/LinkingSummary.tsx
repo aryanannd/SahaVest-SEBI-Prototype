@@ -1,3 +1,4 @@
+import { Header } from '../../components/common/Header';
 import React from 'react';
 import { Wallet, Info, CheckCircle2, AlertCircle } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
@@ -9,7 +10,7 @@ export function LinkingSummary() {
     <div className="bg-surface text-on-surface antialiased min-h-screen flex flex-col items-center">
       {/* Minimal Header for Transactional Flow */}
       <header className="w-full max-w-lg mx-auto pt-6 pb-4 px-4 flex justify-center">
-        <span className="font-headline-md text-primary tracking-tight">SahaVest</span>
+        <Header />
       </header>
 
       {/* Main Content Canvas */}

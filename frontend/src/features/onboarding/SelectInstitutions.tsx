@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { ArrowLeft, ArrowRight, Landmark, TrendingUp, PieChart, PiggyBank, UploadCloud, Loader2, CheckCircle2 } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
+import { Header } from '../../components/common/Header';
 
 export function SelectInstitutions() {
   const navigate = useNavigate();
@@ -21,11 +22,14 @@ export function SelectInstitutions() {
     const file = event.target.files?.[0];
     if (!file) return;
 
+    const password = prompt('Enter CAS Password (usually your PAN in uppercase):') || '';
+
     setUploadStatus('uploading');
     setUploadMessage('Parsing CAS document...');
 
     const formData = new FormData();
     formData.append('casFile', file);
+    formData.append('password', password);
 
     try {
       const response = await fetch('http://localhost:3000/api/portfolio/upload-cas', {
@@ -33,17 +37,23 @@ export function SelectInstitutions() {
         body: formData
       });
 
+      const data = await response.json();
+
       if (!response.ok) {
-        throw new Error('Failed to upload CAS');
+        throw new Error(data.error || 'Failed to upload CAS');
       }
 
-      const data = await response.json();
-      setUploadStatus('success');
-      setUploadMessage(`Successfully parsed ${data.inserted} holdings.`);
-    } catch (error) {
+      if (data.partialDataWarning) {
+        setUploadStatus('success');
+        setUploadMessage(data.partialDataWarning);
+      } else {
+        setUploadStatus('success');
+        setUploadMessage(`Successfully parsed ${data.inserted} holdings.`);
+      }
+    } catch (error: any) {
       console.error('Upload error:', error);
       setUploadStatus('error');
-      setUploadMessage('Failed to parse CAS document. Please try again.');
+      setUploadMessage(error.message || 'Failed to parse CAS document. Please try again.');
     }
   };
 
@@ -61,7 +71,7 @@ export function SelectInstitutions() {
         >
           <ArrowLeft size={24} />
         </button>
-        <div className="font-headline-md text-primary tracking-tight">SahaVest</div>
+        <Header />
         <div className="w-[44px]"></div> {/* Placeholder for balance */}
       </header>
 

@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
-import { Shield, Loader2, ArrowLeft } from 'lucide-react';
+import { Shield, Loader2 } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
+import { Header } from '../../components/common/Header';
 
 export function BrokerRedirect() {
   const navigate = useNavigate();
@@ -17,7 +18,7 @@ export function BrokerRedirect() {
   return (
     <div className="flex-1 flex flex-col items-center justify-center bg-surface px-6 pb-20">
       <div className="w-full max-w-sm flex flex-col items-center text-center">
-        <h1 className="font-headline-md text-primary tracking-tight mb-8">SahaVest</h1>
+        <Header />
 
         <div className="bg-surface-container-lowest rounded-xl p-6 shadow-sm border border-surface-variant w-full flex flex-col items-center">
           {redirecting ? (
