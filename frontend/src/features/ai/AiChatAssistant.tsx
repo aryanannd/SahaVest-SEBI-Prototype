@@ -6,7 +6,7 @@ import { ArrowLeft, MoreVertical, Info, Bot, GraduationCap, BadgeCheck, Trending
 export function AiChatAssistant() {
   const navigate = useNavigate();
   const [loading, setLoading] = useState(true);
-  const [messages, setMessages] = useState<{role: string, content: string, image?: string}[]>([]);
+  const [messages, setMessages] = useState<{role: string, content: string, image?: string, isError?: boolean}[]>([]);
   const [input, setInput] = useState('');
   const [imageBase64, setImageBase64] = useState<string | null>(null);
   const chatEndRef = useRef<HTMLDivElement>(null);
@@ -82,9 +82,14 @@ export function AiChatAssistant() {
         body: JSON.stringify({ message: userMsg.content, image: userMsg.image, history })
       });
       const data = await res.json();
-      setMessages(prev => [...prev, { role: 'assistant', content: data.response }]);
+      
+      if (!res.ok || data.error === true) {
+        setMessages(prev => [...prev, { role: 'assistant', content: data.message || 'AI service temporarily unavailable', isError: true }]);
+      } else {
+        setMessages(prev => [...prev, { role: 'assistant', content: data.response }]);
+      }
     } catch (err) {
-      setMessages(prev => [...prev, { role: 'assistant', content: 'Sorry, I encountered an error. Please try again.' }]);
+      setMessages(prev => [...prev, { role: 'assistant', content: 'Sorry, I encountered a network error. Please try again.', isError: true }]);
     } finally {
       setLoading(false);
     }
@@ -132,8 +137,8 @@ export function AiChatAssistant() {
                 <div className="w-8 h-8 rounded-full bg-primary-container flex items-center justify-center flex-shrink-0">
                   <Bot className="text-on-primary-container" size={18} />
                 </div>
-                <div className="bg-surface-container rounded-2xl rounded-bl-sm px-4 py-3 shadow-sm border border-outline-variant space-y-2">
-                  <p className="font-body-md text-on-surface whitespace-pre-wrap">{msg.content}</p>
+                <div className={`rounded-2xl rounded-bl-sm px-4 py-3 shadow-sm border space-y-2 ${msg.isError ? 'bg-error-container border-error text-on-error-container' : 'bg-surface-container border-outline-variant'}`}>
+                  <p className="font-body-md whitespace-pre-wrap">{msg.content}</p>
                 </div>
               </div>
             ) : (

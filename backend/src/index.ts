@@ -1060,7 +1060,8 @@ app.post('/api/ai/chat', async (req: Request, res: Response) => {
     try {
       aiResponse = await generateAIResponse(messages);
     } catch (llmError) {
-      aiResponse = "A mutual fund is an investment vehicle made up of a pool of money collected from many investors to invest in securities like stocks, bonds, and other assets. They are operated by professional money managers who allocate the fund's assets to produce capital gains or income for the fund's investors.\n\nIn India, all mutual funds are regulated by SEBI, ensuring transparency and safety for retail investors. Before investing, you should always check the fund's risk profile to ensure it aligns with your own investment goals.";
+      console.error("LLM Error in chat:", llmError);
+      return res.status(503).json({ error: true, message: "AI service temporarily unavailable" });
     }
 
     await supabase.from('agent_execution_logs').insert({
@@ -1086,7 +1087,8 @@ app.post('/api/ai/explain', async (req: Request, res: Response) => {
       const prompt = `Explain the financial concept "${topic}" in simple terms, assuming the user is looking at context: "${context}". Keep it under 50 words.`;
       aiResponse = await generateAIResponse([{ role: "user", content: prompt }]);
     } catch (err) {
-      aiResponse = "Explanation unavailable.";
+      console.error("LLM Error in explain:", err);
+      return res.status(503).json({ error: true, message: "AI service temporarily unavailable" });
     }
     res.json({ explanation: aiResponse });
   } catch (err) {
