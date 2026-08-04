@@ -1619,6 +1619,90 @@ app.get('/api/compliance/audit/me', async (req: Request, res: Response) => {
 // 8. Profile & Settings Endpoints
 // ==========================================
 
+// Real Consent Management - reads from aa_consents table
+app.get('/api/compliance/consents/me', async (req: Request, res: Response) => {
+  try {
+    let userId = '716691b9-939e-4118-aafb-9246a3923250';
+    const authHeader = req.headers.authorization;
+    if (authHeader) {
+      const token = authHeader.replace('Bearer ', '');
+      const { data: { user } } = await supabase.auth.getUser(token);
+      if (user) userId = user.id;
+    }
+
+    const { data, error } = await supabase
+      .from('aa_consents')
+      .select('*')
+      .eq('user_id', userId)
+      .order('created_at', { ascending: false });
+
+    if (error) {
+      console.error('Failed to fetch consents:', error);
+      return res.status(500).json({ error: 'Failed to fetch consents', detail: error.message });
+    }
+
+    const consents = (data || []).map(c => ({
+      id: c.id,
+      consent_id: c.consent_id,
+      entity: c.aa_provider || 'Account Aggregator',
+      purpose: c.purpose || 'Portfolio data aggregation',
+      fip_list: c.fip_list || [],
+      data_requested: c.data_requested || c.data_types || [],
+      status: c.status || 'PENDING',
+      valid_from: c.valid_from,
+      expiry: c.valid_till,
+      revoked_at: c.revoked_at,
+      created_at: c.created_at
+    }));
+
+    res.json({ consents });
+  } catch (err) {
+    res.status(500).json({ error: 'Internal server error' });
+  }
+});
+
+app.patch('/api/compliance/consents/:consentId/revoke', async (req: Request, res: Response) => {
+  try {
+    const { consentId } = req.params;
+    let userId = '716691b9-939e-4118-aafb-9246a3923250';
+    const authHeader = req.headers.authorization;
+    if (authHeader) {
+      const token = authHeader.replace('Bearer ', '');
+      const { data: { user } } = await supabase.auth.getUser(token);
+      if (user) userId = user.id;
+    }
+
+    const { data, error } = await supabase
+      .from('aa_consents')
+      .update({ status: 'Revoked', revoked_at: new Date().toISOString() })
+      .eq('consent_id', consentId)
+      .eq('user_id', userId)
+      .select()
+      .single();
+
+    if (error || !data) {
+      console.error('Failed to revoke consent:', error);
+      return res.status(404).json({ error: 'Consent not found or already revoked' });
+    }
+
+    // Write to audit log
+    const auditHash = crypto.createHash('sha256')
+      .update(JSON.stringify({ user_id: userId, consent_id: consentId, action: 'REVOKE', revoked_at: new Date().toISOString() }))
+      .digest('hex');
+    await supabase.from('audit_log').insert({
+      user_id: userId,
+      ref_type: 'AA_CONSENT_REVOKE',
+      ref_id: data.id || null,
+      content_hash: auditHash,
+      blockchain_tx_id: null
+    });
+
+    res.json({ success: true, consent_id: consentId, status: 'Revoked', revoked_at: data.revoked_at });
+  } catch (err) {
+    res.status(500).json({ error: 'Internal server error' });
+  }
+});
+
 app.get('/api/profile/me', async (req: Request, res: Response) => {
   try {
     let userId = '716691b9-939e-4118-aafb-9246a3923250';
