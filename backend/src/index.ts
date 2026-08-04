@@ -643,19 +643,31 @@ app.get('/api/portfolio/exposure/me', async (req: Request, res: Response) => {
 app.post('/api/trade/intent', async (req: Request, res: Response) => {
   try {
     const { holding_id, txn_type, amount, units } = req.body;
-    const authHeader = req.headers.authorization;
     let userId = '716691b9-939e-4118-aafb-9246a3923250';
+    const authHeader = req.headers.authorization;
     if (authHeader) {
       const token = authHeader.replace('Bearer ', '');
       const { data: { user } } = await supabase.auth.getUser(token);
       if (user) userId = user.id;
     }
 
-    // Insert trade intent into db for auditing (mock)
-    console.log(`[TRADE INTENT] User ${userId} wants to ${txn_type} ${units} units of ${holding_id} for ${amount}`);
-    
-    // In a real app, this would return a broker-specific redirect URL
-    res.json({ redirect_url: true, broker: 'zerodha', intent_id: 'INT123456' });
+    const { data, error } = await supabase.from('transactions').insert({
+      user_id: userId,
+      holding_id: holding_id || null,
+      txn_type: txn_type || 'buy',
+      amount: amount || 0,
+      units: units || 0,
+      source: 'SahaVest Intent',
+      txn_date: new Date().toISOString()
+    }).select();
+
+    if (error) {
+      console.error('[TRADE INTENT] DB insert error:', error);
+      return res.status(500).json({ error: 'Failed to record trade intent' });
+    }
+
+    console.log(`[TRADE INTENT] Recorded: user=${userId}, type=${txn_type}, units=${units}, holding=${holding_id}`);
+    res.json({ success: true, redirect_url: 'https://broker.example.com/checkout/12345', intent: data[0] });
   } catch (err) {
     res.status(500).json({ error: 'Internal server error' });
   }
@@ -1211,51 +1223,6 @@ app.get('/api/compliance/audit-trail/:userId', async (req: Request, res: Respons
   }
 });
 
-app.post('/api/compliance/grievance', async (req: Request, res: Response) => {
-  try {
-    const { category, description, brokerName } = req.body;
-    
-    let userId = '716691b9-939e-4118-aafb-9246a3923250';
-    const authHeader = req.headers.authorization;
-    if (authHeader) {
-      const token = authHeader.replace('Bearer ', '');
-      const { data: { user } } = await supabase.auth.getUser(token);
-      if (user) userId = user.id;
-    }
-
-    const mockScoresRef = `SCORES-${Math.floor(Math.random() * 1000000)}`;
-
-    const { data: grievanceData, error } = await supabase.from('grievances').insert([{
-      user_id: userId,
-      scores_ref_id: mockScoresRef,
-      category,
-      status: 'submitted'
-    }]).select('id').single();
-
-    if (error) {
-      console.warn('Failed to save grievance to Supabase, proceeding with mock response.', error);
-    }
-
-    // Fix 10: Write to audit_log for every grievance filing
-    const auditHash = crypto.createHash('sha256')
-      .update(JSON.stringify({ user_id: userId, category, scores_ref_id: mockScoresRef, filed_at: new Date().toISOString() }))
-      .digest('hex');
-    const { error: auditError } = await supabase.from('audit_log').insert({
-      user_id: userId,
-      ref_type: 'GRIEVANCE',
-      ref_id: grievanceData?.id || null,
-      content_hash: auditHash,
-      blockchain_tx_id: null
-    });
-    if (auditError) console.error('Failed to write grievance audit log:', auditError);
-
-    res.status(201).json({ message: 'Grievance filed successfully', refId: mockScoresRef });
-  } catch (error) {
-    console.error('Grievance error:', error);
-    res.status(500).json({ error: 'Internal server error' });
-  }
-});
-
 app.get('/api/compliance/grievance/:userId', async (req: Request, res: Response) => {
   try {
     const { userId } = req.params;
@@ -1289,43 +1256,6 @@ app.get('/api/compliance/grievance/:userId', async (req: Request, res: Response)
     res.json({ grievances: data });
   } catch (error) {
     console.error("Grievance fetch error:", error);
-    res.status(500).json({ error: 'Internal server error' });
-  }
-});
-
-// ==========================================
-// 4. Trade Execution
-// ==========================================
-
-app.post('/api/trade/intent', async (req: Request, res: Response) => {
-  try {
-    const { holding_id, txn_type, amount, units } = req.body;
-    let userId = '716691b9-939e-4118-aafb-9246a3923250';
-    const authHeader = req.headers.authorization;
-    if (authHeader) {
-      const token = authHeader.replace('Bearer ', '');
-      const { data: { user } } = await supabase.auth.getUser(token);
-      if (user) userId = user.id;
-    }
-
-    const { data, error } = await supabase.from('transactions').insert({
-      user_id: userId,
-      holding_id: holding_id || null,
-      txn_type: txn_type || 'buy',
-      amount: amount || 0,
-      units: units || 0,
-      source: 'SahaVest Intent',
-      txn_date: new Date().toISOString()
-    }).select();
-
-    if (error) {
-      console.error("Trade intent error:", error);
-      return res.status(500).json({ error: 'Failed to record trade intent' });
-    }
-
-    // Return a mock redirect URL to the broker
-    res.json({ success: true, redirect_url: 'https://broker.example.com/checkout/12345', intent: data[0] });
-  } catch (err) {
     res.status(500).json({ error: 'Internal server error' });
   }
 });
@@ -1683,44 +1613,7 @@ app.get('/api/compliance/audit/me', async (req: Request, res: Response) => {
   }
 });
 
-app.get('/api/compliance/grievances/me', async (req: Request, res: Response) => {
-  try {
-    res.json({
-      grievances: [
-        { id: '1', scores_ref_id: 'GRV-2023-001', category: 'Trade execution delay', status: 'RESOLVED', filed_at: '2023-11-10T10:00:00Z', broker_name: 'Zerodha' },
-        { id: '2', scores_ref_id: 'GRV-2024-002', category: 'Dividend not credited', status: 'IN_PROGRESS', filed_at: new Date().toISOString(), broker_name: 'Groww' }
-      ]
-    });
-  } catch (err) {
-    res.status(500).json({ error: 'Internal server error' });
-  }
-});
 
-app.post('/api/compliance/grievance', async (req: Request, res: Response) => {
-  try {
-    const { subject, description, entity } = req.body;
-    res.json({
-      success: true,
-      tracking_id: `GRV-${new Date().getFullYear()}-${Math.floor(Math.random() * 1000)}`,
-      status: 'Submitted'
-    });
-  } catch (err) {
-    res.status(500).json({ error: 'Internal server error' });
-  }
-});
-
-app.get('/api/compliance/consents/me', async (req: Request, res: Response) => {
-  try {
-    res.json({
-      consents: [
-        { id: 'con-1', purpose: 'Account Aggregator Data Fetch', entity: 'Setu AA', status: 'Active', expiry: '2027-01-01T00:00:00Z' },
-        { id: 'con-2', purpose: 'Marketing Communications', entity: 'SahaVest', status: 'Revoked', expiry: null }
-      ]
-    });
-  } catch (err) {
-    res.status(500).json({ error: 'Internal server error' });
-  }
-});
 
 // ==========================================
 // 8. Profile & Settings Endpoints
