@@ -651,6 +651,28 @@ app.post('/api/trade/intent', async (req: Request, res: Response) => {
       if (user) userId = user.id;
     }
 
+    // Determine risk of the holding (mock logic for demo)
+    const isHighRiskHolding = holding_id && holding_id.includes('OPTION') || holding_id.includes('FUT') || holding_id === 'CRYPTO';
+    // For demo purposes, we can assume a specific test symbol is high risk, e.g., 'HIGHRISK' or just randomly if amount is very high
+    const impliedRisk = (amount > 100000) ? 'Aggressive' : 'Moderate'; // basic heuristic
+
+    const { data: profile } = await supabase.from('users').select('risk_profile').eq('id', userId).single();
+    const userRiskProfile = profile?.risk_profile || 'Moderate';
+    
+    // Mismatch condition: User is Conservative but order is Aggressive
+    const riskMismatch = userRiskProfile === 'Conservative' && impliedRisk === 'Aggressive';
+
+    if (req.body.ignore_suitability !== true && riskMismatch) {
+      return res.json({
+        success: false,
+        suitability_nudge: {
+          user_profile: userRiskProfile,
+          order_risk: impliedRisk,
+          message: `This trade is categorized as High Risk, while your profile is set to ${userRiskProfile}. Proceeding may lead to higher volatility than your stated preference.`
+        }
+      });
+    }
+
     const { data, error } = await supabase.from('transactions').insert({
       user_id: userId,
       holding_id: holding_id || null,

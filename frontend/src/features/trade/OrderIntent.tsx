@@ -1,6 +1,6 @@
 import { Header } from '../../components/common/Header';
 import React, { useState } from 'react';
-import { ArrowLeft, Landmark, Info, Shield, ExternalLink, Loader2 } from 'lucide-react';
+import { ArrowLeft, Landmark, Info, Shield, ExternalLink, Loader2, AlertTriangle } from 'lucide-react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { supabase } from '../../lib/supabaseClient';
 
@@ -9,6 +9,7 @@ export function OrderIntent() {
   const location = useLocation();
   const [loading, setLoading] = useState(false);
   const [quantity, setQuantity] = useState(25);
+  const [nudge, setNudge] = useState<any>(null);
 
   const state = location.state || {
     holding_id: 'HDFCBANK',
@@ -17,7 +18,7 @@ export function OrderIntent() {
     price: 1450.00
   };
 
-  const handleContinue = async () => {
+  const handleContinue = async (ignoreSuitability = false) => {
     setLoading(true);
     try {
       const { data: { session } } = await supabase.auth.getSession();
@@ -31,10 +32,15 @@ export function OrderIntent() {
           holding_id: state.holding_id,
           txn_type: state.txn_type,
           amount: quantity * state.price,
-          units: quantity
+          units: quantity,
+          ignore_suitability: ignoreSuitability
         })
       });
       const data = await res.json();
+      if (data.suitability_nudge) {
+        setNudge(data.suitability_nudge);
+        return;
+      }
       if (data.redirect_url) {
         navigate('/trade/redirect');
       }
@@ -135,7 +141,7 @@ export function OrderIntent() {
         {/* Action Area */}
         <div className="w-full mt-auto mb-6">
           <button 
-            onClick={handleContinue}
+            onClick={() => handleContinue(false)}
             disabled={loading}
             className="w-full h-[56px] bg-primary text-on-primary font-headline-sm rounded-lg flex items-center justify-center gap-2 hover:bg-primary/90 active:scale-[0.98] transition-all shadow-sm"
           >
@@ -151,6 +157,38 @@ export function OrderIntent() {
         </div>
       </main>
       
+      {/* Suitability Nudge Overlay */}
+      {nudge && (
+        <>
+          <div className="absolute inset-0 bg-on-background/40 z-[60] backdrop-blur-[2px]"></div>
+          <div className="absolute inset-0 z-[70] flex items-center justify-center p-4">
+            <div className="bg-surface-container-lowest w-full max-w-sm rounded-[24px] shadow-lg flex flex-col items-center p-8 text-center animate-in fade-in zoom-in duration-300">
+              <div className="w-16 h-16 rounded-full bg-tertiary-fixed flex items-center justify-center mb-6">
+                <AlertTriangle size={32} className="text-on-tertiary-container" fill="currentColor" />
+              </div>
+              <h2 className="font-headline-md text-on-background mb-3">Risk Profile Mismatch</h2>
+              <p className="font-body-md text-on-surface-variant mb-8">
+                {nudge.message}
+              </p>
+              <div className="w-full flex flex-col gap-3">
+                <button 
+                  onClick={() => navigate('/onboarding/risk-profiling')}
+                  className="w-full min-h-[48px] bg-primary text-on-primary font-label-md rounded-full hover:bg-primary-container transition-colors duration-200 active:scale-[0.98]"
+                >
+                  Review Risk Profile
+                </button>
+                <button 
+                  onClick={() => { setNudge(null); handleContinue(true); }}
+                  className="w-full min-h-[48px] bg-transparent border border-outline text-primary font-label-md rounded-full hover:bg-surface-container-low transition-colors duration-200 active:scale-[0.98]"
+                >
+                  Proceed Anyway
+                </button>
+              </div>
+            </div>
+          </div>
+        </>
+      )}
+
       {/* Bottom Nav & FAB intentionally suppressed for Transactional Flow */}
     </div>
   );
