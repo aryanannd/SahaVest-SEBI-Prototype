@@ -1114,7 +1114,38 @@ app.post('/api/ai/explain', async (req: Request, res: Response) => {
   }
 });
 
-// Mock fallback data for SEBI Registry
+// Real agent execution logs for Explainability Panel
+app.get('/api/agent-logs/me', async (req: Request, res: Response) => {
+  try {
+    let userId = '716691b9-939e-4118-aafb-9246a3923250';
+    const authHeader = req.headers.authorization;
+    if (authHeader) {
+      const token = authHeader.replace('Bearer ', '');
+      const { data: { user } } = await supabase.auth.getUser(token);
+      if (user) userId = user.id;
+    }
+
+    const limit = parseInt(req.query.limit as string) || 20;
+
+    const { data, error } = await supabase
+      .from('agent_execution_logs')
+      .select('id, pipeline_run_id, agent_name, input_ref, output_ref, confidence, latency_ms, status, created_at')
+      .eq('user_id', userId)
+      .order('created_at', { ascending: false })
+      .limit(limit);
+
+    if (error) {
+      console.error('Failed to fetch agent logs:', error);
+      return res.status(500).json({ error: 'Failed to fetch agent logs' });
+    }
+
+    res.json({ logs: data || [] });
+  } catch (err) {
+    res.status(500).json({ error: 'Internal server error' });
+  }
+});
+
+
 const mockIntermediaries = [
   { reg_no: 'INA000012345', name: 'Ravi Kumar Advisory', type: 'Independent RIA', principal_officer: 'Ravi Kumar', address: '101, Dalal Street, Mumbai', valid_till: '2027-12-31' },
   { reg_no: 'INA000098765', name: 'FinWealth Advisors', type: 'Corporate RIA', principal_officer: 'Sneha Desai', address: '402, Trade Square, Lower Parel, Mumbai', valid_till: '2026-06-30' }
