@@ -61,6 +61,12 @@ export function LearningHub() {
             <p className="font-body-md text-on-surface-variant">Master the essentials of guided prosperity.</p>
           </div>
           
+          <div className="bg-surface-container border border-outline-variant/50 rounded-lg px-3 py-2 inline-block">
+            <p className="font-label-sm text-outline">
+              🌍 Content currently available in English. Full translation rolling out.
+            </p>
+          </div>
+          
           {/* Gamification Cards (Bento style) */}
           <div className="grid grid-cols-2 gap-3">
             {/* Streak Card */}

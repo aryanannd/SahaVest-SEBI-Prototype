@@ -3,3 +3,10 @@ node_modules/
 dist/
 build/
 .DS_Store
+frontend/screenshots/
+frontend/scripts/take_screenshots.ts
+frontend/capture_screenshots.ts
+frontend/test_ai_chat.ts
+frontend/dummy.jpg
+backend/scripts/regression.ts
+backend/scripts/test_ai.ts
