@@ -73,7 +73,14 @@ export function LanguageSelection() {
         </div>
 
         {/* Sticky Bottom CTA */}
-        <div className="absolute bottom-0 w-full p-6 bg-gradient-to-t from-surface-container-lowest via-surface-container-lowest to-transparent pb-8 border-t border-outline-variant md:border-none">
+        <div className="absolute bottom-0 w-full p-6 bg-gradient-to-t from-surface-container-lowest via-surface-container-lowest to-transparent pb-8 border-t border-outline-variant md:border-none flex flex-col gap-3">
+          {selectedLang !== 'en' && (
+            <div className="bg-surface-container border border-outline-variant/50 rounded-lg px-3 py-2 text-center shadow-sm">
+              <p className="font-label-sm text-outline">
+                Full translation rolling out — currently showing English content.
+              </p>
+            </div>
+          )}
           <button 
             className="w-full bg-primary text-on-primary h-[56px] rounded-full font-label-md flex items-center justify-center hover:bg-primary/90 transition-colors shadow-sm active:scale-[0.98]"
             onClick={() => navigate('/onboarding/mobile')}

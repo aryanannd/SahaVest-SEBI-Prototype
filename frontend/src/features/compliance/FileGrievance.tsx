@@ -198,9 +198,16 @@ export function FileGrievance() {
         </div>
         
         {/* Trust Indicator */}
-        <div className="mt-6 mb-8 text-center flex items-center justify-center gap-2 text-on-surface-variant opacity-70">
-          <Lock size={16} />
-          <span className="font-label-sm">Your data is transmitted securely to SEBI APIs.</span>
+        <div className="mt-6 mb-8 text-center flex flex-col items-center justify-center gap-2 text-on-surface-variant opacity-70">
+          <div className="flex items-center gap-2">
+            <Lock size={16} />
+            <span className="font-label-sm">Your data is transmitted securely to SEBI APIs.</span>
+          </div>
+          <div className="bg-surface-container border border-outline-variant/50 rounded-lg px-3 py-1.5 mt-2">
+            <span className="font-label-sm text-outline">
+              🔬 Demo mode — Your grievance is saved securely in SahaVest's audit trail with a tracking ID. Submission to SEBI's SCORES portal requires manual/API partnership access (SEBI does not currently expose a public REST API for this).
+            </span>
+          </div>
         </div>
       </main>
     </div>

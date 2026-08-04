@@ -33,6 +33,9 @@ export function IdentityConsent() {
             <p className="font-body-md text-on-surface-variant">
               SahaVest requires access to your official documents to complete your KYC securely.
             </p>
+            <p className="font-label-sm text-outline mt-2 bg-surface-container px-3 py-1.5 rounded-full inline-block">
+              🔬 Demo verification — production requires DigiLocker / CERSAI / NSDL partnership
+            </p>
           </div>
 
           {/* Content Section */}
@@ -103,6 +106,9 @@ export function IdentityConsent() {
             <div className="text-center mt-2">
               <a className="font-label-sm text-primary hover:underline" href="#">Privacy Policy</a>
             </div>
+            <p className="font-label-sm text-outline text-center mt-1">
+              PAN &amp; Aadhaar verification simulated for demo. Real integration pending DigiLocker partnership.
+            </p>
           </div>
           
         </div>

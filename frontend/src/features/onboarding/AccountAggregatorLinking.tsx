@@ -100,6 +100,11 @@ export function AccountAggregatorLinking() {
           <p className="font-body-md text-on-surface-variant mb-6 px-2">
             SahaVest uses the RBI-regulated Account Aggregator (AA) framework. It is read-only and ensures you stay in control of your data.
           </p>
+          <div className="bg-surface-container border border-outline-variant/50 rounded-lg px-4 py-2 mb-6 mx-4 inline-block">
+            <p className="font-label-sm text-outline text-center">
+              🔬 Demo mode — sample account data illustrates the Account Aggregator flow. Production requires live AA-TSP (Setu) sandbox certification.
+            </p>
+          </div>
           <div className="flex items-center justify-center space-x-2 text-secondary mb-8 bg-secondary-container/20 py-2 px-4 rounded-full inline-flex self-center">
             <Shield size={18} className="fill-current" />
             <span className="font-label-md text-on-secondary-container">Bank-Grade Security</span>

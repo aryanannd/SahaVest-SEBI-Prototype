@@ -47,12 +47,17 @@ export function KycProcessing() {
         </p>
 
         {/* Reassurance Banner */}
-        <div className="bg-surface-container-low border border-outline-variant rounded-xl p-4 flex items-start gap-4 mb-8 w-full text-left shadow-sm">
+        <div className="bg-surface-container-low border border-outline-variant rounded-xl p-4 flex items-start gap-4 mb-4 w-full text-left shadow-sm">
           <CheckCircle2 className="text-secondary mt-1" size={24} />
           <div>
-            <p className="font-label-md text-on-surface mb-1">Secure & Compliant</p>
+            <p className="font-label-md text-on-surface mb-1">Secure &amp; Compliant</p>
             <p className="font-body-md text-on-surface-variant">SahaVest is safe and uses RBI-regulated protocols for all data verification.</p>
           </div>
+        </div>
+        <div className="bg-surface-container border border-outline-variant/50 rounded-lg px-4 py-2 mb-8 w-full">
+          <p className="font-label-sm text-outline text-center">
+            🔬 Demo mode — production eKYC requires DigiLocker / CKYC (CERSAI) / NSDL PAN verification partnership
+          </p>
         </div>
       </main>
 

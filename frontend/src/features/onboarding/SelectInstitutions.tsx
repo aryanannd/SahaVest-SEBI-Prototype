@@ -185,29 +185,30 @@ export function SelectInstitutions() {
             </div>
           </section>
 
-          {/* Category: Retirement */}
           <section>
             <h2 className="font-label-md text-on-surface-variant uppercase tracking-wider mb-3 px-2">Retirement & Pension</h2>
             <div className="bg-surface-container-lowest rounded-xl border border-outline-variant shadow-sm overflow-hidden">
-              <div className="flex items-center justify-between p-4 border-b border-outline-variant last:border-b-0">
+              <div className="flex items-center justify-between p-4">
                 <div className="flex items-center gap-4">
-                  <div className="w-12 h-12 bg-surface-container flex items-center justify-center rounded-lg">
-                    <PiggyBank size={24} className="text-primary fill-current" />
+                  <div className="w-12 h-12 bg-surface-container flex items-center justify-center rounded-lg opacity-60">
+                    <PiggyBank size={24} className="text-on-surface-variant" />
                   </div>
                   <div>
                     <h3 className="font-headline-sm text-on-surface">NPS (KFintech)</h3>
                     <p className="font-body-md text-on-surface-variant">National Pension System</p>
+                    <p className="font-label-sm text-outline mt-0.5">Coming soon — requires PFRDA-CRA partnership</p>
                   </div>
                 </div>
-                <div className="relative inline-block w-12 mr-2 align-middle select-none transition duration-200 ease-in">
+                <div className="relative inline-block w-12 mr-2 align-middle select-none opacity-40 pointer-events-none" title="Coming soon">
                   <input 
                     type="checkbox" 
                     id="nps-toggle" 
-                    className="toggle-checkbox absolute block w-6 h-6 rounded-full bg-white border-4 appearance-none cursor-pointer z-10 top-0 left-0 transition-transform duration-200 ease-in-out border-outline-variant checked:border-primary checked:right-0 checked:translate-x-full" 
-                    checked={selections.nps}
-                    onChange={() => handleToggle('nps')}
+                    className="toggle-checkbox absolute block w-6 h-6 rounded-full bg-white border-4 appearance-none cursor-not-allowed z-10 top-0 left-0" 
+                    checked={false}
+                    disabled
+                    onChange={() => {}}
                   />
-                  <label htmlFor="nps-toggle" className={`toggle-label block overflow-hidden h-6 rounded-full cursor-pointer transition-colors duration-200 ease-in-out ${selections.nps ? 'bg-primary' : 'bg-surface-variant'}`}></label>
+                  <label htmlFor="nps-toggle" className="toggle-label block overflow-hidden h-6 rounded-full bg-surface-variant cursor-not-allowed"></label>
                 </div>
               </div>
             </div>

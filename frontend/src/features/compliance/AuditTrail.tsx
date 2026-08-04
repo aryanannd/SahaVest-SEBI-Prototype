@@ -60,6 +60,11 @@ export function AuditTrail() {
         <div className="mb-6">
           <h2 className="font-display-lg-mobile md:font-display-lg text-primary mb-2">Audit Trail</h2>
           <p className="font-body-md text-on-surface-variant">A verifiable log of your AI-generated recommendations and advisory interactions, securely hashed.</p>
+          <div className="bg-surface-container border border-outline-variant/50 rounded-lg px-3 py-2 mt-3 inline-block">
+            <p className="font-label-sm text-outline text-left">
+              Cryptographic hash generated and stored ✅ · On-chain anchoring: pending infrastructure partnership.
+            </p>
+          </div>
         </div>
         
         {/* Filter/Controls (Optional) */}

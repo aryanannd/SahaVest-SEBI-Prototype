@@ -72,7 +72,7 @@ export function TaxSummary() {
         <div className="bg-surface-container-low border border-outline-variant rounded-lg p-4 flex items-start gap-3">
           <Info className="text-outline mt-1 shrink-0" size={20} />
           <p className="font-body-md text-on-surface-variant">
-            Data is for informational purposes only. Please consult a Chartered Accountant for tax filing. Realized gains denote actual booked profits/losses, while unrealized represents current market estimates.
+            <strong>Illustrative estimate — consult a CA for accurate tax filing.</strong> Realized gains denote actual booked profits/losses, while unrealized represents current market estimates.
           </p>
         </div>
 
