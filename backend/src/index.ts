@@ -814,23 +814,29 @@ app.post('/api/compliance/grievance', async (req: Request, res: Response) => {
       .single();
 
     if (error) {
-      console.warn('Failed to save grievance:', error);
+      // HONEST FAILURE: DB insert failed — return real error, not fake refId
+      console.error('[GRIEVANCE] DB insert failed:', error);
+      return res.status(503).json({
+        error: true,
+        message: 'Failed to file grievance. Database unavailable. Please try again.',
+        detail: error.message
+      });
     }
 
-    // Fix 10: Write to audit_log for every grievance filing
+    // Write to audit_log only if grievance was actually saved
     const auditHash = crypto.createHash('sha256')
       .update(JSON.stringify({ user_id: userId, category, scores_ref_id: mockScoresRef, filed_at: new Date().toISOString() }))
       .digest('hex');
     const { error: auditError } = await supabase.from('audit_log').insert({
       user_id: userId,
       ref_type: 'GRIEVANCE',
-      ref_id: grievanceData?.id || null,
+      ref_id: grievanceData.id,
       content_hash: auditHash,
       blockchain_tx_id: null
     });
     if (auditError) console.error('Failed to write grievance audit log:', auditError);
 
-    res.json({ id: grievanceData?.id || mockScoresRef, status: 'submitted', filed_at: new Date().toISOString(), refId: mockScoresRef });
+    res.json({ id: grievanceData.id, status: 'submitted', filed_at: new Date().toISOString(), refId: mockScoresRef });
   } catch (err) {
     console.error(err);
     res.status(500).json({ error: 'Internal server error' });
