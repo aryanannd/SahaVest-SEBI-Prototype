@@ -1534,56 +1534,151 @@ app.get('/api/trust/score', async (req: Request, res: Response) => {
       if (user) userId = user.id;
     }
 
-    const entityName = 'AlphaTech Solutions Pvt Ltd';
-    const score = 85;
-    const riskCategory = score >= 70 ? 'LOW_RISK' : score >= 40 ? 'MEDIUM_RISK' : 'HIGH_RISK';
-    const scoreBreakdown = {
-      registration: 'Verified',
-      regulatory_fines: 'None in last 5 years',
-      community_sentiment: 'Positive'
+    // Accept entity from query param (entity name or reg number)
+    const rawEntity = (req.query.entity as string) || (req.query.regNo as string) || '';
+    const entityName = rawEntity.trim() || 'Unknown Entity';
+    const searchKey = entityName.toUpperCase().trim();
+
+    // ======================================================
+    // SEBI Registry (same data as verify-advisor, extended)
+    // ======================================================
+    const sebiRegistry: Record<string, any> = {
+      'INA000012345': { name: 'Ravi Kumar Advisory', type: 'Individual RIA', valid_till: '2028-12-31', compliant: true },
+      'INA000098765': { name: 'FinWealth Advisors', type: 'Corporate RIA', valid_till: '2027-05-15', compliant: true },
+      'INA000054321': { name: 'Sneha Desai', type: 'Individual RIA', valid_till: '2029-01-20', compliant: true },
     };
+    // Also support name-based lookups
+    const registryByName: Record<string, any> = {
+      'FINWEALTH ADVISORS': { ...sebiRegistry['INA000098765'], reg_no: 'INA000098765' },
+      'RAVI KUMAR ADVISORY': { ...sebiRegistry['INA000012345'], reg_no: 'INA000012345' },
+      'SNEHA DESAI': { ...sebiRegistry['INA000054321'], reg_no: 'INA000054321' },
+      // Known problem entities
+      'ALPHA PROFIT SOLUTIONS': null,  // Unregistered — known scam signals
+      'QUICK GAINS INDIA': null,
+    };
+
+    // ======================================================
+    // Scoring Algorithm (weighted signals)
+    // ======================================================
+    let score = 50; // baseline for unknown entity
+    let registrationStatus = 'Unverified';
+    let fineHistory = 'Unknown';
+    let communitySignal = 'Neutral';
+    let registryMatch: any = null;
+    let riskCategory = 'MEDIUM_RISK';
+
+    // Signal 1: Registry lookup (by reg_no or name)
+    const byRegNo = sebiRegistry[searchKey];
+    const byName = registryByName[searchKey];
+
+    if (byRegNo) {
+      registryMatch = byRegNo;
+      score += 35; // SEBI registered
+      registrationStatus = 'SEBI Registered (reg no match)';
+      // Check validity
+      const validTill = new Date(byRegNo.valid_till);
+      if (validTill > new Date()) {
+        score += 5; // Active registration
+        registrationStatus += ' — Active';
+      } else {
+        score -= 20; // Expired
+        registrationStatus += ' — EXPIRED';
+      }
+      fineHistory = 'None on record';
+      communitySignal = 'Positive';
+    } else if (byName !== undefined) {
+      if (byName === null) {
+        // Explicitly in our known-bad list
+        score -= 25;
+        registrationStatus = 'Unregistered — Known scam signals';
+        fineHistory = 'Regulatory action pending';
+        communitySignal = 'Negative — multiple user complaints';
+      } else {
+        registryMatch = byName;
+        score += 30;
+        registrationStatus = 'SEBI Registered (name match)';
+        fineHistory = 'None on record';
+        communitySignal = 'Positive';
+      }
+    } else {
+      // Unknown entity — partial score based on name heuristics
+      if (searchKey.includes('SEBI') || searchKey.includes('REGISTERED') || searchKey.includes('CERTIFIED')) {
+        score += 5; // Slight boost for self-labeling (not verified)
+        registrationStatus = 'Claims registration — unverified';
+      } else if (searchKey.includes('GUARANTEED') || searchKey.includes('PROFIT') || searchKey.includes('100%')) {
+        score -= 20;
+        registrationStatus = 'Unverified — suspicious naming';
+        communitySignal = 'Negative — guaranteed return claims';
+      } else {
+        registrationStatus = 'Not found in SEBI registry';
+      }
+    }
+
+    // Signal 2: Entity type penalty for generic names
+    if (entityName.length < 5) score -= 5;
+    if (entityName === 'Unknown Entity') score = 30; // Default for missing entity
+
+    // Clamp to valid range
+    score = Math.max(0, Math.min(100, score));
+
+    // Risk categorization
+    if (score >= 70) riskCategory = 'LOW_RISK';
+    else if (score >= 40) riskCategory = 'MEDIUM_RISK';
+    else riskCategory = 'HIGH_RISK';
+
+    const scoreBreakdown = {
+      registration: registrationStatus,
+      regulatory_fines: fineHistory,
+      community_sentiment: communitySignal
+    };
+
     const auditHash = crypto.createHash('sha256')
       .update(JSON.stringify({ entity: entityName, score, breakdown: scoreBreakdown, computed_at: new Date().toISOString() }))
       .digest('hex');
 
-    // Fix 8: Persist trust score to trust_scores table (append-only)
+    // Persist to trust_scores
     const { data: tsData } = await supabase.from('trust_scores').insert({
       user_id: userId,
-      entity_type: 'broker',
+      entity_type: registryMatch?.type || 'unknown',
       entity_ref: entityName,
       score,
-      confidence: 0.88,
+      confidence: registryMatch ? 0.92 : 0.55,
       risk_category: riskCategory,
       score_breakdown: scoreBreakdown,
-      weights_version: 'v1.0',
+      weights_version: 'v2.0',
       audit_hash: auditHash,
       blockchain_tx_id: null
     }).select('id').single();
 
-    // Fix 8: Also write agent_execution_logs
+    // Write agent_execution_logs
     const latency = Date.now() - startTime;
     const pipelineRunId = crypto.randomUUID();
     await supabase.from('agent_execution_logs').insert({
       user_id: userId,
       pipeline_run_id: pipelineRunId,
       agent_name: 'TrustScoreAgent',
-      input_ref: { entity: entityName, entity_type: 'broker' },
-      output_ref: { score, risk_category: riskCategory, trust_score_id: tsData?.id || null },
-      confidence: 0.88,
+      input_ref: { entity: entityName, query: req.query },
+      output_ref: { score, risk_category: riskCategory, trust_score_id: tsData?.id || null, registry_match: !!registryMatch },
+      confidence: registryMatch ? 0.92 : 0.55,
       latency_ms: latency,
       status: 'success'
     });
 
     res.json({
-      entity: { name: entityName, type: 'Broker' },
+      entity: { name: entityName, type: registryMatch?.type || 'Unknown', reg_no: registryMatch?.reg_no || null },
       score,
+      risk_category: riskCategory,
       last_updated: new Date().toISOString(),
-      breakdown: scoreBreakdown
+      breakdown: scoreBreakdown,
+      trust_score_id: tsData?.id || null
     });
   } catch (err) {
+    console.error('Trust score error:', err);
     res.status(500).json({ error: 'Internal server error' });
   }
 });
+
+
 
 
 
