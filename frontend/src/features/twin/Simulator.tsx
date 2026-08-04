@@ -1,5 +1,5 @@
 import { Header } from '../../components/common/Header';
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useEffect } from 'react';
 import { Search, User, Activity, Info, Play, ArrowLeft, CheckCircle2, Loader2 } from 'lucide-react';
 import { LineChart, Line, XAxis, YAxis, Tooltip, ResponsiveContainer, AreaChart, Area, CartesianGrid } from 'recharts';
 import { useNavigate } from 'react-router-dom';
@@ -12,13 +12,40 @@ export function Simulator() {
   const [simulated, setSimulated] = useState(false);
   const [loading, setLoading] = useState(false);
   const [apiData, setApiData] = useState<any>(null);
+  // Live portfolio corpus (fetched from same endpoint as Dashboard)
+  const [corpus, setCorpus] = useState<number>(0);
+  const [corpusLoading, setCorpusLoading] = useState(true);
 
   const navigate = useNavigate();
 
+  // Fetch real portfolio net worth on mount
+  useEffect(() => {
+    async function fetchNetWorth() {
+      try {
+        const { data: { session } } = await supabase.auth.getSession();
+        const headers: HeadersInit = {};
+        if (session) headers['Authorization'] = `Bearer ${session.access_token}`;
+        const res = await fetch('http://localhost:3000/api/portfolio/exposure/me', { headers });
+        const data = await res.json();
+        if (data.totalValue != null && data.totalValue > 0) {
+          setCorpus(Math.round(data.totalValue));
+        } else {
+          setCorpus(0);
+        }
+      } catch (err) {
+        console.error('Failed to fetch portfolio value:', err);
+        setCorpus(0);
+      } finally {
+        setCorpusLoading(false);
+      }
+    }
+    fetchNetWorth();
+  }, []);
+
   const data = useMemo(() => {
-    let current = 1450000;
-    let optCurrent = 1450000;
-    let consCurrent = 1450000;
+    let current = corpus;
+    let optCurrent = corpus;
+    let consCurrent = corpus;
     const pts = [];
     
     for (let i = 0; i <= years; i++) {
@@ -33,7 +60,8 @@ export function Simulator() {
       consCurrent = (consCurrent + (sip * 12)) * (1 + (rate - 2) / 100);
     }
     return pts;
-  }, [sip, years, rate]);
+  }, [sip, years, rate, corpus]);
+
 
   const finalValue = data[data.length - 1]?.expected || 0;
   const optFinalValue = data[data.length - 1]?.optimistic || 0;
@@ -84,7 +112,22 @@ export function Simulator() {
                     </div>
                     <div>
                       <p className="font-label-sm text-on-surface-variant uppercase tracking-wider mb-1">Current Portfolio Value</p>
-                      <p className="font-headline-sm text-on-surface">₹14,50,000</p>
+                      {corpusLoading ? (
+                        <div className="flex items-center gap-2 text-on-surface-variant">
+                          <Loader2 size={16} className="animate-spin" />
+                          <span className="font-body-md">Fetching from portfolio...</span>
+                        </div>
+                      ) : corpus > 0 ? (
+                        <div>
+                          <p className="font-headline-sm text-on-surface">{formatCrore(corpus)}</p>
+                          <p className="font-label-sm text-secondary mt-0.5">✓ Live from portfolio</p>
+                        </div>
+                      ) : (
+                        <div>
+                          <p className="font-headline-sm text-on-surface">₹0</p>
+                          <p className="font-label-sm text-outline mt-0.5">No holdings found — add holdings to see real value</p>
+                        </div>
+                      )}
                     </div>
                   </div>
                   <div className="mt-6 bg-surface-container p-3 rounded-lg flex items-start gap-3">
