@@ -65,9 +65,13 @@ export function KycProcessing() {
       <div className="w-full bg-surface-container-lowest border-t border-surface-variant p-4 md:p-6">
         <div className="max-w-md mx-auto text-center">
           <p className="font-label-sm text-outline uppercase tracking-wider mb-3">Taking too long?</p>
-          <button className="w-full h-[56px] min-h-[56px] flex items-center justify-center gap-2 rounded-full border border-outline text-on-surface hover:bg-surface-container-low transition-colors duration-200 active:scale-[0.98]">
+          <button 
+            disabled 
+            className="w-full h-[56px] min-h-[56px] flex items-center justify-center gap-2 rounded-full border border-outline text-on-surface-variant bg-surface-variant cursor-not-allowed opacity-70"
+            title="Coming soon"
+          >
             <Upload size={20} />
-            <span className="font-label-md">Try alternate KYC via Aadhaar upload</span>
+            <span className="font-label-md">Alternate KYC via Aadhaar (Coming Soon)</span>
           </button>
         </div>
       </div>
