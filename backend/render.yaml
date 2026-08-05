@@ -1,0 +1,34 @@
+services:
+  - type: web
+    name sahavest-backend
+    env: node
+    plan: free
+    buildCommand: npm install
+    startCommand: npm start
+    envVars:
+      - key: PORT
+        value: 3000
+      - key: NODE_ENV
+        value: production
+      - key: SUPABASE_URL
+        sync: false
+      - key: SUPABASE_SERVICE_ROLE_KEY
+        sync: false
+      - key: SETU_CLIENT_ID
+        sync: false
+      - key: SETU_CLIENT_SECRET
+        sync: false
+      - key: SETU_PRODUCT_INSTANCE_ID
+        sync: false
+      - key: SETU_WEBHOOK_SECRET
+        sync: false
+      - key: UPSTASH_REDIS_REST_URL
+        sync: false
+      - key: UPSTASH_REDIS_REST_TOKEN
+        sync: false
+      - key: UPSTASH_REDIS_URL
+        sync: false
+      - key: SENTRY_DSN
+        sync: false
+      - key: CORS_ORIGIN
+        value: https://sahavest.vercel.app,http://localhost:5173
