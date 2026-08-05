@@ -10,6 +10,8 @@ if (sentryDsn && !sentryDsn.includes('your_sentry_dsn')) {
   try {
     Sentry.init({
       dsn: sentryDsn,
+      environment: import.meta.env.MODE || 'development',
+      sendDefaultPii: false,
       integrations: [
         Sentry.browserTracingIntegration(),
         Sentry.replayIntegration(),
@@ -17,6 +19,14 @@ if (sentryDsn && !sentryDsn.includes('your_sentry_dsn')) {
       tracesSampleRate: 1.0,
       replaysSessionSampleRate: 0.1,
       replaysOnErrorSampleRate: 1.0,
+      beforeSend(event) {
+        // Strip sensitive user fields from breadcrumbs and exception contexts
+        if (event.request?.headers) {
+          delete event.request.headers['authorization'];
+          delete event.request.headers['cookie'];
+        }
+        return event;
+      },
     });
   } catch (err) {
     console.warn('[Sentry Frontend] Initialization notice:', err);

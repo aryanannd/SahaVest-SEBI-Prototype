@@ -16,11 +16,22 @@ import { parseCasPdf } from './lib/cas';
 dotenv.config();
 
 Sentry.init({
-  dsn: process.env.SENTRY_DSN,
+  dsn: process.env.SENTRY_DSN_BACKEND || process.env.SENTRY_DSN,
+  environment: process.env.NODE_ENV || 'development',
+  sendDefaultPii: false,
   integrations: [
     nodeProfilingIntegration(),
   ],
   tracesSampleRate: 1.0,
+  beforeSend(event) {
+    // Scrub sensitive headers & authentication tokens from traces
+    if (event.request?.headers) {
+      delete event.request.headers['authorization'];
+      delete event.request.headers['cookie'];
+      delete event.request.headers['x-setu-signature'];
+    }
+    return event;
+  },
 });
 
 const app = express();
@@ -982,6 +993,11 @@ app.post('/api/compliance/grievance', async (req: Request, res: Response) => {
     if (error) {
       // HONEST FAILURE: DB insert failed — return real error, not fake refId
       console.error('[GRIEVANCE] DB insert failed:', error);
+      Sentry.captureMessage(`[Grievance] DB insert failed: ${error.message}`, {
+        level: 'warning',
+        tags: { endpoint: '/api/compliance/grievance', type: 'honest_failure' },
+        extra: { category }
+      });
       return res.status(503).json({
         error: true,
         message: 'Failed to file grievance. Database unavailable. Please try again.',
@@ -1253,8 +1269,12 @@ app.post('/api/ai/chat', async (req: Request, res: Response) => {
     let aiResponse;
     try {
       aiResponse = await generateAIResponse(messages);
-    } catch (llmError) {
+    } catch (llmError: any) {
       console.error("LLM Error in chat:", llmError);
+      Sentry.captureMessage(`[AI Chat] LLM service unavailable: ${llmError?.message || llmError}`, {
+        level: 'warning',
+        tags: { endpoint: '/api/ai/chat', type: 'honest_failure' }
+      });
       return res.status(503).json({ error: true, message: "AI service temporarily unavailable" });
     }
 
@@ -1280,8 +1300,12 @@ app.post('/api/ai/explain', async (req: Request, res: Response) => {
     try {
       const prompt = `Explain the financial concept "${topic}" in simple terms, assuming the user is looking at context: "${context}". Keep it under 50 words.`;
       aiResponse = await generateAIResponse([{ role: "user", content: prompt }]);
-    } catch (err) {
+    } catch (err: any) {
       console.error("LLM Error in explain:", err);
+      Sentry.captureMessage(`[AI Explain] LLM service unavailable: ${err?.message || err}`, {
+        level: 'warning',
+        tags: { endpoint: '/api/ai/explain', type: 'honest_failure' }
+      });
       return res.status(503).json({ error: true, message: "AI service temporarily unavailable" });
     }
     res.json({ explanation: aiResponse });
