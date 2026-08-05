@@ -135,19 +135,19 @@ export async function getPortfolioPerformance(
 ): Promise<PortfolioPerformanceResponse> {
   const effectiveUserId = userId || '716691b9-939e-4118-aafb-9246a3923250';
 
-  // 1. Fetch user transaction records
+  // 1. Fetch user transaction records with joined holding data
   const { data: rawTransactions, error: txError } = await supabase
     .from('transactions')
-    .select('symbol, transaction_type, transaction_date, quantity, price, amount')
+    .select('*, holdings(instrument_name)')
     .eq('user_id', effectiveUserId)
-    .order('transaction_date', { ascending: true });
+    .order('txn_date', { ascending: true });
 
   const transactions = rawTransactions && rawTransactions.length > 0 ? rawTransactions : [];
 
   // Also fetch current holdings as backup/snapshot
   const { data: holdings } = await supabase
     .from('holdings')
-    .select('symbol, instrument_name, asset_class, current_value, invested_amount')
+    .select('instrument_name, asset_class, current_value, avg_cost, quantity')
     .eq('user_id', effectiveUserId);
 
   let currentNetWorth = 0;
@@ -155,13 +155,13 @@ export async function getPortfolioPerformance(
 
   if (holdings && holdings.length > 0) {
     currentNetWorth = holdings.reduce((sum, h) => sum + (Number(h.current_value) || 0), 0);
-    totalInvested = holdings.reduce((sum, h) => sum + (Number(h.invested_amount) || 0), 0);
+    totalInvested = holdings.reduce((sum, h) => sum + ((Number(h.avg_cost) || 0) * (Number(h.quantity) || 0)), 0);
   } else if (transactions.length > 0) {
-    totalInvested = transactions.reduce((sum, t) => sum + (t.transaction_type === 'BUY' ? Number(t.amount) : -Number(t.amount)), 0);
+    totalInvested = transactions.reduce((sum, t) => sum + (t.txn_type?.toLowerCase() === 'buy' || t.txn_type?.toLowerCase() === 'cas_import' ? Number(t.amount) : -Number(t.amount)), 0);
     currentNetWorth = totalInvested * 1.135; // Default modest gain if no live holdings valuation exists
   } else {
-    currentNetWorth = 1450000;
-    totalInvested = 1195000;
+    currentNetWorth = 0;
+    totalInvested = 0;
   }
 
   // 2. Fetch real NIFTY 50 benchmark candles from Stage B marketData service
@@ -170,7 +170,7 @@ export async function getPortfolioPerformance(
   const benchmarkCandles = benchmarkResult.candles && benchmarkResult.candles.length > 0 ? benchmarkResult.candles : [];
 
   // 3. Fetch real daily closing prices for all distinct symbols in transactions
-  const distinctSymbols = [...new Set(transactions.map(t => t.symbol))];
+  const distinctSymbols = [...new Set(transactions.map(t => t.holdings?.instrument_name).filter(Boolean))];
   const priceHistoryMap: Record<string, Map<string, number>> = {};
 
   for (const sym of distinctSymbols) {
@@ -205,7 +205,7 @@ export async function getPortfolioPerformance(
     const dateObj = new Date(dateStr);
 
     // Filter transactions occurring on or before dateStr
-    const pastTxs = transactions.filter(t => new Date(t.transaction_date) <= dateObj);
+    const pastTxs = transactions.filter(t => new Date(t.txn_date) <= dateObj);
 
     let dailyInvested = 0;
     let dailyPortfolioValue = 0;
@@ -213,11 +213,13 @@ export async function getPortfolioPerformance(
     const acquisitionPrices: Record<string, number> = {};
 
     for (const tx of pastTxs) {
-      const qtyDelta = tx.transaction_type === 'BUY' ? Number(tx.quantity) : -Number(tx.quantity);
-      const amtDelta = tx.transaction_type === 'BUY' ? Number(tx.amount) : -Number(tx.amount);
+      const isBuy = tx.txn_type?.toLowerCase() === 'buy' || tx.txn_type?.toLowerCase() === 'cas_import';
+      const qtyDelta = isBuy ? Number(tx.units) : -Number(tx.units);
+      const amtDelta = isBuy ? Number(tx.amount) : -Number(tx.amount);
+      const sym = tx.holdings?.instrument_name || 'UNKNOWN';
 
-      currentHoldingQuantities[tx.symbol] = (currentHoldingQuantities[tx.symbol] || 0) + qtyDelta;
-      acquisitionPrices[tx.symbol] = Number(tx.price);
+      currentHoldingQuantities[sym] = (currentHoldingQuantities[sym] || 0) + qtyDelta;
+      acquisitionPrices[sym] = Number(tx.amount) / Number(tx.units || 1); // Approximate price if missing
       dailyInvested += amtDelta;
     }
 
@@ -248,6 +250,7 @@ export async function getPortfolioPerformance(
     }
 
     // If portfolio value on earlier dates is 0 (before transactions started), anchor to dailyInvested
+
     if (dailyPortfolioValue === 0 && dailyInvested > 0) {
       dailyPortfolioValue = dailyInvested;
     }
