@@ -34,7 +34,7 @@ export function GoalsHub() {
   }, []);
 
   const getIcon = (name: string) => {
-    const l = name.toLowerCase();
+    const l = (name || '').toLowerCase();
     if (l.includes('retire')) return <Mountain size={20} />;
     if (l.includes('house') || l.includes('home')) return <Home size={20} />;
     if (l.includes('emergency')) return <ShieldAlert size={20} />;
@@ -84,7 +84,9 @@ export function GoalsHub() {
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6">
             {goals.map((goal: any) => {
-              const progress = Math.min((goal.current_amount / goal.target_amount) * 100, 100) || 0;
+              const goalLabel = goal.goal_type || goal.name || 'Unnamed Goal';  // goal_type is the DB column; name is legacy
+              const currentAmt = goal.current_amount || 0;
+              const progress = Math.min((currentAmt / goal.target_amount) * 100, 100) || 0;
               const isCompleted = progress >= 100;
               return (
                 <article 
@@ -96,9 +98,9 @@ export function GoalsHub() {
                   <div className="flex justify-between items-start">
                     <div className="flex items-center gap-3">
                       <div className="w-10 h-10 rounded-full bg-primary-container text-on-primary-container flex items-center justify-center">
-                        {getIcon(goal.name)}
+                        {getIcon(goalLabel)}
                       </div>
-                      <h3 className="font-headline-sm text-on-surface">{goal.name}</h3>
+                      <h3 className="font-headline-sm text-on-surface">{goalLabel}</h3>
                     </div>
                     <button className="text-outline hover:text-on-surface-variant p-1">
                       <MoreVertical size={20} />
@@ -106,8 +108,8 @@ export function GoalsHub() {
                   </div>
                   <div className="mt-2">
                     <div className="flex justify-between items-end mb-2">
-                      <span className="font-headline-md text-primary">₹ {goal.current_amount.toLocaleString('en-IN')}</span>
-                      <span className="font-label-md text-on-surface-variant">of ₹ {goal.target_amount.toLocaleString('en-IN')}</span>
+                      <span className="font-headline-md text-primary">₹ {currentAmt.toLocaleString('en-IN')}</span>
+                      <span className="font-label-md text-on-surface-variant">of ₹ {(goal.target_amount || 0).toLocaleString('en-IN')}</span>
                     </div>
                     <div className="w-full bg-surface-container-high rounded-full h-2.5 mb-2 overflow-hidden">
                       <div className="bg-primary h-2.5 rounded-full" style={{ width: `${progress}%` }}></div>

@@ -22,7 +22,7 @@ export function GoalDetail() {
         if (data) {
            setGoal(data);
            setFormData({
-             name: data.name || '',
+             name: data.goal_type || data.name || '',  // goal_type is the DB column; name is legacy
              target_amount: data.target_amount || '',
              target_date: data.target_date ? new Date(data.target_date).toISOString().split('T')[0] : ''
            });
