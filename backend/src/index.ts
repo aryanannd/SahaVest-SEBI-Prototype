@@ -24,6 +24,15 @@ import {
   disconnectBrokerAccount,
   KiteTokenExpiredError,
 } from './lib/kiteConnect';
+import {
+  getUpstoxLoginUrl,
+  exchangeUpstoxCode,
+  fetchUpstoxHoldings,
+  fetchUpstoxFunds,
+  saveUpstoxConnection,
+  normalizeAndStoreUpstoxHoldings,
+  UpstoxTokenExpiredError,
+} from './lib/upstoxConnect';
 dotenv.config();
 
 Sentry.init({
@@ -696,6 +705,192 @@ app.delete('/api/broker/zerodha/disconnect', async (req: Request, res: Response)
   } catch (err: any) {
     console.error('[KiteConnect] Disconnect failed:', err);
     res.status(500).json({ error: true, message: err.message || 'Failed to disconnect Zerodha' });
+  }
+});
+
+// ==========================================
+// Upstox v2 Broker Integration
+// ==========================================
+
+// 1. Get Upstox Login URL
+app.get('/api/broker/upstox/login-url', async (req: Request, res: Response) => {
+  try {
+    const loginUrl = getUpstoxLoginUrl();
+    res.json({ login_url: loginUrl });
+  } catch (err: any) {
+    console.error('[UpstoxConnect] Failed to generate login URL:', err.message);
+    res.status(500).json({ error: true, message: err.message || 'Failed to generate Upstox login URL' });
+  }
+});
+
+// 2. OAuth Callback Handler
+app.get('/api/broker/upstox/callback', async (req: Request, res: Response) => {
+  try {
+    const { code, status } = req.query as { code?: string; status?: string };
+
+    let userId = '716691b9-939e-4118-aafb-9246a3923250';
+    const authHeader = req.headers.authorization;
+    if (authHeader) {
+      const token = authHeader.replace('Bearer ', '');
+      const { data: { user } } = await supabase.auth.getUser(token);
+      if (user) userId = user.id;
+    }
+
+    if (status === 'error' || !code) {
+      console.warn('[UpstoxConnect] User denied Upstox login or missing code:', req.query);
+      return res.redirect(`http://localhost:5173/link-account?broker=upstox&status=error&message=${encodeURIComponent('Upstox authentication was cancelled or failed')}`);
+    }
+
+    // Exchange auth code for access_token (server-side only)
+    const sessionData = await exchangeUpstoxCode(code);
+
+    // Save encrypted token in DB
+    await saveUpstoxConnection({
+      userId,
+      brokerUserId: sessionData.user_id,
+      accessToken: sessionData.access_token,
+    });
+
+    // Initial holdings sync
+    try {
+      const holdings = await fetchUpstoxHoldings(sessionData.access_token);
+      const funds = await fetchUpstoxFunds(sessionData.access_token);
+      await normalizeAndStoreUpstoxHoldings({
+        userId,
+        brokerUserId: sessionData.user_id,
+        holdings,
+        funds,
+      });
+    } catch (syncErr: any) {
+      console.warn('[UpstoxConnect] Initial portfolio sync warning:', syncErr.message);
+    }
+
+    return res.redirect('http://localhost:5173/link-account?broker=upstox&status=connected');
+  } catch (err: any) {
+    console.error('[UpstoxConnect] OAuth callback failed:', err);
+    return res.redirect(`http://localhost:5173/link-account?broker=upstox&status=error&message=${encodeURIComponent(err.message || 'Token exchange failed')}`);
+  }
+});
+
+// 3. Upstox Connection Status
+app.get('/api/broker/upstox/status', async (req: Request, res: Response) => {
+  try {
+    let userId = '716691b9-939e-4118-aafb-9246a3923250';
+    const authHeader = req.headers.authorization;
+    if (authHeader) {
+      const token = authHeader.replace('Bearer ', '');
+      const { data: { user } } = await supabase.auth.getUser(token);
+      if (user) userId = user.id;
+    }
+
+    const { data: conn } = await supabase
+      .from('broker_connections')
+      .select('id, broker, broker_user_id, status, connected_at, last_synced_at, token_expires_at')
+      .eq('user_id', userId)
+      .eq('broker', 'upstox')
+      .maybeSingle();
+
+    if (!conn) {
+      return res.json({ connected: false, status: 'NOT_CONNECTED' });
+    }
+
+    const isExpired = conn.token_expires_at ? new Date(conn.token_expires_at).getTime() < Date.now() : false;
+    const effectiveStatus = isExpired && conn.status === 'ACTIVE' ? 'EXPIRED' : conn.status;
+
+    return res.json({
+      connected: conn.status === 'ACTIVE' && !isExpired,
+      status: effectiveStatus,
+      broker_user_id: conn.broker_user_id,
+      connected_at: conn.connected_at,
+      last_synced_at: conn.last_synced_at,
+      token_expires_at: conn.token_expires_at,
+    });
+  } catch (err) {
+    console.error('[UpstoxConnect] Status check error:', err);
+    res.status(500).json({ error: 'Internal server error' });
+  }
+});
+
+// 4. Trigger Portfolio Sync from Upstox
+app.post('/api/broker/upstox/sync', async (req: Request, res: Response) => {
+  try {
+    let userId = '716691b9-939e-4118-aafb-9246a3923250';
+    const authHeader = req.headers.authorization;
+    if (authHeader) {
+      const token = authHeader.replace('Bearer ', '');
+      const { data: { user } } = await supabase.auth.getUser(token);
+      if (user) userId = user.id;
+    }
+
+    const accessToken = await getActiveBrokerToken(userId, 'upstox');
+    if (!accessToken) {
+      return res.status(401).json({
+        error: 'TOKEN_EXPIRED',
+        message: 'Your Upstox connection has expired or is not active. Please reconnect your account.',
+      });
+    }
+
+    try {
+      const holdings = await fetchUpstoxHoldings(accessToken);
+      const funds = await fetchUpstoxFunds(accessToken);
+
+      const syncResult = await normalizeAndStoreUpstoxHoldings({
+        userId,
+        holdings,
+        funds,
+      });
+
+      return res.json({
+        success: true,
+        synced_at: new Date().toISOString(),
+        holdings_count: syncResult.holdingsCount,
+        total_value: syncResult.totalPortfolioValue,
+      });
+    } catch (apiErr: any) {
+      if (apiErr instanceof UpstoxTokenExpiredError) {
+        await supabase
+          .from('broker_connections')
+          .update({ status: 'EXPIRED' })
+          .eq('user_id', userId)
+          .eq('broker', 'upstox');
+
+        return res.status(401).json({
+          error: 'TOKEN_EXPIRED',
+          message: 'Your Upstox connection has expired. Please reconnect.',
+        });
+      }
+      throw apiErr;
+    }
+  } catch (err: any) {
+    console.error('[UpstoxConnect] Sync failed:', err);
+    res.status(500).json({ error: true, message: err.message || 'Failed to sync Upstox portfolio' });
+  }
+});
+
+// 5. Disconnect Upstox Broker
+app.delete('/api/broker/upstox/disconnect', async (req: Request, res: Response) => {
+  try {
+    let userId = '716691b9-939e-4118-aafb-9246a3923250';
+    const authHeader = req.headers.authorization;
+    if (authHeader) {
+      const token = authHeader.replace('Bearer ', '');
+      const { data: { user } } = await supabase.auth.getUser(token);
+      if (user) userId = user.id;
+    }
+
+    const result = await disconnectBrokerAccount(userId, 'upstox');
+
+    // Also remove Upstox holdings
+    await supabase
+      .from('holdings')
+      .delete()
+      .eq('user_id', userId)
+      .eq('data_source', 'UPSTOX');
+
+    res.json(result);
+  } catch (err: any) {
+    console.error('[UpstoxConnect] Disconnect failed:', err);
+    res.status(500).json({ error: true, message: err.message || 'Failed to disconnect Upstox' });
   }
 });
 
