@@ -50,7 +50,7 @@ export function GoalDetail() {
            navigate('/portfolio/goals');
         } else {
            await supabase.from('goals').update({
-             name: formData.name,
+             goal_type: formData.name,  // 'name' shown in UI maps to 'goal_type' in DB
              target_amount: Number(formData.target_amount),
              target_date: formData.target_date
            }).eq('id', goalId);

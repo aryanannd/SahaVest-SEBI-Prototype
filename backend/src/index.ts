@@ -744,6 +744,7 @@ app.get('/api/portfolio/performance/me', async (req: Request, res: Response) => 
   }
 });
 
+// GOALS-HANDLER-A (real DB)
 app.get('/api/goals', async (req: Request, res: Response) => {
   try {
     const authHeader = req.headers.authorization;
@@ -760,13 +761,8 @@ app.get('/api/goals', async (req: Request, res: Response) => {
       .eq('user_id', userId);
 
     if (error) {
-      // Return mock data if table query fails
-      return res.json({
-        goals: [
-          { id: '1', name: 'Retirement Fund', target_amount: 5000000, current_amount: 1500000, target_date: '2040-01-01' },
-          { id: '2', name: 'House Downpayment', target_amount: 2000000, current_amount: 800000, target_date: '2028-06-01' }
-        ]
-      });
+      console.error('[GOALS] DB error:', error);
+      return res.status(500).json({ error: 'Failed to fetch goals' });
     }
 
     res.json({ goals: goals || [] });
@@ -777,7 +773,8 @@ app.get('/api/goals', async (req: Request, res: Response) => {
 
 app.post('/api/goals', async (req: Request, res: Response) => {
   try {
-    const { name, target_amount, target_date } = req.body;
+    // DB schema: id, user_id, goal_type, target_amount, target_date, linked_holding_ids, created_at
+    const { goal_type, name, target_amount, target_date } = req.body;
     const authHeader = req.headers.authorization;
     let userId = '716691b9-939e-4118-aafb-9246a3923250';
     if (authHeader) {
@@ -790,10 +787,9 @@ app.post('/api/goals', async (req: Request, res: Response) => {
       .from('goals')
       .insert({
         user_id: userId,
-        name,
+        goal_type: goal_type || name || 'Custom',  // accept either field
         target_amount,
-        target_date,
-        current_amount: 0
+        target_date
       })
       .select()
       .single();
@@ -1168,69 +1164,7 @@ app.get('/api/agent-logs/me', async (req: Request, res: Response) => {
 });
 
 
-const mockIntermediaries = [
-  { reg_no: 'INA000012345', name: 'Ravi Kumar Advisory', type: 'Independent RIA', principal_officer: 'Ravi Kumar', address: '101, Dalal Street, Mumbai', valid_till: '2027-12-31' },
-  { reg_no: 'INA000098765', name: 'FinWealth Advisors', type: 'Corporate RIA', principal_officer: 'Sneha Desai', address: '402, Trade Square, Lower Parel, Mumbai', valid_till: '2026-06-30' }
-];
-
-app.get('/api/trust/verify-advisor/:regNo', async (req: Request, res: Response) => {
-  try {
-    const { regNo } = req.params;
-    const queryRegNo = typeof regNo === 'string' ? regNo.toUpperCase().trim() : '';
-    const startTime = Date.now();
-
-    // Auth
-    let userId = '716691b9-939e-4118-aafb-9246a3923250';
-    const authHeader = req.headers.authorization;
-    if (authHeader) {
-      const token = authHeader.replace('Bearer ', '');
-      const { data: { user } } = await supabase.auth.getUser(token);
-      if (user) userId = user.id;
-    }
-
-    const { data, error } = await supabase
-      .from('intermediaries')
-      .select('*')
-      .eq('reg_no', queryRegNo)
-      .single();
-
-    let result: any;
-    let found = false;
-    if (error || !data) {
-      const mockMatch = mockIntermediaries.find(i => i.reg_no === queryRegNo);
-      if (mockMatch) {
-        result = mockMatch;
-        found = true;
-      }
-    } else {
-      result = data;
-      found = true;
-    }
-
-    // Fix 9: Log every advisor verification to agent_execution_logs
-    const latency = Date.now() - startTime;
-    const pipelineRunId = crypto.randomUUID();
-    await supabase.from('agent_execution_logs').insert({
-      user_id: userId,
-      pipeline_run_id: pipelineRunId,
-      agent_name: 'AdvisorVerificationAgent',
-      input_ref: { reg_no: queryRegNo },
-      output_ref: found ? { found: true, name: result.name, type: result.type } : { found: false },
-      confidence: found ? 0.95 : 0.0,
-      latency_ms: latency,
-      status: found ? 'success' : 'not_found'
-    });
-
-    if (!found) {
-      return res.status(404).json({ error: 'Advisor not found in registry' });
-    }
-
-    res.json(result);
-  } catch (error) {
-    console.error('Verification error:', error);
-    res.status(500).json({ error: 'Internal server error' });
-  }
-});
+// ADVISOR-HANDLER-B was here — deleted (dead code, shadowed by ADVISOR-HANDLER-A above at L990)
 
 // Mock fallback for Audit Logs
 const generateHash = (payload: any) => {
@@ -1323,28 +1257,7 @@ app.get('/api/compliance/grievance/:userId', async (req: Request, res: Response)
 // 5. Standard Data Endpoints
 // ==========================================
 
-app.get('/api/insights/me', async (req: Request, res: Response) => {
-  try {
-    let userId = '716691b9-939e-4118-aafb-9246a3923250';
-    const authHeader = req.headers.authorization;
-    if (authHeader) {
-      const token = authHeader.replace('Bearer ', '');
-      const { data: { user } } = await supabase.auth.getUser(token);
-      if (user) userId = user.id;
-    }
-    
-    const { data: profile } = await supabase.from('users').select('risk_profile').eq('id', userId).single();
-    
-    const insights = [
-      { id: 1, type: 'greeting', title: 'SahaVest Assistant', message: `Hello! Based on your ${profile?.risk_profile || 'Moderate'} risk profile, I've analyzed your portfolio.` },
-      { id: 2, type: 'alert', title: 'Tax Saving Opportunity', message: 'You can save up to ₹46,800 in taxes under Section 80C by investing ₹1.5L in ELSS.' }
-    ];
-    
-    res.json({ insights });
-  } catch (err) {
-    res.status(500).json({ error: 'Internal server error' });
-  }
-});
+// INSIGHTS-HANDLER-B was here — deleted (dead code, shadowed by INSIGHTS-HANDLER-A at L1048)
 
 app.post('/api/simulation/run', async (req: Request, res: Response) => {
   try {
@@ -1440,44 +1353,7 @@ app.post('/api/simulation/run', async (req: Request, res: Response) => {
   }
 });
 
-app.get('/api/goals', async (req: Request, res: Response) => {
-  try {
-    let userId = '716691b9-939e-4118-aafb-9246a3923250';
-    const authHeader = req.headers.authorization;
-    if (authHeader) {
-      const token = authHeader.replace('Bearer ', '');
-      const { data: { user } } = await supabase.auth.getUser(token);
-      if (user) userId = user.id;
-    }
-
-    const { data, error } = await supabase.from('goals').select('*').eq('user_id', userId);
-    if (error) return res.status(500).json({ error: 'DB Error' });
-    res.json({ goals: data || [] });
-  } catch (err) {
-    res.status(500).json({ error: 'Internal server error' });
-  }
-});
-
-app.post('/api/goals', async (req: Request, res: Response) => {
-  try {
-    const { name, target_amount, target_date, priority } = req.body;
-    let userId = '716691b9-939e-4118-aafb-9246a3923250';
-    const authHeader = req.headers.authorization;
-    if (authHeader) {
-      const token = authHeader.replace('Bearer ', '');
-      const { data: { user } } = await supabase.auth.getUser(token);
-      if (user) userId = user.id;
-    }
-
-    const { data, error } = await supabase.from('goals').insert({
-      user_id: userId, name, target_amount, target_date, priority: priority || 1, current_amount: 0
-    }).select();
-    if (error) return res.status(500).json({ error: 'DB Error' });
-    res.json({ goal: data[0] });
-  } catch (err) {
-    res.status(500).json({ error: 'Internal server error' });
-  }
-});
+// GOALS-HANDLER-B GET + POST — DELETED (dead code, shadowed by GOALS-HANDLER-A above)
 
 app.get('/api/transactions', async (req: Request, res: Response) => {
   try {
@@ -2000,17 +1876,8 @@ app.put('/api/profile/security', async (req: Request, res: Response) => {
   }
 });
 
-app.get('/api/profile/security/me', async (req: Request, res: Response) => {
-  try {
-    res.json({
-      two_factor_enabled: true,
-      last_password_change: '2023-09-15T00:00:00Z',
-      active_sessions: 2
-    });
-  } catch (err) {
-    res.status(500).json({ error: 'Internal server error' });
-  }
-});
+// SECURITY-HANDLER-A was here — DELETED: was a hardcoded static mock (two_factor_enabled: true, last_password_change: hardcoded).
+// Real DB-backed SECURITY-HANDLER-B below now wins.
 
 app.get('/api/profile/notifications/me', async (req: Request, res: Response) => {
   try {
@@ -2057,45 +1924,7 @@ app.post('/api/trust/alerts/:id/read', async (req: Request, res: Response) => {
 // 5. Profile & Security Endpoints
 // ==========================================
 
-app.get('/api/profile/me', async (req: Request, res: Response) => {
-  try {
-    let userId = '716691b9-939e-4118-aafb-9246a3923250';
-    const authHeader = req.headers.authorization;
-    if (authHeader) {
-      const token = authHeader.replace('Bearer ', '');
-      const { data: { user } } = await supabase.auth.getUser(token);
-      if (user) userId = user.id;
-    }
-
-    const { data: profile, error } = await supabase
-      .from('users')
-      .select('full_name, email, phone, dob, marital_status, annual_income, kyc_status')
-      .eq('id', userId)
-      .single();
-      
-    const { data: nominees } = await supabase
-      .from('nominees')
-      .select('*')
-      .eq('user_id', userId);
-
-    if (error) {
-      // Mock data fallback
-      return res.json({
-        profile: {
-          full_name: 'Demo User',
-          email: 'demo@sahavest.com',
-          phone: '+91 9876543210',
-          kyc_status: 'pending'
-        },
-        nominees: []
-      });
-    }
-
-    res.json({ profile: profile || {}, nominees: nominees || [] });
-  } catch (err) {
-    res.status(500).json({ error: 'Internal server error' });
-  }
-});
+// PROFILE-ME-HANDLER-B was here — deleted (dead code, shadowed by PROFILE-ME-HANDLER-A above at L1737, which is cleaner with no silent mock fallback)
 
 app.put('/api/profile/me', async (req: Request, res: Response) => {
   try {
