@@ -19,15 +19,28 @@ export function ProfileSettings() {
   const [brokerLoading, setBrokerLoading] = useState(false);
   const [brokerMessage, setBrokerMessage] = useState('');
 
+  const [upstoxStatus, setUpstoxStatus] = useState<any>(null);
+  const [upstoxLoading, setUpstoxLoading] = useState(false);
+  const [upstoxMessage, setUpstoxMessage] = useState('');
+
   const fetchBrokerStatus = async () => {
     try {
       const { data: { session } } = await supabase.auth.getSession();
       const headers: HeadersInit = {};
       if (session) headers['Authorization'] = `Bearer ${session.access_token}`;
-      const res = await fetch('http://localhost:3000/api/broker/zerodha/status', { headers });
-      if (res.ok) {
-        const data = await res.json();
+      
+      const [kiteRes, upstoxRes] = await Promise.all([
+        fetch('http://localhost:3000/api/broker/zerodha/status', { headers }),
+        fetch('http://localhost:3000/api/broker/upstox/status', { headers })
+      ]);
+      
+      if (kiteRes.ok) {
+        const data = await kiteRes.json();
         setBrokerStatus(data);
+      }
+      if (upstoxRes.ok) {
+        const data = await upstoxRes.json();
+        setUpstoxStatus(data);
       }
     } catch (e) {
       console.error('Failed to fetch broker status:', e);
@@ -117,6 +130,68 @@ export function ProfileSettings() {
       setBrokerMessage(err.message || 'Disconnect failed.');
     } finally {
       setBrokerLoading(false);
+    }
+  };
+
+  const handleConnectUpstox = async () => {
+    setUpstoxLoading(true);
+    setUpstoxMessage('Generating Upstox login URL...');
+    try {
+      const res = await fetch('http://localhost:3000/api/broker/upstox/login-url');
+      const data = await res.json();
+      if (data.login_url) {
+        window.location.href = data.login_url;
+      } else {
+        setUpstoxMessage(data.message || 'Failed to get login URL');
+      }
+    } catch (err: any) {
+      setUpstoxMessage(err.message || 'Failed to initiate Upstox login');
+    } finally {
+      setUpstoxLoading(false);
+    }
+  };
+
+  const handleSyncUpstox = async () => {
+    setUpstoxLoading(true);
+    setUpstoxMessage('Syncing holdings from Upstox...');
+    try {
+      const { data: { session } } = await supabase.auth.getSession();
+      const headers: HeadersInit = { 'Content-Type': 'application/json' };
+      if (session) headers['Authorization'] = `Bearer ${session.access_token}`;
+      const res = await fetch('http://localhost:3000/api/broker/upstox/sync', { method: 'POST', headers });
+      const data = await res.json();
+      if (res.ok) {
+        setUpstoxMessage(`Synced ${data.holdings_count} holdings successfully.`);
+        fetchBrokerStatus();
+      } else if (data.error === 'TOKEN_EXPIRED') {
+        setUpstoxMessage('Your Upstox session expired. Please reconnect.');
+        fetchBrokerStatus();
+      } else {
+        setUpstoxMessage(data.message || 'Sync failed.');
+      }
+    } catch (err: any) {
+      setUpstoxMessage(err.message || 'Sync failed.');
+    } finally {
+      setUpstoxLoading(false);
+    }
+  };
+
+  const handleDisconnectUpstox = async () => {
+    if (!confirm('Are you sure you want to disconnect your Upstox account?')) return;
+    setUpstoxLoading(true);
+    try {
+      const { data: { session } } = await supabase.auth.getSession();
+      const headers: HeadersInit = {};
+      if (session) headers['Authorization'] = `Bearer ${session.access_token}`;
+      const res = await fetch('http://localhost:3000/api/broker/upstox/disconnect', { method: 'DELETE', headers });
+      if (res.ok) {
+        setUpstoxMessage('Upstox account disconnected.');
+        fetchBrokerStatus();
+      }
+    } catch (err: any) {
+      setUpstoxMessage(err.message || 'Disconnect failed.');
+    } finally {
+      setUpstoxLoading(false);
     }
   };
 
@@ -454,6 +529,85 @@ export function ProfileSettings() {
 
                       {brokerMessage && (
                         <p className="text-xs text-primary font-medium text-center">{brokerMessage}</p>
+                      )}
+                    </div>
+
+                    {/* Upstox Demat & Broker Account */}
+                    <div className="p-3 bg-surface-container-low rounded-lg border border-surface-variant flex flex-col gap-3">
+                      <div className="flex items-start gap-3">
+                        <div className="mt-1 text-primary">
+                          <LineChart size={24} className="fill-current" />
+                        </div>
+                        <div className="flex-1">
+                          <div className="flex items-center justify-between">
+                            <p className="font-label-sm text-outline uppercase">Upstox Pro Connect</p>
+                            {upstoxStatus?.status === 'ACTIVE' ? (
+                              <span className="inline-flex items-center gap-1 bg-secondary-container text-on-secondary-container px-2 py-0.5 rounded-full text-xs font-medium">
+                                <CheckCircle size={12} className="text-secondary" />
+                                Active
+                              </span>
+                            ) : upstoxStatus?.status === 'EXPIRED' ? (
+                              <span className="inline-flex items-center gap-1 bg-error-container text-on-error-container px-2 py-0.5 rounded-full text-xs font-medium">
+                                <ShieldAlert size={12} className="text-error" />
+                                Session Expired
+                              </span>
+                            ) : (
+                              <span className="text-xs text-on-surface-variant">Not Connected</span>
+                            )}
+                          </div>
+
+                          <p className="font-body-md text-on-background font-medium mt-1">
+                            {upstoxStatus?.broker_user_id ? `Client: ${upstoxStatus.broker_user_id}` : 'Upstox Securities'}
+                          </p>
+
+                          {upstoxStatus?.last_synced_at && (
+                            <p className="font-label-sm text-on-surface-variant mt-0.5">
+                              Last synced: {new Date(upstoxStatus.last_synced_at).toLocaleString()}
+                            </p>
+                          )}
+                        </div>
+                      </div>
+
+                      {/* Action Buttons */}
+                      <div className="flex items-center gap-2 pt-2 border-t border-surface-variant">
+                        {upstoxStatus?.status === 'ACTIVE' ? (
+                          <>
+                            <button
+                              onClick={handleSyncUpstox}
+                              disabled={upstoxLoading}
+                              className="flex-1 py-1.5 px-3 bg-primary text-on-primary rounded-lg font-label-sm hover:bg-primary/90 transition-colors disabled:opacity-50 flex items-center justify-center gap-1.5"
+                            >
+                              Sync Holdings
+                            </button>
+                            <button
+                              onClick={handleDisconnectUpstox}
+                              disabled={upstoxLoading}
+                              className="py-1.5 px-3 border border-outline-variant text-error rounded-lg font-label-sm hover:bg-error-container transition-colors disabled:opacity-50"
+                            >
+                              Disconnect
+                            </button>
+                          </>
+                        ) : upstoxStatus?.status === 'EXPIRED' ? (
+                          <button
+                            onClick={handleConnectUpstox}
+                            disabled={upstoxLoading}
+                            className="w-full py-1.5 px-3 bg-error text-on-error rounded-lg font-label-sm hover:bg-error/90 transition-colors disabled:opacity-50 flex items-center justify-center gap-1.5"
+                          >
+                            Reconnect Upstox
+                          </button>
+                        ) : (
+                          <button
+                            onClick={handleConnectUpstox}
+                            disabled={upstoxLoading}
+                            className="w-full py-2 px-3 bg-primary text-on-primary rounded-lg font-label-md hover:bg-primary/90 transition-colors disabled:opacity-50 flex items-center justify-center gap-1.5"
+                          >
+                            Connect Upstox
+                          </button>
+                        )}
+                      </div>
+
+                      {upstoxMessage && (
+                        <p className="text-xs text-primary font-medium text-center">{upstoxMessage}</p>
                       )}
                     </div>
                   </div>
