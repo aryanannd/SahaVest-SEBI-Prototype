@@ -13,6 +13,17 @@ import multer from 'multer';
 import fs from 'fs';
 import path from 'path';
 import { parseCasPdf } from './lib/cas';
+import {
+  getKiteLoginUrl,
+  exchangeKiteToken,
+  fetchKiteHoldings,
+  fetchKiteMargins,
+  saveBrokerConnection,
+  getActiveBrokerToken,
+  normalizeAndStoreKiteHoldings,
+  disconnectBrokerAccount,
+  KiteTokenExpiredError,
+} from './lib/kiteConnect';
 dotenv.config();
 
 Sentry.init({
@@ -496,6 +507,195 @@ app.post('/api/portfolio/upload-cas', upload.single('casFile'), async (req: Requ
     }
   } catch (err) {
     res.status(500).json({ error: 'Internal server error' });
+  }
+});
+
+// ==========================================
+// Zerodha Kite Connect v3 Broker Integration
+// ==========================================
+
+// 1. Get Kite Login URL
+app.get('/api/broker/zerodha/login-url', async (req: Request, res: Response) => {
+  try {
+    const loginUrl = getKiteLoginUrl();
+    res.json({ login_url: loginUrl });
+  } catch (err: any) {
+    console.error('[KiteConnect] Failed to generate login URL:', err.message);
+    res.status(500).json({ error: true, message: err.message || 'Failed to generate Kite login URL' });
+  }
+});
+
+// 2. OAuth Callback Handler
+app.get('/api/broker/zerodha/callback', async (req: Request, res: Response) => {
+  try {
+    const { request_token, status } = req.query as { request_token?: string; status?: string };
+    
+    // Auth fallback user
+    let userId = '716691b9-939e-4118-aafb-9246a3923250';
+    const authHeader = req.headers.authorization;
+    if (authHeader) {
+      const token = authHeader.replace('Bearer ', '');
+      const { data: { user } } = await supabase.auth.getUser(token);
+      if (user) userId = user.id;
+    }
+
+    if (status === 'error' || !request_token) {
+      console.warn('[KiteConnect] User denied Zerodha login or missing token:', req.query);
+      return res.redirect(`http://localhost:5173/link-account?broker=zerodha&status=error&message=${encodeURIComponent('Zerodha authentication was cancelled or failed')}`);
+    }
+
+    // Exchange request_token for access_token (server-side only)
+    const sessionData = await exchangeKiteToken(request_token);
+    
+    // Save encrypted token in DB
+    await saveBrokerConnection({
+      userId,
+      broker: 'zerodha',
+      brokerUserId: sessionData.user_id,
+      accessToken: sessionData.access_token,
+      publicToken: sessionData.public_token,
+    });
+
+    // Initial sync
+    try {
+      const holdings = await fetchKiteHoldings(sessionData.access_token);
+      const margins = await fetchKiteMargins(sessionData.access_token);
+      await normalizeAndStoreKiteHoldings({
+        userId,
+        brokerUserId: sessionData.user_id,
+        holdings,
+        margins,
+      });
+    } catch (syncErr: any) {
+      console.warn('[KiteConnect] Initial portfolio sync warning:', syncErr.message);
+    }
+
+    return res.redirect('http://localhost:5173/link-account?broker=zerodha&status=connected');
+  } catch (err: any) {
+    console.error('[KiteConnect] OAuth callback failed:', err);
+    return res.redirect(`http://localhost:5173/link-account?broker=zerodha&status=error&message=${encodeURIComponent(err.message || 'Token exchange failed')}`);
+  }
+});
+
+// 3. Broker Connection Status
+app.get('/api/broker/zerodha/status', async (req: Request, res: Response) => {
+  try {
+    let userId = '716691b9-939e-4118-aafb-9246a3923250';
+    const authHeader = req.headers.authorization;
+    if (authHeader) {
+      const token = authHeader.replace('Bearer ', '');
+      const { data: { user } } = await supabase.auth.getUser(token);
+      if (user) userId = user.id;
+    }
+
+    const { data: conn } = await supabase
+      .from('broker_connections')
+      .select('id, broker, broker_user_id, status, connected_at, last_synced_at, token_expires_at')
+      .eq('user_id', userId)
+      .eq('broker', 'zerodha')
+      .maybeSingle();
+
+    if (!conn) {
+      return res.json({ connected: false, status: 'NOT_CONNECTED' });
+    }
+
+    const isExpired = conn.token_expires_at ? new Date(conn.token_expires_at).getTime() < Date.now() : false;
+    const effectiveStatus = isExpired && conn.status === 'ACTIVE' ? 'EXPIRED' : conn.status;
+
+    return res.json({
+      connected: conn.status === 'ACTIVE' && !isExpired,
+      status: effectiveStatus,
+      broker_user_id: conn.broker_user_id,
+      connected_at: conn.connected_at,
+      last_synced_at: conn.last_synced_at,
+      token_expires_at: conn.token_expires_at,
+    });
+  } catch (err) {
+    console.error('[KiteConnect] Status check error:', err);
+    res.status(500).json({ error: 'Internal server error' });
+  }
+});
+
+// 4. Trigger Portfolio Sync from Zerodha
+app.post('/api/broker/zerodha/sync', async (req: Request, res: Response) => {
+  try {
+    let userId = '716691b9-939e-4118-aafb-9246a3923250';
+    const authHeader = req.headers.authorization;
+    if (authHeader) {
+      const token = authHeader.replace('Bearer ', '');
+      const { data: { user } } = await supabase.auth.getUser(token);
+      if (user) userId = user.id;
+    }
+
+    const accessToken = await getActiveBrokerToken(userId, 'zerodha');
+    if (!accessToken) {
+      return res.status(401).json({
+        error: 'TOKEN_EXPIRED',
+        message: 'Your Zerodha connection has expired or is not active. Please reconnect your account.',
+      });
+    }
+
+    try {
+      const holdings = await fetchKiteHoldings(accessToken);
+      const margins = await fetchKiteMargins(accessToken);
+
+      const syncResult = await normalizeAndStoreKiteHoldings({
+        userId,
+        holdings,
+        margins,
+      });
+
+      return res.json({
+        success: true,
+        synced_at: new Date().toISOString(),
+        holdings_count: syncResult.holdingsCount,
+        total_value: syncResult.totalPortfolioValue,
+      });
+    } catch (apiErr: any) {
+      if (apiErr instanceof KiteTokenExpiredError) {
+        await supabase
+          .from('broker_connections')
+          .update({ status: 'EXPIRED' })
+          .eq('user_id', userId)
+          .eq('broker', 'zerodha');
+
+        return res.status(401).json({
+          error: 'TOKEN_EXPIRED',
+          message: 'Your Zerodha connection has expired. Please reconnect.',
+        });
+      }
+      throw apiErr;
+    }
+  } catch (err: any) {
+    console.error('[KiteConnect] Sync failed:', err);
+    res.status(500).json({ error: true, message: err.message || 'Failed to sync Zerodha portfolio' });
+  }
+});
+
+// 5. Disconnect Zerodha Broker
+app.delete('/api/broker/zerodha/disconnect', async (req: Request, res: Response) => {
+  try {
+    let userId = '716691b9-939e-4118-aafb-9246a3923250';
+    const authHeader = req.headers.authorization;
+    if (authHeader) {
+      const token = authHeader.replace('Bearer ', '');
+      const { data: { user } } = await supabase.auth.getUser(token);
+      if (user) userId = user.id;
+    }
+
+    const result = await disconnectBrokerAccount(userId, 'zerodha');
+    
+    // Also remove Zerodha holdings
+    await supabase
+      .from('holdings')
+      .delete()
+      .eq('user_id', userId)
+      .eq('data_source', 'ZERODHA_KITE');
+
+    res.json(result);
+  } catch (err: any) {
+    console.error('[KiteConnect] Disconnect failed:', err);
+    res.status(500).json({ error: true, message: err.message || 'Failed to disconnect Zerodha' });
   }
 });
 
