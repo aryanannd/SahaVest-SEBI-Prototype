@@ -7,7 +7,7 @@ import crypto from 'crypto';
 import { supabase } from './lib/supabase';
 import { generateAIResponse, type Message } from './lib/llm';
 import { createSetuConsentRequest, getSetuConsentStatus, verifySetuWebhook } from './lib/setuAA';
-import { enqueuePortfolioSync } from './lib/queue';
+import { enqueuePortfolioSync, getQueueHealth } from './lib/queue';
 import { rateLimiter, cacheGet, cacheSet, upstashClient, ioRedisClient } from './lib/redis';
 import multer from 'multer';
 import fs from 'fs';
@@ -59,6 +59,12 @@ app.get('/api/redis/health', async (req: Request, res: Response) => {
   }
 
   res.json(status);
+});
+
+// BullMQ Queue health endpoint
+app.get('/api/queue/health', async (req: Request, res: Response) => {
+  const health = await getQueueHealth();
+  res.json(health);
 });
 
 app.get('/api/debug-sentry', function mainHandler(req, res) {

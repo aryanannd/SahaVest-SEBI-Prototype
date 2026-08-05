@@ -1,4 +1,4 @@
-import { Queue, Worker } from 'bullmq';
+import { Queue, Worker, Job } from 'bullmq';
 import Redis from 'ioredis';
 import { supabase } from './supabase';
 import {
@@ -9,40 +9,110 @@ import {
 
 let portfolioSyncQueue: Queue | null = null;
 let portfolioSyncWorker: Worker | null = null;
+let queueConnection: Redis | null = null;
+let workerConnection: Redis | null = null;
 
-function getQueue(): Queue | null {
-  const redisUrl = process.env.REDIS_URL || process.env.UPSTASH_REDIS_URL;
-  if (!redisUrl || redisUrl.includes('your-upstash-url') || redisUrl.includes('placeholder')) {
+function getRedisUrl(): string | null {
+  const url = process.env.REDIS_URL || process.env.UPSTASH_REDIS_URL;
+  if (!url || url.includes('your-upstash-url') || url.includes('placeholder')) {
     return null;
   }
+  return url;
+}
+
+function createRedisConnection(name: string): Redis {
+  const redisUrl = getRedisUrl();
+  if (!redisUrl) {
+    throw new Error('REDIS_URL is not configured in environment');
+  }
+
+  const isTls = redisUrl.startsWith('rediss://');
+  const conn = new Redis(redisUrl, {
+    maxRetriesPerRequest: null, // Mandatory for BullMQ
+    enableReadyCheck: false,
+    tls: isTls ? {} : undefined,
+    connectTimeout: 5000,
+    retryStrategy(times) {
+      return Math.min(times * 100, 3000);
+    },
+  });
+
+  conn.on('connect', () => {
+    console.log(`[Upstash Redis Queue (${name})] Connection established`);
+  });
+
+  conn.on('ready', () => {
+    console.log(`[Upstash Redis Queue (${name})] Ready to accept commands`);
+  });
+
+  conn.on('error', (err) => {
+    console.warn(`[Upstash Redis Queue (${name})] Connection notice: ${err.message}`);
+  });
+
+  return conn;
+}
+
+export function getQueue(): Queue | null {
+  const redisUrl = getRedisUrl();
+  if (!redisUrl) return null;
 
   if (!portfolioSyncQueue) {
     try {
-      const connection = new Redis(redisUrl, {
-        maxRetriesPerRequest: null,
-        connectTimeout: 2000,
-      });
-      connection.on('error', (err) => {
-        console.warn('[Redis] Connection notice:', err.message);
-      });
-      portfolioSyncQueue = new Queue('portfolioSync', { connection });
-
-      portfolioSyncWorker = new Worker(
-        'portfolioSync',
-        async (job) => {
-          await executePortfolioSync(job.data);
+      queueConnection = createRedisConnection('queue');
+      portfolioSyncQueue = new Queue('portfolioSync', {
+        connection: queueConnection,
+        defaultJobOptions: {
+          attempts: 3,
+          backoff: {
+            type: 'exponential',
+            delay: 2000,
+          },
+          removeOnComplete: 100,
+          removeOnFail: 500,
         },
-        { connection }
-      );
-
-      portfolioSyncWorker.on('failed', (job, err) => {
-        console.error(`[Queue] Job failed for consent ${job?.data?.consent_id}:`, err);
       });
+
+      // Initialize Worker with its dedicated connection instance
+      if (!portfolioSyncWorker) {
+        workerConnection = createRedisConnection('worker');
+        portfolioSyncWorker = new Worker(
+          'portfolioSync',
+          async (job: Job) => {
+            console.log(`[Queue Worker] Starting job ${job.id} for consent ${job.data.consent_id}...`);
+            await executePortfolioSync(job.data);
+            return { consent_id: job.data.consent_id, status: 'PROCESSED' };
+          },
+          {
+            connection: workerConnection,
+            concurrency: 5,
+          }
+        );
+
+        portfolioSyncWorker.on('completed', (job) => {
+          console.log(`[Queue Worker] Job ${job.id} for consent ${job.data.consent_id} completed successfully`);
+        });
+
+        portfolioSyncWorker.on('failed', (job, err) => {
+          console.error(
+            `[Queue Worker] Job ${job?.id} for consent ${job?.data?.consent_id} failed on attempt ${job?.attemptsMade}: ${err.message}`
+          );
+        });
+
+        portfolioSyncWorker.on('error', (err) => {
+          console.warn(`[Queue Worker] Worker error notice: ${err.message}`);
+        });
+      }
     } catch (err: any) {
-      console.warn('[Queue] Failed to initialize BullMQ with Redis:', err.message);
+      console.warn('[Queue] Failed to initialize BullMQ with Upstash Redis:', err.message);
     }
   }
+
   return portfolioSyncQueue;
+}
+
+export function getWorker(): Worker | null {
+  getQueue(); // ensures initialization
+  return portfolioSyncWorker;
 }
 
 export async function executePortfolioSync(data: {
@@ -50,9 +120,14 @@ export async function executePortfolioSync(data: {
   user_id: string;
   fip_list?: string[];
   is_live?: boolean;
+  force_error?: boolean;
 }) {
-  const { consent_id, user_id, fip_list, is_live } = data;
+  const { consent_id, user_id, fip_list, is_live, force_error } = data;
   console.log(`[Queue] Starting portfolio sync for consent ${consent_id} (is_live: ${!!is_live})...`);
+
+  if (force_error) {
+    throw new Error(`Synthetic job failure forced for consent ${consent_id}`);
+  }
 
   try {
     if (is_live) {
@@ -158,17 +233,21 @@ export async function enqueuePortfolioSync(data: {
   user_id: string;
   fip_list?: string[];
   is_live?: boolean;
-}) {
+  force_error?: boolean;
+}): Promise<{ queued: boolean; jobId?: string; mode: string }> {
   const queue = getQueue();
   if (queue) {
     try {
-      await Promise.race([
-        queue.add('sync', data),
-        new Promise((_, reject) => setTimeout(() => reject(new Error('Queue connection timeout')), 1500)),
+      const job = await Promise.race<Job>([
+        queue.add('portfolio-sync', data, {
+          jobId: `sync-${data.consent_id}`,
+        }),
+        new Promise((_, reject) => setTimeout(() => reject(new Error('Queue connection timeout')), 2500)) as any,
       ]);
-      return;
+      console.log(`[Queue] Enqueued job ${job.id} in BullMQ`);
+      return { queued: true, jobId: job.id, mode: 'UPSTASH_BULLMQ' };
     } catch (err: any) {
-      console.warn('[Queue] Redis queue timed out, running in async background:', err.message);
+      console.warn('[Queue] Redis queue timed out or failed, falling back to background worker:', err.message);
     }
   }
 
@@ -180,4 +259,73 @@ export async function enqueuePortfolioSync(data: {
       console.error('[Queue Fallback] Direct sync execution failed:', execErr);
     }
   });
+
+  return { queued: false, mode: 'IN_MEMORY_ASYNC_FALLBACK' };
+}
+
+export async function getQueueHealth(): Promise<{
+  status: string;
+  redis_url_configured: boolean;
+  active_jobs?: number;
+  waiting_jobs?: number;
+  completed_jobs?: number;
+  failed_jobs?: number;
+}> {
+  const redisUrl = getRedisUrl();
+  if (!redisUrl) {
+    return {
+      status: 'FALLBACK_MODE',
+      redis_url_configured: false,
+    };
+  }
+
+  const queue = getQueue();
+  if (!queue) {
+    return {
+      status: 'UNAVAILABLE',
+      redis_url_configured: true,
+    };
+  }
+
+  try {
+    const [waiting, active, completed, failed] = await Promise.all([
+      queue.getWaitingCount(),
+      queue.getActiveCount(),
+      queue.getCompletedCount(),
+      queue.getFailedCount(),
+    ]);
+
+    return {
+      status: 'HEALTHY',
+      redis_url_configured: true,
+      waiting_jobs: waiting,
+      active_jobs: active,
+      completed_jobs: completed,
+      failed_jobs: failed,
+    };
+  } catch (err: any) {
+    return {
+      status: 'ERROR',
+      redis_url_configured: true,
+    };
+  }
+}
+
+export async function closeQueueConnections(): Promise<void> {
+  if (portfolioSyncWorker) {
+    await portfolioSyncWorker.close();
+    portfolioSyncWorker = null;
+  }
+  if (portfolioSyncQueue) {
+    await portfolioSyncQueue.close();
+    portfolioSyncQueue = null;
+  }
+  if (workerConnection) {
+    workerConnection.disconnect();
+    workerConnection = null;
+  }
+  if (queueConnection) {
+    queueConnection.disconnect();
+    queueConnection = null;
+  }
 }
