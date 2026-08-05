@@ -15,6 +15,25 @@ export function ProfileSettings() {
   const [isPinModalOpen, setIsPinModalOpen] = useState(false);
   const [pinForm, setPinForm] = useState({ newPin: '' });
 
+  const [brokerStatus, setBrokerStatus] = useState<any>(null);
+  const [brokerLoading, setBrokerLoading] = useState(false);
+  const [brokerMessage, setBrokerMessage] = useState('');
+
+  const fetchBrokerStatus = async () => {
+    try {
+      const { data: { session } } = await supabase.auth.getSession();
+      const headers: HeadersInit = {};
+      if (session) headers['Authorization'] = `Bearer ${session.access_token}`;
+      const res = await fetch('http://localhost:3000/api/broker/zerodha/status', { headers });
+      if (res.ok) {
+        const data = await res.json();
+        setBrokerStatus(data);
+      }
+    } catch (e) {
+      console.error('Failed to fetch broker status:', e);
+    }
+  };
+
   useEffect(() => {
     async function fetchProfile() {
       try {
@@ -36,7 +55,70 @@ export function ProfileSettings() {
       }
     }
     fetchProfile();
+    fetchBrokerStatus();
   }, []);
+
+  const handleConnectZerodha = async () => {
+    setBrokerLoading(true);
+    setBrokerMessage('Generating Zerodha login URL...');
+    try {
+      const res = await fetch('http://localhost:3000/api/broker/zerodha/login-url');
+      const data = await res.json();
+      if (data.login_url) {
+        window.location.href = data.login_url;
+      } else {
+        setBrokerMessage(data.message || 'Failed to get login URL');
+      }
+    } catch (err: any) {
+      setBrokerMessage(err.message || 'Failed to initiate Kite login');
+    } finally {
+      setBrokerLoading(false);
+    }
+  };
+
+  const handleSyncZerodha = async () => {
+    setBrokerLoading(true);
+    setBrokerMessage('Syncing holdings from Zerodha...');
+    try {
+      const { data: { session } } = await supabase.auth.getSession();
+      const headers: HeadersInit = { 'Content-Type': 'application/json' };
+      if (session) headers['Authorization'] = `Bearer ${session.access_token}`;
+      const res = await fetch('http://localhost:3000/api/broker/zerodha/sync', { method: 'POST', headers });
+      const data = await res.json();
+      if (res.ok) {
+        setBrokerMessage(`Synced ${data.holdings_count} holdings successfully.`);
+        fetchBrokerStatus();
+      } else if (data.error === 'TOKEN_EXPIRED') {
+        setBrokerMessage('Your Zerodha session expired. Please reconnect.');
+        fetchBrokerStatus();
+      } else {
+        setBrokerMessage(data.message || 'Sync failed.');
+      }
+    } catch (err: any) {
+      setBrokerMessage(err.message || 'Sync failed.');
+    } finally {
+      setBrokerLoading(false);
+    }
+  };
+
+  const handleDisconnectZerodha = async () => {
+    if (!confirm('Are you sure you want to disconnect your Zerodha account?')) return;
+    setBrokerLoading(true);
+    try {
+      const { data: { session } } = await supabase.auth.getSession();
+      const headers: HeadersInit = {};
+      if (session) headers['Authorization'] = `Bearer ${session.access_token}`;
+      const res = await fetch('http://localhost:3000/api/broker/zerodha/disconnect', { method: 'DELETE', headers });
+      if (res.ok) {
+        setBrokerMessage('Zerodha account disconnected.');
+        fetchBrokerStatus();
+      }
+    } catch (err: any) {
+      setBrokerMessage(err.message || 'Disconnect failed.');
+    } finally {
+      setBrokerLoading(false);
+    }
+  };
 
   const handleLogout = async () => {
     await supabase.auth.signOut();
@@ -296,24 +378,84 @@ export function ProfileSettings() {
                         </div>
                       </div>
                     </div>
-                    {/* Demat Account */}
-                    <div className="p-3 bg-surface-container-low rounded-lg border border-surface-variant flex items-start gap-3">
-                      <div className="mt-1 text-primary">
-                        <LineChart size={24} className="fill-current" />
-                      </div>
-                      <div className="flex-1">
-                        <p className="font-label-sm text-outline uppercase mb-1">Demat Account</p>
-                        <p className="font-body-md text-on-background font-medium">Zerodha Broking</p>
-                        <p className="font-label-md text-on-surface-variant">DP ID: IN301549</p>
-                        <div className="mt-2 inline-flex items-center gap-1 text-secondary">
-                          <CheckCircle size={16} className="fill-current" />
-                          <span className="font-label-sm">Synced</span>
+                    {/* Demat & Broker Account */}
+                    <div className="p-3 bg-surface-container-low rounded-lg border border-surface-variant flex flex-col gap-3">
+                      <div className="flex items-start gap-3">
+                        <div className="mt-1 text-primary">
+                          <LineChart size={24} className="fill-current" />
+                        </div>
+                        <div className="flex-1">
+                          <div className="flex items-center justify-between">
+                            <p className="font-label-sm text-outline uppercase">Zerodha Kite Connect</p>
+                            {brokerStatus?.status === 'ACTIVE' ? (
+                              <span className="inline-flex items-center gap-1 bg-secondary-container text-on-secondary-container px-2 py-0.5 rounded-full text-xs font-medium">
+                                <CheckCircle size={12} className="text-secondary" />
+                                Active
+                              </span>
+                            ) : brokerStatus?.status === 'EXPIRED' ? (
+                              <span className="inline-flex items-center gap-1 bg-error-container text-on-error-container px-2 py-0.5 rounded-full text-xs font-medium">
+                                <ShieldAlert size={12} className="text-error" />
+                                Session Expired
+                              </span>
+                            ) : (
+                              <span className="text-xs text-on-surface-variant">Not Connected</span>
+                            )}
+                          </div>
+                          
+                          <p className="font-body-md text-on-background font-medium mt-1">
+                            {brokerStatus?.broker_user_id ? `Client: ${brokerStatus.broker_user_id}` : 'Zerodha Broking Ltd.'}
+                          </p>
+                          
+                          {brokerStatus?.last_synced_at && (
+                            <p className="font-label-sm text-on-surface-variant mt-0.5">
+                              Last synced: {new Date(brokerStatus.last_synced_at).toLocaleString()}
+                            </p>
+                          )}
                         </div>
                       </div>
+
+                      {/* Action Buttons */}
+                      <div className="flex items-center gap-2 pt-2 border-t border-surface-variant">
+                        {brokerStatus?.status === 'ACTIVE' ? (
+                          <>
+                            <button
+                              onClick={handleSyncZerodha}
+                              disabled={brokerLoading}
+                              className="flex-1 py-1.5 px-3 bg-primary text-on-primary rounded-lg font-label-sm hover:bg-primary/90 transition-colors disabled:opacity-50 flex items-center justify-center gap-1.5"
+                            >
+                              Sync Holdings
+                            </button>
+                            <button
+                              onClick={handleDisconnectZerodha}
+                              disabled={brokerLoading}
+                              className="py-1.5 px-3 border border-outline-variant text-error rounded-lg font-label-sm hover:bg-error-container transition-colors disabled:opacity-50"
+                            >
+                              Disconnect
+                            </button>
+                          </>
+                        ) : brokerStatus?.status === 'EXPIRED' ? (
+                          <button
+                            onClick={handleConnectZerodha}
+                            disabled={brokerLoading}
+                            className="w-full py-1.5 px-3 bg-error text-on-error rounded-lg font-label-sm hover:bg-error/90 transition-colors disabled:opacity-50 flex items-center justify-center gap-1.5"
+                          >
+                            Reconnect Zerodha
+                          </button>
+                        ) : (
+                          <button
+                            onClick={handleConnectZerodha}
+                            disabled={brokerLoading}
+                            className="w-full py-2 px-3 bg-primary text-on-primary rounded-lg font-label-md hover:bg-primary/90 transition-colors disabled:opacity-50 flex items-center justify-center gap-1.5"
+                          >
+                            Connect Zerodha (Kite)
+                          </button>
+                        )}
+                      </div>
+
+                      {brokerMessage && (
+                        <p className="text-xs text-primary font-medium text-center">{brokerMessage}</p>
+                      )}
                     </div>
-                    <button className="w-full py-2 border border-outline-variant text-primary font-label-md rounded-lg hover:bg-surface-container-low transition-colors">
-                      Link Another Account
-                    </button>
                   </div>
                 </section>
                 
