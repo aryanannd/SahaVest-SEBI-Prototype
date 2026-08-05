@@ -8,6 +8,7 @@ import { supabase } from './lib/supabase';
 import { generateAIResponse, type Message } from './lib/llm';
 import { createSetuConsentRequest, getSetuConsentStatus, verifySetuWebhook } from './lib/setuAA';
 import { enqueuePortfolioSync } from './lib/queue';
+import { rateLimiter, cacheGet, cacheSet, upstashClient, ioRedisClient } from './lib/redis';
 import multer from 'multer';
 import fs from 'fs';
 import path from 'path';
@@ -39,6 +40,27 @@ app.get('/api/health', (req: Request, res: Response) => {
   res.status(200).json({ status: 'ok', message: 'Backend is running correctly.' });
 });
 
+// Redis & Cache status endpoint
+app.get('/api/redis/health', async (req: Request, res: Response) => {
+  const status: Record<string, any> = {
+    upstash_rest: !!upstashClient,
+    ioredis_tcp: !!ioRedisClient && ioRedisClient.status === 'ready',
+    mode: upstashClient ? 'UPSTASH_REST' : (ioRedisClient && ioRedisClient.status === 'ready' ? 'IOREDIS_TCP' : 'IN_MEMORY_FALLBACK'),
+    timestamp: new Date().toISOString(),
+  };
+
+  try {
+    const testKey = 'health:ping:' + Date.now();
+    await cacheSet(testKey, { ping: 'pong' }, 10);
+    const readBack = await cacheGet<{ ping: string }>(testKey);
+    status.cache_test = readBack?.ping === 'pong' ? 'SUCCESS' : 'FAILED';
+  } catch (err: any) {
+    status.cache_test = 'ERROR: ' + err.message;
+  }
+
+  res.json(status);
+});
+
 app.get('/api/debug-sentry', function mainHandler(req, res) {
   throw new Error("My first Sentry error!");
 });
@@ -47,7 +69,7 @@ app.get('/api/debug-sentry', function mainHandler(req, res) {
 // 1. Authentication Endpoints
 // ==========================================
 
-app.post('/api/auth/otp', async (req: Request, res: Response) => {
+app.post('/api/auth/otp', rateLimiter({ limit: 5, windowSeconds: 60, prefix: 'rl:otp' }), async (req: Request, res: Response) => {
   try {
     const { mobile } = req.body;
     if (!mobile) return res.status(400).json({ error: 'Mobile number is required' });
@@ -69,7 +91,7 @@ app.post('/api/auth/otp', async (req: Request, res: Response) => {
   }
 });
 
-app.post('/api/auth/verify', async (req: Request, res: Response) => {
+app.post('/api/auth/verify', rateLimiter({ limit: 10, windowSeconds: 60, prefix: 'rl:verify' }), async (req: Request, res: Response) => {
   try {
     const { mobile, otp } = req.body;
     if (!mobile || !otp) return res.status(400).json({ error: 'Mobile and OTP required' });
@@ -1022,7 +1044,7 @@ app.get('/api/compliance/grievances/me', async (req: Request, res: Response) => 
 
 // 3. Trust, Safety, AI Endpoints
 
-app.post('/api/trust/scam-check', async (req: Request, res: Response) => {
+app.post('/api/trust/scam-check', rateLimiter({ limit: 20, windowSeconds: 60, prefix: 'rl:scam_check' }), async (req: Request, res: Response) => {
   try {
     const { content, input_type = 'text', image, type } = req.body;
     let userId = '716691b9-939e-4118-aafb-9246a3923250';
@@ -1109,6 +1131,13 @@ app.get('/api/trust/verify-advisor/:regNo', async (req: Request, res: Response) 
     const searchKey = typeof regNo === 'string' ? regNo.toUpperCase() : '';
     const startTime = Date.now();
 
+    // Check Redis cache first
+    const cacheKey = `advisor:registry:${searchKey}`;
+    const cachedResult = await cacheGet<any>(cacheKey);
+    if (cachedResult) {
+      return res.json({ ...cachedResult, _cached: true });
+    }
+
     // Auth
     let userId = '716691b9-939e-4118-aafb-9246a3923250';
     const authHeader = req.headers.authorization;
@@ -1153,6 +1182,9 @@ app.get('/api/trust/verify-advisor/:regNo', async (req: Request, res: Response) 
     if (!found) {
       return res.status(404).json({ error: 'Advisor not found in SEBI registry.' });
     }
+
+    // Store in cache for 1 hour (3600 seconds)
+    await cacheSet(cacheKey, result, 3600);
 
     return res.json(result);
   } catch (err) {
