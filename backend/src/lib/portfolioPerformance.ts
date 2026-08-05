@@ -280,21 +280,6 @@ export async function getPortfolioPerformance(
     });
   }
 
-  // Ensure the latest point aligns with current net worth
-  if (chartData.length > 0 && currentNetWorth > 0) {
-    const lastPoint = chartData[chartData.length - 1];
-    if (lastPoint.portfolioValue < currentNetWorth * 0.5) {
-      // Re-scale if partial transaction history
-      const scaleFactor = currentNetWorth / (lastPoint.portfolioValue || 1);
-      for (const p of chartData) {
-        p.portfolioValue = Math.round(p.portfolioValue * scaleFactor);
-        p.portfolioReturnPct = p.investedValue > 0 
-          ? Number((((p.portfolioValue - p.investedValue) / p.investedValue) * 100).toFixed(2)) 
-          : 0;
-      }
-    }
-  }
-
   // 6. Calculate Exact Mathematical XIRR using real cash flows from transactions
   const xirrCashFlows: CashFlow[] = [
     ...transactions.map(t => ({
@@ -309,14 +294,19 @@ export async function getPortfolioPerformance(
 
   const calculatedXIRR = calculateExactXIRR(xirrCashFlows);
 
+  const startPoint = chartData[0];
+  const endPoint = chartData[chartData.length - 1];
+
+  if (endPoint) {
+    currentNetWorth = endPoint.portfolioValue;
+    totalInvested = endPoint.investedValue;
+  }
+
   // Summary Metrics
   const totalReturns = Math.round((currentNetWorth - totalInvested) * 100) / 100;
   const totalReturnsPercent = totalInvested > 0 ? Number((((currentNetWorth - totalInvested) / totalInvested) * 100).toFixed(2)) : 0;
   const todayChangePct = 1.18;
   const todayChangeVal = Math.round((currentNetWorth * (todayChangePct / 100)) * 100) / 100;
-
-  const startPoint = chartData[0];
-  const endPoint = chartData[chartData.length - 1];
 
   const periodPortfolioReturn = startPoint && endPoint && startPoint.portfolioValue > 0
     ? Number((((endPoint.portfolioValue - startPoint.portfolioValue) / startPoint.portfolioValue) * 100).toFixed(2))
