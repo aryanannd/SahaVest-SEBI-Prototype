@@ -16,7 +16,7 @@ export function BehavioralAlertCenter() {
         const headers: HeadersInit = { 'Content-Type': 'application/json' };
         if (session) headers['Authorization'] = `Bearer ${session.access_token}`;
         
-        const res = await fetch('http://localhost:3000/api/trust/alerts', { headers });
+        const res = await fetch('/api/trust/alerts', { headers });
         const data = await res.json();
         if (data && data.alerts) setAlerts(data.alerts);
       } catch (err) {

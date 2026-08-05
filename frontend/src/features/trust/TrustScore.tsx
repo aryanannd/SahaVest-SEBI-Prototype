@@ -16,8 +16,9 @@ export function TrustScore() {
         const { data: { session } } = await supabase.auth.getSession();
         const headers: HeadersInit = { 'Content-Type': 'application/json' };
         if (session) headers['Authorization'] = `Bearer ${session.access_token}`;
-        
-        const res = await fetch('http://localhost:3000/api/trust/score', { headers });
+        const searchParams = new URLSearchParams(window.location.search);
+        const entity = searchParams.get('entity') || 'SNEHA DESAI';
+        const res = await fetch(`/api/trust/score?entity=${encodeURIComponent(entity)}`, { headers });
         const data = await res.json();
         setApiData(data);
         

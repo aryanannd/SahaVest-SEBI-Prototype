@@ -25,7 +25,18 @@ export function BottomNav() {
     <nav className="fixed md:absolute bottom-0 w-full z-50 border-t border-outline-variant bg-surface flex justify-around items-center h-[72px] px-2 pb-safe shadow-[0_-4px_6px_-1px_rgba(0,0,0,0.05)]">
       {items.map((it) => {
         const Icon = it.icon;
-        const active = currentPath.startsWith(it.id);
+        
+        let active = currentPath.startsWith(it.id);
+        if (it.id === '/fraud') {
+          active = currentPath.startsWith('/fraud') || currentPath.startsWith('/trust') || currentPath.startsWith('/protection') || currentPath.startsWith('/safety');
+        } else if (it.id === '/chat') {
+          active = currentPath.startsWith('/chat') || currentPath.startsWith('/twin') || currentPath.startsWith('/ai');
+        } else if (it.id === '/profile') {
+          active = currentPath.startsWith('/profile') || currentPath.startsWith('/compliance') || currentPath.startsWith('/privacy');
+        } else if (it.id === '/portfolio') {
+          active = currentPath.startsWith('/portfolio') || currentPath.startsWith('/fund');
+        }
+
         return (
           <button 
             key={it.id} 

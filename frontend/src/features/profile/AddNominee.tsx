@@ -35,7 +35,7 @@ export function AddNominee() {
       const headers: HeadersInit = { 'Content-Type': 'application/json' };
       if (session) headers['Authorization'] = `Bearer ${session.access_token}`;
 
-      const res = await fetch('http://localhost:3000/api/profile/nominees', {
+      const res = await fetch('/api/profile/nominees', {
         method: 'POST',
         headers,
         body: JSON.stringify({

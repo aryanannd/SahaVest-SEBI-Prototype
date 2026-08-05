@@ -15,7 +15,7 @@ export function TaxSummary() {
         const headers: HeadersInit = {};
         if (session) headers['Authorization'] = `Bearer ${session.access_token}`;
         
-        const res = await fetch('http://localhost:3000/api/portfolio/tax-summary/me', { headers });
+        const res = await fetch('/api/portfolio/tax-summary/me', { headers });
         const result = await res.json();
         setData(result);
       } catch (err) {

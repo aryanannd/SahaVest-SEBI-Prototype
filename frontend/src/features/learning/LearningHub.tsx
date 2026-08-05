@@ -16,7 +16,7 @@ export function LearningHub() {
         const headers: HeadersInit = {};
         if (session) headers['Authorization'] = `Bearer ${session.access_token}`;
         
-        const res = await fetch('http://localhost:3000/api/learning-progress', { headers });
+        const res = await fetch('/api/learning-progress', { headers });
         const result = await res.json();
         if (result.progress) {
            setProgress(result.progress);

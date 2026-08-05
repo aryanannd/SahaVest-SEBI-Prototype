@@ -42,7 +42,7 @@ export function GoalDetail() {
            const { data: { session } } = await supabase.auth.getSession();
            const headers: HeadersInit = { 'Content-Type': 'application/json' };
            if (session) headers['Authorization'] = `Bearer ${session.access_token}`;
-           await fetch('http://localhost:3000/api/goals', { 
+           await fetch('/api/goals', { 
              method: 'POST', 
              headers, 
              body: JSON.stringify(formData) 

@@ -32,7 +32,7 @@ export function SelectInstitutions() {
     formData.append('password', password);
 
     try {
-      const response = await fetch('http://localhost:3000/api/portfolio/upload-cas', {
+      const response = await fetch('/api/portfolio/upload-cas', {
         method: 'POST',
         body: formData
       });

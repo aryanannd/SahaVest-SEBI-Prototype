@@ -30,8 +30,8 @@ export function ProfileSettings() {
       if (session) headers['Authorization'] = `Bearer ${session.access_token}`;
       
       const [kiteRes, upstoxRes] = await Promise.all([
-        fetch('http://localhost:3000/api/broker/zerodha/status', { headers }),
-        fetch('http://localhost:3000/api/broker/upstox/status', { headers })
+        fetch('/api/broker/zerodha/status', { headers }),
+        fetch('/api/broker/upstox/status', { headers })
       ]);
       
       if (kiteRes.ok) {
@@ -54,7 +54,7 @@ export function ProfileSettings() {
         const headers: HeadersInit = {};
         if (session) headers['Authorization'] = `Bearer ${session.access_token}`;
         
-        const res = await fetch('http://localhost:3000/api/profile/me', { headers });
+        const res = await fetch('/api/profile/me', { headers });
         const data = await res.json();
         setProfileData(data);
         if (data.profile) {
@@ -75,7 +75,7 @@ export function ProfileSettings() {
     setBrokerLoading(true);
     setBrokerMessage('Generating Zerodha login URL...');
     try {
-      const res = await fetch('http://localhost:3000/api/broker/zerodha/login-url');
+      const res = await fetch('/api/broker/zerodha/login-url');
       const data = await res.json();
       if (data.login_url) {
         window.location.href = data.login_url;
@@ -96,7 +96,7 @@ export function ProfileSettings() {
       const { data: { session } } = await supabase.auth.getSession();
       const headers: HeadersInit = { 'Content-Type': 'application/json' };
       if (session) headers['Authorization'] = `Bearer ${session.access_token}`;
-      const res = await fetch('http://localhost:3000/api/broker/zerodha/sync', { method: 'POST', headers });
+      const res = await fetch('/api/broker/zerodha/sync', { method: 'POST', headers });
       const data = await res.json();
       if (res.ok) {
         setBrokerMessage(`Synced ${data.holdings_count} holdings successfully.`);
@@ -121,7 +121,7 @@ export function ProfileSettings() {
       const { data: { session } } = await supabase.auth.getSession();
       const headers: HeadersInit = {};
       if (session) headers['Authorization'] = `Bearer ${session.access_token}`;
-      const res = await fetch('http://localhost:3000/api/broker/zerodha/disconnect', { method: 'DELETE', headers });
+      const res = await fetch('/api/broker/zerodha/disconnect', { method: 'DELETE', headers });
       if (res.ok) {
         setBrokerMessage('Zerodha account disconnected.');
         fetchBrokerStatus();
@@ -137,7 +137,7 @@ export function ProfileSettings() {
     setUpstoxLoading(true);
     setUpstoxMessage('Generating Upstox login URL...');
     try {
-      const res = await fetch('http://localhost:3000/api/broker/upstox/login-url');
+      const res = await fetch('/api/broker/upstox/login-url');
       const data = await res.json();
       if (data.login_url) {
         window.location.href = data.login_url;
@@ -158,7 +158,7 @@ export function ProfileSettings() {
       const { data: { session } } = await supabase.auth.getSession();
       const headers: HeadersInit = { 'Content-Type': 'application/json' };
       if (session) headers['Authorization'] = `Bearer ${session.access_token}`;
-      const res = await fetch('http://localhost:3000/api/broker/upstox/sync', { method: 'POST', headers });
+      const res = await fetch('/api/broker/upstox/sync', { method: 'POST', headers });
       const data = await res.json();
       if (res.ok) {
         setUpstoxMessage(`Synced ${data.holdings_count} holdings successfully.`);
@@ -183,7 +183,7 @@ export function ProfileSettings() {
       const { data: { session } } = await supabase.auth.getSession();
       const headers: HeadersInit = {};
       if (session) headers['Authorization'] = `Bearer ${session.access_token}`;
-      const res = await fetch('http://localhost:3000/api/broker/upstox/disconnect', { method: 'DELETE', headers });
+      const res = await fetch('/api/broker/upstox/disconnect', { method: 'DELETE', headers });
       if (res.ok) {
         setUpstoxMessage('Upstox account disconnected.');
         fetchBrokerStatus();
@@ -197,7 +197,7 @@ export function ProfileSettings() {
 
   const handleLogout = async () => {
     await supabase.auth.signOut();
-    navigate('/onboarding/login');
+    navigate('/onboarding/splash');
   };
 
   const handleSaveProfile = async (e: React.FormEvent) => {
@@ -207,7 +207,7 @@ export function ProfileSettings() {
       const headers: HeadersInit = { 'Content-Type': 'application/json' };
       if (session) headers['Authorization'] = `Bearer ${session.access_token}`;
       
-      const res = await fetch('http://localhost:3000/api/profile/me', {
+      const res = await fetch('/api/profile/me', {
         method: 'PUT',
         headers,
         body: JSON.stringify(editForm)
@@ -230,7 +230,7 @@ export function ProfileSettings() {
       const headers: HeadersInit = { 'Content-Type': 'application/json' };
       if (session) headers['Authorization'] = `Bearer ${session.access_token}`;
       
-      const res = await fetch('http://localhost:3000/api/profile/security', {
+      const res = await fetch('/api/profile/security', {
         method: 'PUT',
         headers,
         body: JSON.stringify(updates)
@@ -250,7 +250,7 @@ export function ProfileSettings() {
       const { data: { session } } = await supabase.auth.getSession();
       const headers: HeadersInit = {};
       if (session) headers['Authorization'] = `Bearer ${session.access_token}`;
-      await fetch(`http://localhost:3000/api/profile/nominees/${id}`, { method: 'DELETE', headers });
+      await fetch(`/api/profile/nominees/${id}`, { method: 'DELETE', headers });
       setProfileData((prev: any) => ({
         ...prev,
         nominees: prev.nominees.filter((n: any) => n.id !== id)

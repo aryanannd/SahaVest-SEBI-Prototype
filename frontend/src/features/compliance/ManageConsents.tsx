@@ -21,7 +21,7 @@ export function ManageConsents() {
   const fetchConsents = async () => {
     try {
       const headers = await getHeaders();
-      const res = await fetch('http://localhost:3000/api/compliance/consents/me', { headers });
+      const res = await fetch('/api/compliance/consents/me', { headers });
       const data = await res.json();
       if (data.consents) setConsents(data.consents);
     } catch (err) {
@@ -40,7 +40,7 @@ export function ManageConsents() {
     setRevoking(consentId);
     try {
       const headers = await getHeaders();
-      const res = await fetch(`http://localhost:3000/api/compliance/consents/${consentId}/revoke`, {
+      const res = await fetch(`/api/compliance/consents/${consentId}/revoke`, {
         method: 'PATCH',
         headers,
       });

@@ -18,7 +18,7 @@ export function BehavioralAlertCenter() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    fetch('http://localhost:3000/api/alerts/behavioral/me')
+    fetch('/api/trust/alerts')
       .then(res => res.json())
       .then(data => {
         if (data.alerts) {

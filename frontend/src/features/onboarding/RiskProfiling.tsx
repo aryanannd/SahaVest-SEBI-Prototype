@@ -150,7 +150,7 @@ export function RiskProfiling() {
         const headers: HeadersInit = { 'Content-Type': 'application/json' };
         if (session) headers['Authorization'] = `Bearer ${session.access_token}`;
 
-        await fetch('http://localhost:3000/api/users/me/risk-profile', {
+        await fetch('/api/users/me/risk-profile', {
           method: 'POST',
           headers,
           body: JSON.stringify({ risk_profile: category })

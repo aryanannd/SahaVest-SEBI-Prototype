@@ -44,7 +44,7 @@ export function LinkingAccounts() {
         const headers: Record<string, string> = { 'Content-Type': 'application/json' };
         if (session) headers['Authorization'] = `Bearer ${session.access_token}`;
 
-        const baseUrl = import.meta.env.VITE_API_BASE_URL || 'http://localhost:3000/api';
+        const baseUrl = import.meta.env.VITE_API_BASE_URL || '/api';
         const res = await fetch(`${baseUrl}/aa/consent/${consent_id}/status`, { headers });
 
         if (res.ok) {

@@ -26,7 +26,7 @@ export function AccountAggregatorLinking() {
       const headers: Record<string, string> = {};
       if (session) headers['Authorization'] = `Bearer ${session.access_token}`;
 
-      const res = await fetch('http://localhost:3000/api/portfolio/upload-cas', {
+      const res = await fetch('/api/portfolio/upload-cas', {
         method: 'POST',
         headers,
         body: formData,

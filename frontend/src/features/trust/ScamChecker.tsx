@@ -22,7 +22,7 @@ export function ScamChecker() {
       const payload: any = { type: 'text', content: tip };
       if (imageBase64) payload.image = imageBase64;
 
-      const res = await fetch('http://localhost:3000/api/trust/scam-check', {
+      const res = await fetch('/api/trust/scam-check', {
         method: 'POST',
         headers,
         body: JSON.stringify(payload)
@@ -210,23 +210,13 @@ export function ScamChecker() {
                   <h2 className="font-headline-sm text-on-surface">Analysis Report</h2>
                 </div>
                 <div className="bg-surface-container-low rounded-lg p-4 overflow-y-auto max-h-[300px] font-body-md text-on-surface leading-relaxed relative">
-                  <p>
-                    "URGENT: <mark className="bg-error-container text-on-error-container px-1 rounded font-medium cursor-help group relative">Guaranteed 500% returns<span className="absolute hidden group-hover:block bottom-full left-0 mb-1 w-48 bg-inverse-surface text-inverse-on-surface font-label-sm p-2 rounded shadow-lg z-20">Red Flag: Unrealistic guarantee of returns.</span></mark> on a secret micro-cap stock! Insider information reveals institutional buying starts TOMORROW. 
-                    <mark className="bg-tertiary-fixed text-on-tertiary-fixed px-1 rounded font-medium cursor-help group relative ml-1">Act now before it's too late.<span className="absolute hidden group-hover:block bottom-full left-0 mb-1 w-48 bg-inverse-surface text-inverse-on-surface font-label-sm p-2 rounded shadow-lg z-20">Yellow Flag: Creates false sense of urgency.</span></mark> 
-                    Click the link below to download the app and deposit your funds directly to secure your shares. 
-                    <mark className="bg-error-container text-on-error-container px-1 rounded font-medium cursor-help group relative ml-1">Zero risk involved.<span className="absolute hidden group-hover:block bottom-full right-0 mb-1 w-48 bg-inverse-surface text-inverse-on-surface font-label-sm p-2 rounded shadow-lg z-20">Red Flag: All investments carry risk.</span></mark>"
-                  </p>
+                  <p className="whitespace-pre-wrap">{tip || "Image uploaded for analysis."}</p>
                 </div>
-                <div className="mt-4 flex gap-3 flex-wrap">
-                  <div className="flex items-center gap-2">
-                    <div className="w-3 h-3 rounded-full bg-error-container border border-error"></div>
-                    <span className="font-label-sm text-on-surface-variant">Critical Red Flags</span>
-                  </div>
-                  <div className="flex items-center gap-2">
-                    <div className="w-3 h-3 rounded-full bg-tertiary-fixed border border-tertiary"></div>
-                    <span className="font-label-sm text-on-surface-variant">Suspicious Phrasing</span>
-                  </div>
+                <div className="mt-4 p-4 bg-surface-variant/20 rounded-lg">
+                  <h4 className="font-label-md text-on-surface mb-2">Detailed Analysis</h4>
+                  <p className="font-body-md text-on-surface-variant whitespace-pre-wrap">{apiData?.analysis || "No detailed analysis available."}</p>
                 </div>
+
               </section>
 
               <section className="md:col-span-5 flex flex-col gap-4">

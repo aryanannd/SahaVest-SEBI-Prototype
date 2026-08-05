@@ -1,192 +1,420 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { supabase } from '../../lib/supabaseClient';
-import { Search, User, ArrowUp, TrendingUp, Info, Percent, Wallet, PlusCircle, Loader2 } from "lucide-react";
+import { 
+  ArrowLeft, ArrowUp, TrendingUp, Info, Percent, Wallet, 
+  ShieldCheck, Loader2, Sparkles, AlertCircle, BarChart3, CheckCircle2, Clock
+} from "lucide-react";
+import { 
+  ResponsiveContainer, AreaChart, Area, Line, XAxis, YAxis, 
+  Tooltip, CartesianGrid, ReferenceLine 
+} from 'recharts';
+
+type TimeRange = '1M' | '3M' | '6M' | '1Y' | 'ALL';
+
+interface PerformanceDataPoint {
+  date: string;
+  timestamp: string;
+  portfolioValue: number;
+  investedValue: number;
+  benchmarkValue: number;
+  portfolioReturnPct: number;
+  benchmarkReturnPct: number;
+}
+
+interface PerformanceResponse {
+  currentNetWorth: number;
+  investedAmount: number;
+  totalReturns: number;
+  totalReturnsPercent: number;
+  todayChange: {
+    value: number;
+    percentage: number;
+  };
+  returns1M: number;
+  returns3M: number;
+  returns6M: number;
+  returns1Y: number;
+  returnsAllTime: number;
+  xirr: number;
+  benchmarkComparison: {
+    portfolio: number;
+    nifty50: number;
+    alpha: number;
+  };
+  range: TimeRange;
+  chartData: PerformanceDataPoint[];
+  source: 'LIVE_DELAYED' | 'CACHE_STALE';
+  is_delayed: boolean;
+  delay_label: string;
+  cached_at: string;
+  disclaimer: string;
+}
 
 export function PerformanceHistory() {
   const navigate = useNavigate();
-  const [data, setData] = useState<any>(null);
-  const [loading, setLoading] = useState(true);
+  const [selectedRange, setSelectedRange] = useState<TimeRange>('1Y');
+  const [compareBenchmark, setCompareBenchmark] = useState<boolean>(true);
+  const [data, setData] = useState<PerformanceResponse | null>(null);
+  const [loading, setLoading] = useState<boolean>(true);
+  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    async function fetchData() {
+    async function fetchPerformance() {
+      setLoading(true);
+      setError(null);
       try {
         const { data: { session } } = await supabase.auth.getSession();
         const headers: HeadersInit = {};
         if (session) headers['Authorization'] = `Bearer ${session.access_token}`;
-        
-        const res = await fetch('http://localhost:3000/api/portfolio/performance/me', { headers });
-        const result = await res.json();
+
+        const res = await fetch(`/api/portfolio/performance/me?range=${selectedRange}`, { headers });
+        if (!res.ok) throw new Error('Failed to fetch performance data');
+        const result: PerformanceResponse = await res.json();
         setData(result);
-      } catch (err) {
-        console.error(err);
+      } catch (err: any) {
+        console.error('Error fetching performance:', err);
+        setError(err.message || 'Error loading performance');
       } finally {
         setLoading(false);
       }
     }
-    fetchData();
-  }, []);
+    fetchPerformance();
+  }, [selectedRange]);
+
+  const formatCurrency = (val: number) => {
+    return new Intl.NumberFormat('en-IN', {
+      style: 'currency',
+      currency: 'INR',
+      maximumFractionDigits: 0
+    }).format(val);
+  };
+
+  const formatYAxis = (val: number) => {
+    if (val >= 10000000) return `₹${(val / 10000000).toFixed(1)}Cr`;
+    if (val >= 100000) return `₹${(val / 100000).toFixed(1)}L`;
+    if (val >= 1000) return `₹${(val / 1000).toFixed(0)}k`;
+    return `₹${val}`;
+  };
+
+  // Custom Chart Tooltip
+  const CustomTooltip = ({ active, payload, label }: any) => {
+    if (active && payload && payload.length) {
+      const pData: PerformanceDataPoint = payload[0].payload;
+      return (
+        <div className="bg-surface-container-lowest/95 backdrop-blur-md p-3 rounded-xl border border-outline-variant shadow-lg text-xs space-y-1.5 min-w-[170px] pointer-events-none">
+          <p className="font-label-sm text-on-surface-variant font-semibold border-b border-outline-variant/40 pb-1">
+            {pData.date}
+          </p>
+          <div className="flex items-center justify-between gap-3">
+            <span className="text-primary font-medium flex items-center gap-1">
+              <span className="w-2 h-2 rounded-full bg-primary inline-block"></span>
+              Portfolio
+            </span>
+            <span className="font-bold text-on-surface">{formatCurrency(pData.portfolioValue)}</span>
+          </div>
+          {pData.investedValue && (
+            <div className="flex items-center justify-between gap-3 text-on-surface-variant">
+              <span className="flex items-center gap-1">
+                <span className="w-2 h-2 rounded-full bg-outline inline-block"></span>
+                Invested
+              </span>
+              <span>{formatCurrency(pData.investedValue)}</span>
+            </div>
+          )}
+          {compareBenchmark && pData.benchmarkValue && (
+            <div className="flex items-center justify-between gap-3 pt-1 border-t border-outline-variant/30 text-amber-600 dark:text-amber-400">
+              <span className="flex items-center gap-1 font-medium">
+                <span className="w-2 h-2 rounded-full bg-amber-500 inline-block"></span>
+                NIFTY 50
+              </span>
+              <span className="font-semibold">{formatCurrency(pData.benchmarkValue)}</span>
+            </div>
+          )}
+          <div className="flex items-center justify-between pt-1 text-[11px] text-secondary font-semibold">
+            <span>Return ({selectedRange})</span>
+            <span>+{pData.portfolioReturnPct}%</span>
+          </div>
+        </div>
+      );
+    }
+    return null;
+  };
 
   return (
-    <div className="bg-background text-on-background antialiased min-h-screen flex flex-col font-body-md relative">
+    <div className="bg-surface text-on-surface min-h-screen flex flex-col font-body-md relative pb-20 md:pb-8">
       {/* TopAppBar */}
-      <header className="bg-surface dark:bg-surface-dim w-full sticky top-0 z-50 border-b border-outline-variant dark:border-outline">
+      <header className="bg-surface sticky top-0 z-50 border-b border-outline-variant">
         <div className="flex items-center justify-between px-4 py-3 w-full max-w-7xl mx-auto">
-          <button className="text-primary dark:text-primary-fixed hover:bg-surface-container-low dark:hover:bg-surface-container-highest transition-colors active:scale-95 duration-100 p-2 rounded-full min-h-[44px] min-w-[44px] flex items-center justify-center">
-            <Search />
+          <button 
+            onClick={() => navigate(-1)}
+            aria-label="Back"
+            className="text-on-surface hover:bg-surface-container-low transition-colors active:scale-95 duration-100 p-2 rounded-full min-h-[44px] min-w-[44px] flex items-center justify-center"
+          >
+            <ArrowLeft size={20} />
           </button>
-          <h1 className="font-headline-md text-primary dark:text-primary-fixed tracking-tight cursor-pointer" onClick={() => navigate('/')}>
-            SahaVest
+          <h1 className="font-headline-sm text-primary tracking-tight font-bold">
+            Portfolio Performance
           </h1>
-          <button className="text-primary dark:text-primary-fixed hover:bg-surface-container-low dark:hover:bg-surface-container-highest transition-colors active:scale-95 duration-100 p-2 rounded-full min-h-[44px] min-w-[44px] flex items-center justify-center">
-            <User />
-          </button>
+          <div className="w-[44px]"></div>
         </div>
-        {/* Desktop Nav Cluster (Hidden on mobile) */}
-        <nav className="hidden md:flex justify-center space-x-6 py-2 border-t border-outline-variant/30">
-          <a className="font-label-md text-on-surface-variant hover:text-primary transition-colors py-2 px-4 rounded-full hover:bg-surface-container-low" href="#">Dashboard</a>
-          <a className="font-label-md text-primary bg-surface-container-low py-2 px-4 rounded-full" href="#">Portfolio</a>
-          <a className="font-label-md text-on-surface-variant hover:text-primary transition-colors py-2 px-4 rounded-full hover:bg-surface-container-low" href="#">Protection</a>
-          <a className="font-label-md text-on-surface-variant hover:text-primary transition-colors py-2 px-4 rounded-full hover:bg-surface-container-low" href="#">Profile</a>
-        </nav>
       </header>
 
-      {/* Main Content Canvas */}
-      <main className="flex-grow w-full max-w-7xl mx-auto px-4 py-6 pb-32">
+      {/* Main Content */}
+      <main className="flex-grow w-full max-w-7xl mx-auto px-4 py-6 space-y-6 animate-in fade-in slide-in-from-bottom-2 duration-300">
         
-        {/* Page Header */}
-        {loading ? (
-           <div className="flex justify-center p-8"><Loader2 className="animate-spin text-primary" size={32} /></div>
-        ) : (
-        <div className="mb-8 flex flex-col items-center justify-center text-center">
-          <h2 className="font-body-md text-on-surface-variant mb-2">Current Net Worth</h2>
-          <div className="font-display-lg-mobile md:font-display-lg text-primary">₹{(data?.currentNetWorth || 0).toLocaleString('en-IN', {minimumFractionDigits: 2})}</div>
-          <div className="flex items-center mt-2 text-secondary">
-            <ArrowUp size={16} className="mr-1" />
-            <span className="font-label-md">₹{(data?.todayChange?.value || 0).toLocaleString('en-IN')} ({(data?.todayChange?.percentage || 0)}%) Today</span>
+        {/* Stale Cache Banner (Honesty requirement) */}
+        {data?.source === 'CACHE_STALE' && (
+          <div className="bg-amber-500/10 border border-amber-500/30 p-3 rounded-xl flex items-center gap-3 text-amber-800 dark:text-amber-200 text-xs">
+            <Clock size={16} className="shrink-0 text-amber-600 dark:text-amber-400" />
+            <span>
+              Showing cached data as of <strong>{new Date(data.cached_at).toLocaleTimeString('en-IN', { hour: '2-digit', minute: '2-digit' })}</strong>. Live updates temporarily paused.
+            </span>
           </div>
-        </div>
         )}
 
-        {/* Performance Chart Section */}
-        <section className="bg-surface-container-lowest rounded-xl border border-outline-variant/50 p-4 mb-8 shadow-sm relative overflow-hidden">
-          {/* Time Range Selectors */}
-          <div className="flex justify-between items-center mb-6">
-            <h3 className="font-headline-sm text-on-surface">Performance History</h3>
-            <div className="flex bg-surface-container p-1 rounded-full space-x-1">
-              <button className="font-label-sm min-w-[44px] min-h-[32px] px-3 py-1 rounded-full text-on-surface-variant hover:bg-surface-container-high transition-colors">1M</button>
-              <button className="font-label-sm min-w-[44px] min-h-[32px] px-3 py-1 rounded-full text-on-surface-variant hover:bg-surface-container-high transition-colors">3M</button>
-              <button className="font-label-sm min-w-[44px] min-h-[32px] px-3 py-1 rounded-full bg-primary text-on-primary shadow-sm transition-colors">1Y</button>
-              <button className="font-label-sm min-w-[44px] min-h-[32px] px-3 py-1 rounded-full text-on-surface-variant hover:bg-surface-container-high transition-colors">All</button>
+        {/* Hero Net Worth Header Card */}
+        <section className="bg-surface-container-lowest rounded-2xl p-6 border border-outline-variant shadow-sm space-y-4">
+          <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
+            <div className="space-y-1">
+              <div className="flex items-center gap-2">
+                <span className="font-label-sm text-on-surface-variant uppercase tracking-wider">Total Portfolio Value</span>
+                <span className="inline-flex items-center gap-1 bg-secondary-container/40 text-secondary text-[11px] font-semibold px-2 py-0.5 rounded-full">
+                  <TrendingUp size={12} /> Live / delayed
+                </span>
+              </div>
+              <div className="font-display-lg text-primary font-extrabold tracking-tight">
+                {data ? formatCurrency(data.currentNetWorth) : '₹13,55,000'}
+              </div>
             </div>
-          </div>
-          
-          {/* SVG Line Chart (Simulated) */}
-          <div className="w-full h-64 md:h-80 relative mb-4">
-            <svg className="w-full h-full overflow-visible" preserveAspectRatio="none" viewBox="0 0 800 300">
-              <defs>
-                <linearGradient id="blueGradient" x1="0%" x2="0%" y1="0%" y2="100%">
-                  <stop offset="0%" stopColor="#002653" stopOpacity="0.15"></stop>
-                  <stop offset="100%" stopColor="#002653" stopOpacity="0"></stop>
-                </linearGradient>
-              </defs>
-              {/* Grid Lines */}
-              <line stroke="#e1e3e4" strokeWidth="1" strokeDasharray="4" x1="40" x2="780" y1="50" y2="50"></line>
-              <line stroke="#e1e3e4" strokeWidth="1" strokeDasharray="4" x1="40" x2="780" y1="125" y2="125"></line>
-              <line stroke="#e1e3e4" strokeWidth="1" strokeDasharray="4" x1="40" x2="780" y1="200" y2="200"></line>
-              <line stroke="#c4c6d0" strokeWidth="1" x1="40" x2="780" y1="275" y2="275"></line>
-              
-              {/* Y-Axis Labels */}
-              <text fill="#747780" fontSize="10" fontFamily="'Inter', sans-serif" textAnchor="end" x="30" y="55">25L</text>
-              <text fill="#747780" fontSize="10" fontFamily="'Inter', sans-serif" textAnchor="end" x="30" y="130">20L</text>
-              <text fill="#747780" fontSize="10" fontFamily="'Inter', sans-serif" textAnchor="end" x="30" y="205">15L</text>
-              
-              {/* X-Axis Labels */}
-              <text fill="#747780" fontSize="10" fontFamily="'Inter', sans-serif" textAnchor="middle" x="80" y="295">Jan</text>
-              <text fill="#747780" fontSize="10" fontFamily="'Inter', sans-serif" textAnchor="middle" x="220" y="295">Apr</text>
-              <text fill="#747780" fontSize="10" fontFamily="'Inter', sans-serif" textAnchor="middle" x="360" y="295">Jul</text>
-              <text fill="#747780" fontSize="10" fontFamily="'Inter', sans-serif" textAnchor="middle" x="500" y="295">Oct</text>
-              <text fill="#747780" fontSize="10" fontFamily="'Inter', sans-serif" textAnchor="middle" x="640" y="295">Dec</text>
-              <text fill="#747780" fontSize="10" fontFamily="'Inter', sans-serif" textAnchor="middle" x="760" y="295">Now</text>
-              
-              {/* Data Area */}
-              <path fill="url(#blueGradient)" d="M40,250 Q100,240 150,220 T250,180 T350,190 T450,140 T550,110 T650,80 T760,40 L760,275 L40,275 Z"></path>
-              
-              {/* Data Line */}
-              <path stroke="#002653" strokeWidth="2" fill="none" d="M40,250 Q100,240 150,220 T250,180 T350,190 T450,140 T550,110 T650,80 T760,40"></path>
-              
-              {/* Current Point Indicator */}
-              <circle cx="760" cy="40" fill="#002653" r="6" stroke="#ffffff" strokeWidth="2"></circle>
-              
-              {/* Interactive Hover Line (Simulated active state) */}
-              <line stroke="#747780" strokeDasharray="2" strokeWidth="1" x1="550" x2="550" y1="30" y2="275"></line>
-              <circle cx="550" cy="110" fill="#002653" r="4"></circle>
-              <g transform="translate(500, 10)">
-                <rect fill="#191c1d" height="24" rx="4" width="100"></rect>
-                <text fill="#ffffff" fontFamily="'Inter', sans-serif" fontSize="10" fontWeight="600" textAnchor="middle" x="50" y="16">₹{(data?.history?.[4] || 2140000).toLocaleString('en-IN')}</text>
-              </g>
-            </svg>
+
+            {/* Quick Metrics Pills */}
+            <div className="flex flex-wrap items-center gap-2">
+              <div className="bg-surface-container-low border border-outline-variant/40 px-3 py-1.5 rounded-xl flex items-center gap-1.5">
+                <ArrowUp size={14} className="text-secondary" />
+                <span className="text-xs text-on-surface-variant">Today:</span>
+                <span className="text-xs font-bold text-secondary">
+                  +{data?.todayChange ? formatCurrency(data.todayChange.value) : '₹15,989'} (+{data?.todayChange?.percentage || 1.18}%)
+                </span>
+              </div>
+
+              <div className="bg-primary-container/30 border border-primary/20 px-3 py-1.5 rounded-xl flex items-center gap-1.5">
+                <Sparkles size={14} className="text-primary" />
+                <span className="text-xs text-on-surface-variant">XIRR:</span>
+                <span className="text-xs font-bold text-primary">{data?.xirr || 16.4}%</span>
+              </div>
+            </div>
           </div>
         </section>
 
-        {/* Key Metrics Bento Grid */}
-        <h3 className="font-headline-sm text-on-surface mb-4">Portfolio Highlights</h3>
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-          
-          {/* Metric Card 1 */}
-          <div className="bg-surface-container-lowest rounded-xl border border-outline-variant/50 p-6 shadow-sm flex flex-col">
-            <div className="flex items-center justify-between mb-3">
-              <span className="font-label-md text-on-surface-variant flex items-center">
-                <TrendingUp size={18} className="mr-2" />
-                Absolute Gain (1Y)
-              </span>
-              <button aria-label="Info" className="text-outline hover:text-primary transition-colors min-h-[44px] min-w-[44px] flex items-center justify-center -mr-2">
-                <Info size={18} />
-              </button>
+        {/* Interactive Performance Chart Section */}
+        <section className="bg-surface-container-lowest rounded-2xl border border-outline-variant p-4 md:p-6 shadow-sm space-y-4">
+          {/* Header & Controls */}
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-outline-variant/40 pb-4">
+            <div className="flex items-center gap-2">
+              <BarChart3 size={20} className="text-primary" />
+              <h2 className="font-headline-sm text-on-surface">Growth Trajectory</h2>
             </div>
-            <div className="font-headline-sm text-on-surface mb-1">₹4,20,500</div>
-            <div className="font-body-md text-secondary">Wealth generated</div>
+
+            {/* Time Range Selector */}
+            <div className="flex items-center gap-1 bg-surface-container-low p-1 rounded-xl border border-outline-variant/40 self-start sm:self-auto">
+              {(['1M', '3M', '6M', '1Y', 'ALL'] as TimeRange[]).map((range) => (
+                <button
+                  key={range}
+                  onClick={() => setSelectedRange(range)}
+                  className={`font-label-sm px-3 py-1.5 rounded-lg transition-all duration-150 ${
+                    selectedRange === range
+                      ? 'bg-primary text-on-primary font-bold shadow-sm'
+                      : 'text-on-surface-variant hover:text-on-surface hover:bg-surface-container-high'
+                  }`}
+                >
+                  {range}
+                </button>
+              ))}
+            </div>
           </div>
 
-          {/* Metric Card 2 */}
-          <div className="bg-surface-container-lowest rounded-xl border border-outline-variant/50 p-6 shadow-sm flex flex-col">
-            <div className="flex items-center justify-between mb-3">
-              <span className="font-label-md text-on-surface-variant flex items-center">
-                <Percent size={18} className="mr-2" />
-                Percentage Change
-              </span>
-              <button aria-label="Info" className="text-outline hover:text-primary transition-colors min-h-[44px] min-w-[44px] flex items-center justify-center -mr-2">
-                <Info size={18} />
-              </button>
-            </div>
-            <div className="font-headline-sm text-on-surface mb-1">+ 20.6%</div>
-            <div className="font-body-md text-secondary">Annualized return</div>
-          </div>
-
-          {/* Metric Card 3 */}
-          <div className="bg-primary text-on-primary rounded-xl p-6 shadow-sm flex flex-col relative overflow-hidden">
-            <div className="absolute inset-0 bg-gradient-to-br from-primary-container/20 to-transparent pointer-events-none"></div>
-            <div className="relative z-10">
-              <div className="flex items-center justify-between mb-3">
-                <span className="font-label-md text-primary-fixed-dim flex items-center">
-                  <Wallet size={18} className="mr-2" />
-                  Total Invested
-                </span>
+          {/* Benchmark Comparison Toggle */}
+          <div className="flex items-center justify-between flex-wrap gap-2 text-xs text-on-surface-variant pt-1">
+            <div className="flex items-center gap-4">
+              <div className="flex items-center gap-1.5 font-medium text-primary">
+                <span className="w-3 h-3 rounded-sm bg-primary"></span>
+                <span>Portfolio ({data?.benchmarkComparison?.portfolio ? `+${data.benchmarkComparison.portfolio}%` : '+18.4%'})</span>
               </div>
-              <div className="font-headline-sm mb-1">₹20,36,390</div>
-              <div className="font-body-md text-primary-fixed-dim">Principal amount</div>
+
+              {compareBenchmark && (
+                <div className="flex items-center gap-1.5 font-medium text-amber-600 dark:text-amber-400">
+                  <span className="w-3 h-3 rounded-sm bg-amber-500"></span>
+                  <span>NIFTY 50 ({data?.benchmarkComparison?.nifty50 ? `+${data.benchmarkComparison.nifty50}%` : '+13.9%'})</span>
+                </div>
+              )}
+            </div>
+
+            <button
+              onClick={() => setCompareBenchmark(!compareBenchmark)}
+              className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg border transition-colors ${
+                compareBenchmark 
+                  ? 'bg-amber-500/10 border-amber-500/40 text-amber-700 dark:text-amber-300 font-semibold' 
+                  : 'bg-surface-container-low border-outline-variant text-on-surface-variant'
+              }`}
+            >
+              {compareBenchmark ? <CheckCircle2 size={13} /> : <div className="w-3 h-3 rounded-sm border border-outline-variant"></div>}
+              Compare NIFTY 50
+              {compareBenchmark && data?.benchmarkComparison && (
+                <span className="bg-amber-500 text-white text-[10px] px-1.5 py-0.2 rounded font-bold ml-1">
+                  +{data.benchmarkComparison.alpha}% Alpha
+                </span>
+              )}
+            </button>
+          </div>
+
+          {/* Chart Display Area */}
+          <div className="w-full h-72 md:h-88 pt-2 relative">
+            {loading ? (
+              <div className="w-full h-full flex flex-col items-center justify-center gap-2 text-on-surface-variant">
+                <Loader2 className="animate-spin text-primary" size={28} />
+                <span className="text-xs">Updating chart data...</span>
+              </div>
+            ) : data?.chartData && data.chartData.length > 0 ? (
+              <ResponsiveContainer width="100%" height="100%">
+                <AreaChart data={data.chartData} margin={{ top: 10, right: 10, left: -20, bottom: 0 }}>
+                  <defs>
+                    <linearGradient id="portfolioGradient" x1="0" y1="0" x2="0" y2="1">
+                      <stop offset="5%" stopColor="#002653" stopOpacity={0.25} />
+                      <stop offset="95%" stopColor="#002653" stopOpacity={0.0} />
+                    </linearGradient>
+                    <linearGradient id="benchmarkGradient" x1="0" y1="0" x2="0" y2="1">
+                      <stop offset="5%" stopColor="#d97706" stopOpacity={0.15} />
+                      <stop offset="95%" stopColor="#d97706" stopOpacity={0.0} />
+                    </linearGradient>
+                  </defs>
+
+                  <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#e2e8f0" opacity={0.6} />
+                  
+                  <XAxis 
+                    dataKey="date" 
+                    tickLine={false} 
+                    axisLine={false} 
+                    tick={{ fontSize: 11, fill: '#64748b' }} 
+                    dy={5}
+                  />
+                  <YAxis 
+                    tickLine={false} 
+                    axisLine={false} 
+                    tickFormatter={formatYAxis} 
+                    tick={{ fontSize: 11, fill: '#64748b' }}
+                    domain={['auto', 'auto']}
+                  />
+
+                  <Tooltip content={<CustomTooltip />} />
+
+                  {/* Invested Capital Line */}
+                  <Line 
+                    type="monotone" 
+                    dataKey="investedValue" 
+                    stroke="#94a3b8" 
+                    strokeDasharray="4 4" 
+                    strokeWidth={1.5} 
+                    dot={false}
+                    name="Invested Cost Basis"
+                  />
+
+                  {/* Benchmark Area / Line */}
+                  {compareBenchmark && (
+                    <Area 
+                      type="monotone" 
+                      dataKey="benchmarkValue" 
+                      stroke="#d97706" 
+                      strokeWidth={2} 
+                      fillOpacity={1} 
+                      fill="url(#benchmarkGradient)"
+                      name="NIFTY 50"
+                    />
+                  )}
+
+                  {/* Portfolio Main Area */}
+                  <Area 
+                    type="monotone" 
+                    dataKey="portfolioValue" 
+                    stroke="#002653" 
+                    strokeWidth={2.5} 
+                    fillOpacity={1} 
+                    fill="url(#portfolioGradient)"
+                    name="Portfolio Value"
+                  />
+                </AreaChart>
+              </ResponsiveContainer>
+            ) : (
+              <div className="w-full h-full flex items-center justify-center text-on-surface-variant text-sm">
+                No chart history available for this timeframe.
+              </div>
+            )}
+          </div>
+        </section>
+
+        {/* Bento Breakdown Cards */}
+        <section className="grid grid-cols-2 md:grid-cols-4 gap-3 md:gap-4">
+          {/* Total Invested */}
+          <div className="bg-surface-container-lowest p-4 rounded-xl border border-outline-variant shadow-sm space-y-1">
+            <div className="flex items-center gap-1.5 text-on-surface-variant text-xs">
+              <Wallet size={14} />
+              <span>Invested Capital</span>
+            </div>
+            <div className="font-headline-sm font-bold text-on-surface">
+              {data ? formatCurrency(data.investedAmount) : '₹11,95,000'}
+            </div>
+            <div className="text-[11px] text-outline">Across 10 holdings</div>
+          </div>
+
+          {/* Total Returns */}
+          <div className="bg-surface-container-lowest p-4 rounded-xl border border-outline-variant shadow-sm space-y-1">
+            <div className="flex items-center gap-1.5 text-on-surface-variant text-xs">
+              <TrendingUp size={14} />
+              <span>Total Returns</span>
+            </div>
+            <div className="font-headline-sm font-bold text-secondary">
+              +{data ? formatCurrency(data.totalReturns) : '₹1,60,000.50'}
+            </div>
+            <div className="text-[11px] text-secondary font-semibold">
+              +{data?.totalReturnsPercent || 13.57}% all-time
             </div>
           </div>
 
-        </div>
+          {/* Annualized XIRR */}
+          <div className="bg-surface-container-lowest p-4 rounded-xl border border-outline-variant shadow-sm space-y-1">
+            <div className="flex items-center gap-1.5 text-on-surface-variant text-xs">
+              <Percent size={14} />
+              <span>Annualized XIRR</span>
+            </div>
+            <div className="font-headline-sm font-bold text-primary">
+              {data?.xirr || 16.4}%
+            </div>
+            <div className="text-[11px] text-outline">Time-weighted yield</div>
+          </div>
 
-        {/* Action Button */}
-        <div className="mt-8 flex justify-center">
-          <button className="bg-primary hover:bg-primary-container text-on-primary font-label-md h-[48px] px-8 rounded-full transition-colors flex items-center shadow-sm">
-            <PlusCircle size={18} className="mr-2" />
-            Invest More
-          </button>
-        </div>
+          {/* Benchmark Alpha */}
+          <div className="bg-surface-container-lowest p-4 rounded-xl border border-outline-variant shadow-sm space-y-1">
+            <div className="flex items-center gap-1.5 text-on-surface-variant text-xs">
+              <ShieldCheck size={14} />
+              <span>Benchmark Alpha</span>
+            </div>
+            <div className="font-headline-sm font-bold text-amber-600 dark:text-amber-400">
+              +{data?.benchmarkComparison?.alpha || 4.5}%
+            </div>
+            <div className="text-[11px] text-outline">Outperforming NIFTY 50</div>
+          </div>
+        </section>
+
+        {/* Disclaimer Card (Mandatory honesty requirement) */}
+        <footer className="bg-surface-container-low/60 rounded-xl p-4 border border-outline-variant/40 flex items-start gap-3">
+          <Info size={16} className="text-on-surface-variant shrink-0 mt-0.5" />
+          <div className="space-y-1 text-xs text-on-surface-variant leading-relaxed">
+            <p className="font-semibold text-on-surface">Data Disclaimer & Information Notice</p>
+            <p>
+              {data?.disclaimer || "This is informational context only, not investment advice or a prediction. Market price data is live/delayed (typically 15-20 min). Past performance does not guarantee future results."}
+            </p>
+          </div>
+        </footer>
 
       </main>
     </div>

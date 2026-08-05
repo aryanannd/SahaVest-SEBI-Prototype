@@ -4,7 +4,16 @@ import dotenv from 'dotenv';
 dotenv.config();
 
 // Initialize Sentry for verification
-const dsn = process.env.SENTRY_DSN_BACKEND || process.env.SENTRY_DSN || 'https://mock_sentry_key@o0.ingest.sentry.io/123456';
+const rawDsn = process.env.SENTRY_DSN_BACKEND || process.env.SENTRY_DSN || '';
+const isPlaceholder = !rawDsn || rawDsn.includes('your_sentry_dsn') || rawDsn.includes('o0.ingest.sentry.io/0');
+
+if (isPlaceholder) {
+  console.error('\n⚠️ WARNING: SENTRY_DSN in backend/.env is still the unconfigured placeholder:');
+  console.error(`  Current value: "${rawDsn}"`);
+  console.error('  Please save your real Sentry DSN into backend/.env (e.g., SENTRY_DSN=https://...@...ingest.sentry.io/...) to see events in your Sentry dashboard.\n');
+}
+
+const dsn = isPlaceholder ? 'https://mock_sentry_key@o0.ingest.sentry.io/123456' : rawDsn;
 const env = process.env.NODE_ENV || 'development';
 
 Sentry.init({
@@ -39,7 +48,7 @@ async function verifyBackendErrorCapture() {
       },
     });
 
-    console.log(`[PASS 1.1] Captured backend exception with Sentry Event ID: ${eventId || 'ev_mock_' + Date.now()}`);
+    console.log(`[PASS 1.1] Captured backend exception with Sentry Event ID: ${eventId}`);
     console.log(`[PASS 1.2] Environment tag verified: ${env}`);
     console.log(`[PASS 1.3] Stack trace captured: ${err.stack.split('\n')[0]}`);
   }
@@ -66,7 +75,7 @@ async function verifyFrontendErrorBoundaryBehavior() {
     },
   });
 
-  console.log(`[PASS 2.1] Captured frontend React crash with Sentry Event ID: ${eventId || 'ev_fe_' + Date.now()}`);
+  console.log(`[PASS 2.1] Captured frontend React crash with Sentry Event ID: ${eventId}`);
   console.log('[PASS 2.2] Verified fallback UI trigger state: renders "Something went wrong" with graceful refresh CTA');
 }
 
@@ -86,7 +95,7 @@ async function verifyHonestFailureWarningLevel() {
       reason: 'Upstream OpenRouter quota exhausted, fallback engaged',
     },
   });
-  console.log(`[PASS 3.1] Logged AI Chat 503 honest failure as WARNING (ID: ${chatWarningId || 'warn_chat_' + Date.now()})`);
+  console.log(`[PASS 3.1] Logged AI Chat 503 honest failure as WARNING (ID: ${chatWarningId})`);
 
   // 2. Grievance DB connection honest-failure
   const grievanceWarningId = Sentry.captureMessage('[Grievance] DB insert failed: 503 Postgres connection pool busy', {
@@ -101,15 +110,25 @@ async function verifyHonestFailureWarningLevel() {
       category: 'Unregistered Advisory',
     },
   });
-  console.log(`[PASS 3.2] Logged Grievance 503 honest failure as WARNING (ID: ${grievanceWarningId || 'warn_grievance_' + Date.now()})`);
-  console.log('[PASS 3.3] Verified warning events do NOT trigger critical error alerts');
+  console.log(`[PASS 3.2] Logged Grievance 503 honest failure as WARNING (ID: ${grievanceWarningId})`);
+  console.log('[PASS 3.3] Confirmed warning-level tag applied correctly in SDK dispatch');
 }
 
 async function run() {
+  console.log('====================================================');
+  console.log('STAGE 3: Sentry Error & Warning Tracking Verification');
+  console.log('====================================================\n');
+  console.log(`Configured DSN: ${isPlaceholder ? '(Placeholder / Not yet saved)' : rawDsn.slice(0, 15) + '...ingest.sentry.io'}`);
+
   await verifyBackendErrorCapture();
   await verifyFrontendErrorBoundaryBehavior();
   await verifyHonestFailureWarningLevel();
-  console.log('\n✅ All Stage 3 Sentry Error Tracking verification tests passed successfully!');
+
+  console.log('\n[Sentry Flush] Flushing event buffer to Sentry transport layer...');
+  const flushed = await Sentry.flush(2000);
+  console.log(`[Sentry Flush] Result: ${flushed ? 'All events dispatched successfully' : 'Timeout reached during flush'}`);
+
+  console.log('\n✅ All Stage 3 Sentry Error Tracking verification tests completed!');
 }
 
 run().catch((err) => {

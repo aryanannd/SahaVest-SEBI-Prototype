@@ -37,7 +37,7 @@ export function AdvisorVerification() {
       const headers: HeadersInit = {};
       if (session) headers['Authorization'] = `Bearer ${session.access_token}`;
       
-      const response = await fetch(`http://localhost:3000/api/trust/verify-advisor/${searchVal}`, { headers });
+      const response = await fetch(`/api/trust/verify-advisor/${searchVal}`, { headers });
       
       if (response.ok) {
         const data = await response.json();

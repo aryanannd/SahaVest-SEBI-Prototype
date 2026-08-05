@@ -3,7 +3,7 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { 
   Search, User, Link as LinkIcon, TrendingUp, Shield, 
-  ShieldCheck, Compass, ArrowUp, Landmark, Gem, Minus, AlertTriangle, Bell
+  ShieldCheck, Compass, ArrowUp, Landmark, Gem, Minus, AlertTriangle, Bell, ChevronRight
 } from "lucide-react";
 import { supabase } from '../../lib/supabaseClient';
 
@@ -28,7 +28,7 @@ export function Dashboard() {
           headers['Authorization'] = `Bearer ${session.access_token}`;
         }
         
-        const res = await fetch('http://localhost:3000/api/portfolio/exposure/me', {
+        const res = await fetch('/api/portfolio/exposure/me', {
           headers
         });
         const data = await res.json();
@@ -87,9 +87,8 @@ export function Dashboard() {
     );
   }
 
-  // Formatting helper
   const formatCurrency = (val: number) => new Intl.NumberFormat('en-IN', { style: 'currency', currency: 'INR', maximumFractionDigits: 0 }).format(val);
-  const totalNetWorth = exposureData?.totalValue || 1450000;
+  const totalNetWorth = exposureData?.totalValue ?? null;
 
   return (
     <div className="bg-surface text-on-surface pb-[80px] md:pb-0 min-h-screen">
@@ -128,15 +127,33 @@ export function Dashboard() {
           </div>
         )}
 
-        {/* Net Worth Header Area */}
-        <section className="text-center space-y-2 pt-4">
-          <h2 className="font-label-md text-on-surface-variant">Total Net Worth</h2>
-          <div className="font-display-lg-mobile md:font-display-lg text-primary">{formatCurrency(totalNetWorth)}</div>
-          <div className="flex items-center justify-center gap-1 text-secondary font-label-md">
-            <TrendingUp size={16} />
-            <span>+2.4% (1M)</span>
+        {/* Net Worth Header Area (Clickable -> Performance Chart) */}
+        <section 
+          onClick={() => navigate('/portfolio/performance')}
+          role="button"
+          tabIndex={0}
+          onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') navigate('/portfolio/performance'); }}
+          className="bg-surface-container-lowest rounded-2xl p-5 md:p-6 border border-outline-variant/60 shadow-sm hover:border-primary/40 hover:shadow-md transition-all cursor-pointer text-center space-y-2 group active:scale-[0.99] duration-150 relative overflow-hidden"
+        >
+          <div className="flex items-center justify-center gap-2">
+            <span className="font-label-md text-on-surface-variant uppercase tracking-wider">Total Net Worth</span>
+            <span className="inline-flex items-center gap-1 text-[11px] font-medium text-primary bg-primary-container/40 px-2 py-0.5 rounded-full group-hover:bg-primary group-hover:text-on-primary transition-colors">
+              Performance Chart <ChevronRight size={12} />
+            </span>
           </div>
-          <div className="font-label-sm text-outline pt-3">Last updated: 5 mins ago</div>
+          <div className="font-display-lg-mobile md:font-display-lg text-primary tracking-tight font-bold group-hover:scale-[1.01] transition-transform">
+            {totalNetWorth === null
+              ? <span className="inline-block w-40 h-9 bg-surface-container animate-pulse rounded-lg align-middle" />
+              : formatCurrency(totalNetWorth)
+            }
+          </div>
+          <div className="flex items-center justify-center gap-2 text-secondary font-label-md">
+            <span className="inline-flex items-center gap-1 bg-secondary-container/40 text-secondary px-2.5 py-1 rounded-full text-xs font-semibold">
+              <TrendingUp size={14} /> {exposureData?.dayChangePercent != null ? `${exposureData.dayChangePercent > 0 ? '+' : ''}${exposureData.dayChangePercent.toFixed(1)}% (Today)` : 'Live Pricing'}
+            </span>
+            <span className="text-outline text-xs">•</span>
+            <span className="text-outline text-xs">Live/delayed pricing (15–20 min)</span>
+          </div>
         </section>
 
         {/* Donut Chart & Legend Bento */}

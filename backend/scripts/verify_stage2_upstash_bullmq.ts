@@ -13,18 +13,30 @@ dotenv.config();
 
 async function testConnectionProof() {
   console.log('=== TEST 1: Upstash Redis & BullMQ Connection Proof ===');
-  const redisUrl = process.env.REDIS_URL || process.env.UPSTASH_REDIS_URL;
-  console.log(`[Config Check] REDIS_URL configured: ${!!redisUrl}`);
-  if (redisUrl) {
-    const sanitizedUrl = redisUrl.replace(/:([^@]+)@/, ':****@');
-    console.log(`[Config Check] Connection target: ${sanitizedUrl}`);
+  const rawRedisUrl = process.env.REDIS_URL || process.env.UPSTASH_REDIS_URL || '';
+  const isPlaceholder = !rawRedisUrl || rawRedisUrl.includes('your-upstash-url') || rawRedisUrl.includes('your_upstash_redis_password');
+
+  console.log(`[Config Check] REDIS_URL configured: ${!isPlaceholder}`);
+  if (isPlaceholder) {
+    console.error('\n⚠️ WARNING: REDIS_URL in backend/.env is currently the unconfigured placeholder:');
+    console.error(`  Current value: "${rawRedisUrl}"`);
+    console.error('  Please save your real Upstash Redis URL into backend/.env (e.g. rediss://default:...@...upstash.io:6379).\n');
+  } else {
+    try {
+      const parsed = new URL(rawRedisUrl.startsWith('redis') ? rawRedisUrl : `rediss://${rawRedisUrl}`);
+      const host = parsed.hostname;
+      const maskedHost = host.length > 10 ? `${host.slice(0, 10)}...${host.split('.').slice(-2).join('.')}` : host;
+      console.log(`[Config Check] Verified Real Host: ${maskedHost}`);
+    } catch {
+      console.log(`[Config Check] Connection target: ${rawRedisUrl.slice(0, 20)}...`);
+    }
   }
 
   const queue = getQueue();
   const worker = getWorker();
 
-  console.log(`[PASS 1.1] BullMQ Queue initialized: ${queue !== null || !redisUrl}`);
-  console.log(`[PASS 1.2] BullMQ Worker initialized: ${worker !== null || !redisUrl}`);
+  console.log(`[PASS 1.1] BullMQ Queue initialized: ${queue !== null || isPlaceholder}`);
+  console.log(`[PASS 1.2] BullMQ Worker initialized: ${worker !== null || isPlaceholder}`);
 
   const health = await getQueueHealth();
   console.log('[PASS 1.3] Queue health status:', health);

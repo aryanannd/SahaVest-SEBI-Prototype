@@ -74,6 +74,7 @@ function App() {
               <Route path="/dashboard" element={<Dashboard />} />
               <Route path="/fund/:type" element={<FundDetail />} />
               <Route path="/fund/:type/:holdingId" element={<HoldingDetail />} />
+              <Route path="/portfolio/holding/:holdingId" element={<HoldingDetail />} />
               <Route path="/portfolio" element={<PortfolioHub />} />
               <Route path="/portfolio/returns" element={<ReturnsDetail />} />
               <Route path="/portfolio/goals" element={<GoalsHub />} />
@@ -85,6 +86,7 @@ function App() {
               <Route path="/chat" element={<ChatAssistant />} />
               <Route path="/alerts" element={<PortfolioAlerts />} />
               <Route path="/fraud" element={<ScamChecker />} />
+              <Route path="/protection" element={<Navigate to="/fraud" replace />} />
               <Route path="/trust/report" element={<ReportScam />} />
               <Route path="/trust/advisor" element={<AdvisorVerification />} />
               <Route path="/trust/registry" element={<RegistryVerification />} />
@@ -106,6 +108,7 @@ function App() {
               <Route path="/compliance/audit" element={<AuditTrail />} />
               <Route path="/compliance/grievance/new" element={<FileGrievance />} />
               <Route path="/compliance/grievance/track" element={<GrievanceTracker />} />
+              <Route path="/grievance/tracker" element={<GrievanceTracker />} />
               <Route path="/compliance/grievance/:id" element={<Grievance />} />
               <Route path="/privacy" element={<PrivacyCenter />} />
               <Route path="/privacy/consents" element={<ManageConsents />} />

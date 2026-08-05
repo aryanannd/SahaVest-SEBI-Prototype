@@ -25,7 +25,7 @@ export function Simulator() {
         const { data: { session } } = await supabase.auth.getSession();
         const headers: HeadersInit = {};
         if (session) headers['Authorization'] = `Bearer ${session.access_token}`;
-        const res = await fetch('http://localhost:3000/api/portfolio/exposure/me', { headers });
+        const res = await fetch('/api/portfolio/exposure/me', { headers });
         const data = await res.json();
         if (data.totalValue != null && data.totalValue > 0) {
           setCorpus(Math.round(data.totalValue));
@@ -188,7 +188,7 @@ export function Simulator() {
                            const headers: HeadersInit = { 'Content-Type': 'application/json' };
                            if (session) headers['Authorization'] = `Bearer ${session.access_token}`;
                            
-                           const res = await fetch('http://localhost:3000/api/simulation/run', {
+                           const res = await fetch('/api/simulation/run', {
                              method: 'POST',
                              headers,
                              body: JSON.stringify({ sipAmount: sip, duration: years, returnRate: rate })

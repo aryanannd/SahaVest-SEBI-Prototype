@@ -17,7 +17,7 @@ export function AuditTrail() {
         const headers: HeadersInit = { 'Content-Type': 'application/json' };
         if (session) headers['Authorization'] = `Bearer ${session.access_token}`;
         
-        const res = await fetch('http://localhost:3000/api/compliance/audit/me', { headers });
+        const res = await fetch('/api/compliance/audit/me', { headers });
         const data = await res.json();
         if (data.events) {
           setLogs(data.events);

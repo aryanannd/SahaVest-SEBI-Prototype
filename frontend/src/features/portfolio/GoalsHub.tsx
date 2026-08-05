@@ -21,7 +21,7 @@ export function GoalsHub() {
           headers['Authorization'] = `Bearer ${session.access_token}`;
         }
         
-        const res = await fetch('http://localhost:3000/api/goals', { headers });
+        const res = await fetch('/api/goals', { headers });
         const data = await res.json();
         setGoals(data.goals || []);
       } catch (err) {

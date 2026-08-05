@@ -55,7 +55,7 @@ export function OnboardingFlow() {
     try {
       if (MOCK_OTP && otp === '123456') {
         // Use demo-login bypass endpoint which returns a real session
-        const res = await fetch('http://localhost:3000/api/auth/demo-login', { method: 'POST' });
+        const res = await fetch('/api/auth/demo-login', { method: 'POST' });
         const data = await res.json();
         if (data.session) {
           // Set the session into the Supabase client so it works globally
@@ -69,7 +69,7 @@ export function OnboardingFlow() {
         }
       } else {
         // Real OTP verify (to be fully integrated next)
-        const res = await fetch('http://localhost:3000/api/auth/verify', {
+        const res = await fetch('/api/auth/verify', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ mobile: phone, otp })

@@ -19,7 +19,7 @@ export function FileGrievance() {
       const headers: HeadersInit = { 'Content-Type': 'application/json' };
       if (session) headers['Authorization'] = `Bearer ${session.access_token}`;
       
-      const res = await fetch('http://localhost:3000/api/compliance/grievance', {
+      const res = await fetch('/api/compliance/grievance', {
         method: 'POST',
         headers,
         body: JSON.stringify({
@@ -29,7 +29,7 @@ export function FileGrievance() {
         })
       });
       if (res.ok) {
-        navigate('/grievance/tracker');
+        navigate('/compliance/grievance/track');
       } else {
         alert('Failed to submit grievance');
       }

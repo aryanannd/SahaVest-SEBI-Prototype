@@ -15,7 +15,7 @@ export function NotificationPreferences() {
         const { data: { session } } = await supabase.auth.getSession();
         const headers: HeadersInit = { 'Content-Type': 'application/json' };
         if (session) headers['Authorization'] = `Bearer ${session.access_token}`;
-        const res = await fetch('http://localhost:3000/api/profile/notifications/me', { headers });
+        const res = await fetch('/api/profile/notifications/me', { headers });
         const data = await res.json();
         if (data.email_alerts !== undefined) setPortfolioUpdates(data.email_alerts);
         if (data.push_alerts !== undefined) setGrievanceStatus(data.push_alerts);

@@ -152,7 +152,7 @@ export function ApproveDataSharing() {
                 const { data: { session } } = await supabase.auth.getSession();
                 if (session) {
                   const currentOrigin = window.location.origin;
-                  const res = await fetch(`${import.meta.env.VITE_API_BASE_URL || 'http://localhost:3000/api'}/aa/consent`, {
+                  const res = await fetch(`${import.meta.env.VITE_API_BASE_URL || '/api'}/aa/consent`, {
                     method: 'POST',
                     headers: { 
                       'Content-Type': 'application/json',

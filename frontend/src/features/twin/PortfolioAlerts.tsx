@@ -12,7 +12,7 @@ export function PortfolioAlerts() {
   } | null>(null);
 
   useEffect(() => {
-    fetch('http://localhost:3000/api/portfolio/exposure/me')
+    fetch('/api/portfolio/exposure/me')
       .then(res => res.json())
       .then(data => {
         setAlertData(data);

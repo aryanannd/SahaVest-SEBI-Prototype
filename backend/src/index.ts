@@ -33,6 +33,10 @@ import {
   normalizeAndStoreUpstoxHoldings,
   UpstoxTokenExpiredError,
 } from './lib/upstoxConnect';
+import { getCandles, getQuote, resolveYahooSymbol } from './lib/marketData';
+import { getCompanyNews } from './lib/newsService';
+import { generateContextSummary, scanForProhibitedLanguage } from './lib/aiContextSummary';
+import { getPortfolioPerformance } from './lib/portfolioPerformance';
 dotenv.config();
 
 Sentry.init({
@@ -894,6 +898,97 @@ app.delete('/api/broker/upstox/disconnect', async (req: Request, res: Response) 
   }
 });
 
+// ==========================================
+// Market Data: Candles, Quote, News, AI Summary
+// ==========================================
+
+/**
+ * GET /api/market/candles/:symbol?interval=1d&range=3mo
+ * Returns OHLC candle data for a stock symbol (NSE/BSE).
+ * Primary: Yahoo Finance (delayed ~15-20 min)
+ * Fallback: Last cached data with stale label
+ */
+app.get('/api/market/candles/:symbol', async (req: Request, res: Response) => {
+  try {
+    const { symbol } = req.params;
+    const interval = (req.query.interval as '1d' | '1wk' | '1mo') || '1d';
+    const range = (req.query.range as '1mo' | '3mo' | '6mo' | '1y' | '2y' | '5y') || '3mo';
+    const simulateError = process.env.NODE_ENV !== 'production' && req.query.simulate_error === 'true';
+
+    if (!symbol) return res.status(400).json({ error: 'Symbol is required' });
+
+    const result = await getCandles(symbol, interval, range, { forceFailure: simulateError });
+    return res.json(result);
+  } catch (err: any) {
+    console.error('[MarketData] Candle fetch error:', err);
+    return res.status(500).json({ error: true, message: err.message || 'Failed to fetch candles' });
+  }
+});
+
+/**
+ * GET /api/market/quote/:symbol
+ * Returns current delayed quote for a symbol.
+ */
+app.get('/api/market/quote/:symbol', async (req: Request, res: Response) => {
+  try {
+    const { symbol } = req.params;
+    const simulateError = process.env.NODE_ENV !== 'production' && req.query.simulate_error === 'true';
+    if (!symbol) return res.status(400).json({ error: 'Symbol is required' });
+
+    const result = await getQuote(symbol, { forceFailure: simulateError });
+    return res.json(result);
+  } catch (err: any) {
+    console.error('[MarketData] Quote fetch error:', err);
+    return res.status(500).json({ error: true, message: err.message || 'Failed to fetch quote' });
+  }
+});
+
+/**
+ * GET /api/market/news/:symbol?company=Reliance+Industries
+ * Returns recent news articles for a company.
+ */
+app.get('/api/market/news/:symbol', async (req: Request, res: Response) => {
+  try {
+    const { symbol } = req.params;
+    const companyName = (req.query.company as string) || symbol;
+    if (!symbol) return res.status(400).json({ error: 'Symbol is required' });
+
+    const result = await getCompanyNews(companyName, symbol);
+    return res.json(result);
+  } catch (err: any) {
+    console.error('[MarketData] News fetch error:', err);
+    return res.status(500).json({ error: true, message: err.message || 'Failed to fetch news' });
+  }
+});
+
+/**
+ * GET /api/market/ai-summary/:symbol?company=Reliance+Industries
+ * Returns AI context summary: news sentiment + volatility context + disclaimer.
+ * NEVER includes price predictions, probabilities, or buy/sell advice.
+ */
+app.get('/api/market/ai-summary/:symbol', async (req: Request, res: Response) => {
+  try {
+    const { symbol } = req.params;
+    const companyName = (req.query.company as string) || symbol;
+    if (!symbol) return res.status(400).json({ error: 'Symbol is required' });
+
+    // Fetch news and candles in parallel for context
+    const [newsResult, candleResult] = await Promise.allSettled([
+      getCompanyNews(companyName, symbol),
+      getCandles(symbol, '1d', '3mo'),
+    ]);
+
+    const articles = newsResult.status === 'fulfilled' ? newsResult.value.articles : [];
+    const candles = candleResult.status === 'fulfilled' ? candleResult.value.candles.slice(-60) : [];
+
+    const summary = await generateContextSummary(symbol, companyName, articles, candles);
+    return res.json(summary);
+  } catch (err: any) {
+    console.error('[MarketData] AI summary error:', err);
+    return res.status(500).json({ error: true, message: err.message || 'Failed to generate AI summary' });
+  }
+});
+
 // Exposure / Concentration Analytics
 app.get('/api/portfolio/exposure/:userId', async (req: Request, res: Response) => {
   try {
@@ -1016,6 +1111,7 @@ app.get('/api/portfolio/tax-summary/:userId', async (req: Request, res: Response
 app.get('/api/portfolio/performance/:userId', async (req: Request, res: Response) => {
   try {
     const { userId } = req.params;
+    const range = ((req.query.range as string)?.toUpperCase() || '1Y') as '1M' | '3M' | '6M' | '1Y' | 'ALL';
     let activeUserId = userId === 'me' ? '716691b9-939e-4118-aafb-9246a3923250' : userId;
     const authHeader = req.headers.authorization;
     if (authHeader) {
@@ -1024,33 +1120,11 @@ app.get('/api/portfolio/performance/:userId', async (req: Request, res: Response
       if (user) activeUserId = user.id;
     }
 
-    // Retrieve total holdings value
-    const { data: holdings } = await supabase
-      .from('holdings')
-      .select('current_value')
-      .eq('user_id', activeUserId);
-      
-    const currentTotal = holdings?.reduce((sum, h) => sum + (h.current_value || 0), 0) || 2456890.50;
-
-    // Generate mock historical data points scaling up to currentTotal
-    const history = [
-      currentTotal * 0.8,
-      currentTotal * 0.82,
-      currentTotal * 0.78,
-      currentTotal * 0.85,
-      currentTotal * 0.90,
-      currentTotal * 0.95,
-      currentTotal
-    ];
-
-    res.status(200).json({
-      currentNetWorth: currentTotal,
-      todayChange: { value: 124000, percentage: 5.32 },
-      history
-    });
+    const performance = await getPortfolioPerformance(activeUserId, range);
+    return res.status(200).json(performance);
   } catch (error) {
     console.error("Performance history error:", error);
-    res.status(500).json({ error: 'Internal server error fetching performance' });
+    return res.status(500).json({ error: 'Internal server error fetching performance' });
   }
 });
 
@@ -1213,8 +1287,8 @@ app.post('/api/trade/intent', async (req: Request, res: Response) => {
     const { data: profile } = await supabase.from('users').select('risk_profile').eq('id', userId).single();
     const userRiskProfile = profile?.risk_profile || 'Moderate';
     
-    // Mismatch condition: User is Conservative but order is Aggressive
-    const riskMismatch = userRiskProfile === 'Conservative' && impliedRisk === 'Aggressive';
+    // Mismatch condition: User is not Aggressive but order is Aggressive
+    const riskMismatch = userRiskProfile !== 'Aggressive' && impliedRisk === 'Aggressive';
 
     if (req.body.ignore_suitability !== true && riskMismatch) {
       return res.json({
@@ -1267,34 +1341,97 @@ app.get('/api/portfolio/tax-summary/me', async (req: Request, res: Response) => 
 
 app.get('/api/portfolio/performance/me', async (req: Request, res: Response) => {
   try {
-    // Mock data for prototype
-    res.json({
-      returns1M: 2.4,
-      returns3M: 5.1,
-      returns1Y: 12.8,
-      returnsAllTime: 45.2,
-      xirr: 15.4,
-      benchmarkComparison: {
-        portfolio: 15.4,
-        nifty50: 12.1
-      },
-      chartData: [
-        { date: 'Jan', value: 1000000 },
-        { date: 'Feb', value: 1050000 },
-        { date: 'Mar', value: 1100000 },
-        { date: 'Apr', value: 1080000 },
-        { date: 'May', value: 1150000 },
-        { date: 'Jun', value: 1200000 },
-        { date: 'Jul', value: 1250000 },
-        { date: 'Aug', value: 1300000 },
-        { date: 'Sep', value: 1350000 },
-        { date: 'Oct', value: 1400000 },
-        { date: 'Nov', value: 1420000 },
-        { date: 'Dec', value: 1450000 }
-      ]
-    });
-  } catch (err) {
-    res.status(500).json({ error: 'Internal server error' });
+    const range = ((req.query.range as string)?.toUpperCase() || '1Y') as '1M' | '3M' | '6M' | '1Y' | 'ALL';
+    let activeUserId = '716691b9-939e-4118-aafb-9246a3923250';
+    const authHeader = req.headers.authorization;
+    if (authHeader) {
+      const token = authHeader.replace('Bearer ', '');
+      const { data: { user } } = await supabase.auth.getUser(token);
+      if (user) activeUserId = user.id;
+    }
+
+    const performance = await getPortfolioPerformance(activeUserId, range);
+    return res.status(200).json(performance);
+  } catch (err: any) {
+    console.error('Performance /me error:', err);
+    return res.status(500).json({ error: 'Internal server error fetching performance' });
+  }
+});
+
+app.get('/api/portfolio/holdings/me', async (req: Request, res: Response) => {
+  try {
+    const type = req.query.type as string;
+    const limit = parseInt((req.query.limit as string) || '10');
+    const offset = parseInt((req.query.offset as string) || '0');
+    
+    let activeUserId = '716691b9-939e-4118-aafb-9246a3923250';
+    const authHeader = req.headers.authorization;
+    if (authHeader) {
+      const token = authHeader.replace('Bearer ', '');
+      const { data: { user } } = await supabase.auth.getUser(token);
+      if (user) activeUserId = user.id;
+    }
+
+    let query = supabase.from('holdings').select('*').eq('user_id', activeUserId);
+    
+    if (type) {
+      if (type.toLowerCase() === 'equity') query = query.ilike('asset_class', '%equity%');
+      else if (type.toLowerCase() === 'mf') query = query.ilike('asset_class', '%mutual fund%');
+      else if (type.toLowerCase() === 'bonds') query = query.ilike('asset_class', '%bond%');
+      else if (type.toLowerCase() === 'nps') query = query.ilike('asset_class', '%nps%');
+      else if (type.toLowerCase() === 'sgb') query = query.ilike('asset_class', '%sgb%');
+      else if (type.toLowerCase() === 'reit') query = query.ilike('asset_class', '%reit%');
+      else query = query.eq('asset_class', type);
+    }
+
+    // Include limit and offset for Stage F Load More
+    query = query.range(offset, offset + limit - 1);
+
+    const { data: holdings, error } = await query;
+
+    if (error) {
+      console.error('[HOLDINGS] DB error:', error);
+      return res.status(500).json({ error: 'Failed to fetch holdings' });
+    }
+
+    const processedHoldings = await Promise.all((holdings || []).map(async (h) => {
+      const isIlliquid = ['bond', 'nps', 'sgb', 'reit', 'invit'].some(c => h.asset_class?.toLowerCase().includes(c));
+      
+      let livePrice = h.current_value / h.quantity;
+      let dayChange = 0;
+      let dayChangePercent = 0;
+      let asOfDate = h.last_updated || new Date().toISOString();
+      let isLive = !isIlliquid;
+
+      if (!isIlliquid && h.symbol) {
+        try {
+          const quoteResult = await getQuote(h.symbol);
+          if (quoteResult && quoteResult.price) {
+            livePrice = quoteResult.price;
+            dayChange = quoteResult.dayChange || 0;
+            dayChangePercent = quoteResult.dayChangePercent || 0;
+            asOfDate = quoteResult.cached_at || quoteResult.timestamp || new Date().toISOString();
+          }
+        } catch (e) {
+          console.warn(`Could not fetch live quote for ${h.symbol}`);
+        }
+      }
+
+      return {
+        ...h,
+        livePrice,
+        currentValue: livePrice * h.quantity,
+        dayChange: dayChange * h.quantity,
+        dayChangePercent,
+        asOfDate,
+        isLive
+      };
+    }));
+
+    res.json({ holdings: processedHoldings, count: processedHoldings.length, nextOffset: offset + limit });
+  } catch (err: any) {
+    console.error('Holdings /me error:', err);
+    return res.status(500).json({ error: 'Internal server error fetching holdings' });
   }
 });
 
@@ -1647,46 +1784,129 @@ app.post('/api/ai/chat', async (req: Request, res: Response) => {
       if (user) userId = user.id;
     }
 
+    // --- Stage 4: Pull real portfolio data for portfolio-specific questions ---
+    let portfolioContext = '';
+    const portfolioKeywords = /\b(portfolio|holdings?|my (?:investment|fund|stock|equity|mutual fund|return|value)|asset allocation|xirr|returns?|exposure)\b/i;
+    if (portfolioKeywords.test(message)) {
+      try {
+        const { data: holdingsData } = await supabase
+          .from('holdings')
+          .select('asset_class, instrument_name, current_value, avg_cost, quantity')
+          .eq('user_id', userId)
+          .limit(20);
+        if (holdingsData && holdingsData.length > 0) {
+          const totalValue = holdingsData.reduce((acc: number, h: any) => acc + (h.current_value || 0), 0);
+          const byClass: Record<string, number> = {};
+          holdingsData.forEach((h: any) => {
+            const cls = h.asset_class || 'Other';
+            byClass[cls] = (byClass[cls] || 0) + (h.current_value || 0);
+          });
+          portfolioContext = `\n\n[REAL USER PORTFOLIO DATA — use this to answer portfolio questions accurately]\nTotal Portfolio Value: ₹${totalValue.toLocaleString('en-IN')}\nAsset Allocation: ${Object.entries(byClass).map(([k, v]) => `${k}: ₹${v.toLocaleString('en-IN')}`).join(', ')}\nHoldings: ${holdingsData.map((h: any) => `${h.instrument_name} (${h.asset_class})`).join(', ')}\n[END PORTFOLIO DATA]`;
+        }
+      } catch (e) {
+        console.warn('Could not fetch portfolio data for chat context:', e);
+      }
+    }
+
+    // --- Stage 5: Inject market data for company/stock questions ---
+    let marketContext = '';
+    const companyMatch = message.match(/\b(?:tell me about|what is|how is|share price of|info on|NSE|BSE)\s+([A-Z][A-Za-z\s]{2,20}(?:Ltd|Limited|Bank|Industries|Corp|Inc)?)\b/i);
+    if (companyMatch) {
+      const companyName = companyMatch[1].trim();
+      try {
+        const newsData = await getCompanyNews(companyName);
+        if (newsData && newsData.articles && newsData.articles.length > 0) {
+          marketContext = `\n\n[MARKET/NEWS CONTEXT for ${companyName}]\n${newsData.articles.slice(0, 3).map((n: any) => `- ${n.title} (${n.source_name || 'recent'})`).join('\n')}\n[END MARKET CONTEXT]`;
+        }
+      } catch (e) {
+        console.warn('Could not fetch market data for chat context:', e);
+      }
+    }
+
+    // --- IPO-specific query detection ---
+    const ipoQuery = /\bipo\b/i.test(message);
+    const ipoContext = ipoQuery
+      ? `\n\n[IPO NOTE] You do not have access to live IPO subscription data or allotment status from NSE/BSE in real time. When asked about specific live IPO details, say honestly: "I don't have live IPO data for that right now." But you CAN and SHOULD give detailed educational information about how IPO investing works, grey market premium, allotment ratios, listing day strategies, and ASBA process.\n`
+      : '';
+
+    // --- Build full system prompt (Stages 3+4: multi-language + capabilities) ---
+    const systemPrompt = `You are SahaVest Assistant, a trusted financial education assistant built into the SahaVest app for Indian retail investors.
+
+LANGUAGE RULE (CRITICAL): Detect the language the user writes or speaks in — including Hindi, Gujarati, Marathi, Tamil, Telugu, Bengali, Kannada, Malayalam, Punjabi, Hinglish (Hindi-English mix), or any Indian language — and respond FLUENTLY in that exact same language. Never switch to English unless the user writes in English. If the user mixes languages (e.g. Hinglish), respond in the same mixed style.
+
+YOUR CAPABILITIES (respond to ALL of these):
+1. Explain financial terms in plain language: XIRR, NAV, expense ratio, SIP, ELSS, CAGR, PE ratio, etc.
+2. Explain the user's OWN portfolio metrics using real data when provided to you. Use the [REAL USER PORTFOLIO DATA] block if present.
+3. Guide users to verify advisors — mention the in-app "Verify an Advisor" feature (under Trust & Safety) and SEBI's SCORES portal.
+4. Investment education: how SIPs work, asset class risks, diversification, etc.
+5. Company information — use news/market context provided in [MARKET/NEWS CONTEXT] blocks when available.
+6. SEBI regulations: investor protection, SCORES portal, registered intermediaries — general educational info only.
+7. IPO education: how IPOs work, ASBA, allotment, grey market premium, listing gains risk. Use [IPO NOTE] guidance if present.
+
+ABSOLUTE GUARDRAILS (strictly enforced):
+- NEVER give a specific buy/sell recommendation for any individual stock, mutual fund, or asset.
+- NEVER predict future prices, future returns, or state probability of profit/loss.
+- NEVER say anything like "this stock will rise", "buy X now", "strong buy", "price target of X".
+- If the user explicitly asks for a stock tip, stock recommendation, or "should I buy X?": decline clearly but respectfully, redirect to educational content about how to evaluate investments yourself, and suggest consulting a SEBI-registered advisor.
+- NEVER guarantee returns of any kind.
+
+FORMAT: Keep answers clear, helpful, and under 3-4 paragraphs. Use bullet points for lists. Use ₹ for Indian Rupees.${portfolioContext}${marketContext}${ipoContext}`;
+
     let userMessageContent: any = message;
     if (image) {
       userMessageContent = [
-        { type: 'text', text: message },
+        { type: 'text', text: message || 'Please analyze this image and describe what you see, especially any financial information.' },
         { type: 'image_url', image_url: { url: image } }
       ];
     }
 
     const messages: Message[] = [
-      { role: "system", content: "You are the SahaVest financial assistant. Explain concepts clearly. Do not give specific buy/sell advice. Keep answers under 3 paragraphs." },
-      ...history,
-      { role: "user", content: userMessageContent }
+      { role: 'system', content: systemPrompt },
+      ...history.slice(-10), // Keep last 10 turns for context without bloating
+      { role: 'user', content: userMessageContent }
     ];
 
-    let aiResponse;
+    let aiResponse: string;
     try {
       aiResponse = await generateAIResponse(messages);
     } catch (llmError: any) {
-      console.error("LLM Error in chat:", llmError);
+      console.error('LLM Error in chat:', llmError);
       Sentry.captureMessage(`[AI Chat] LLM service unavailable: ${llmError?.message || llmError}`, {
         level: 'warning',
         tags: { endpoint: '/api/ai/chat', type: 'honest_failure' }
       });
-      return res.status(503).json({ error: true, message: "AI service temporarily unavailable" });
+      return res.status(503).json({ error: true, message: 'AI service temporarily unavailable' });
+    }
+
+    // --- Stage 4: Code-level Compliance Guardrail (same as aiContextSummary.ts pattern) ---
+    // This is the Compliance Agent hard-gate: scan output BEFORE it reaches the user.
+    const violations = scanForProhibitedLanguage(aiResponse);
+    if (violations.length > 0) {
+      console.warn(`[AI Chat Compliance] Response blocked for user ${userId}. Violations: ${violations.join(', ')}`);
+      Sentry.captureMessage(`[AI Chat Compliance] Output scan blocked response`, {
+        level: 'warning',
+        tags: { endpoint: '/api/ai/chat', type: 'compliance_block', violations: violations.join(',') }
+      });
+      // Replace with safe fallback instead of sending the flagged response
+      aiResponse = "I'm sorry, I can't provide that specific guidance. I'm designed to help with financial education and general information about concepts, not to provide investment recommendations or predict market outcomes. For personalized advice, I'd suggest consulting a SEBI-registered investment advisor.\n\nIs there a financial concept I can help explain, or would you like to know more about how to evaluate investment options for yourself?";
     }
 
     await supabase.from('agent_execution_logs').insert({
       user_id: userId,
       agent_role: 'Chat_Assistant',
-      input_payload: { message },
-      output_payload: { response: aiResponse },
+      input_payload: { message: typeof message === 'string' ? message : '[multimodal]' },
+      output_payload: { response: aiResponse, compliance_checked: true, violations_found: violations.length },
       execution_time_ms: 1000,
       status: 'SUCCESS'
     });
 
     res.json({ response: aiResponse });
   } catch (err) {
+    console.error('AI Chat error:', err);
     res.status(500).json({ error: 'Internal server error' });
   }
 });
+
 
 app.post('/api/ai/explain', async (req: Request, res: Response) => {
   try {
@@ -1994,7 +2214,63 @@ app.post('/api/learning-progress', async (req: Request, res: Response) => {
   }
 });
 
-// Latest status per module (replaces the old single-row UPSERT query pattern)
+/**
+ * POST /api/learning/simplify
+ * Converts complex financial document text into plain English using AI.
+ * Returns structured simplified points and key term definitions.
+ */
+app.post('/api/learning/simplify', async (req: Request, res: Response) => {
+  try {
+    const { text } = req.body;
+    if (!text || typeof text !== 'string' || text.trim().length < 20) {
+      return res.status(400).json({ error: 'Text must be at least 20 characters long.' });
+    }
+
+    const prompt = `You are a financial literacy assistant for SahaVest, an Indian personal finance app.
+
+Simplify the following financial document excerpt into plain English for a first-time investor. Respond in JSON format ONLY (no markdown, no extra text):
+{
+  "summary": "A 1-2 sentence plain-English overview of what this passage says.",
+  "points": [
+    { "title": "Short bold title", "explanation": "Plain English explanation (1-2 sentences)." }
+  ],
+  "terms": [
+    { "term": "Technical term", "definition": "What it means in simple words." }
+  ]
+}
+
+Maximum 4 bullet points, maximum 3 terms. Be clear, concise, and avoid jargon.
+
+Document text:
+"""${text.slice(0, 2000)}"""`;
+
+    let aiResult;
+    try {
+      const responseText = await generateAIResponse([{ role: 'user', content: prompt }]);
+      const jsonMatch = responseText.match(/\{[\s\S]*\}/);
+      aiResult = jsonMatch ? JSON.parse(jsonMatch[0]) : null;
+    } catch (llmErr: any) {
+      console.warn('[Simplify] LLM failed:', llmErr?.message);
+      // Graceful fallback
+      return res.json({
+        summary: 'AI simplification is temporarily unavailable. Please try again shortly.',
+        points: [],
+        terms: [],
+        source: 'UNAVAILABLE'
+      });
+    }
+
+    if (!aiResult) {
+      return res.status(500).json({ error: 'Failed to parse AI response' });
+    }
+
+    return res.json({ ...aiResult, source: 'LIVE' });
+  } catch (err) {
+    res.status(500).json({ error: 'Internal server error' });
+  }
+});
+
+
 app.get('/api/learning-progress/current', async (req: Request, res: Response) => {
   try {
     let userId = '716691b9-939e-4118-aafb-9246a3923250';

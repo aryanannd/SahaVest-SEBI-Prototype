@@ -23,7 +23,7 @@ export function InvestorTwinSimulator() {
       const headers: HeadersInit = { 'Content-Type': 'application/json' };
       if (session) headers['Authorization'] = `Bearer ${session.access_token}`;
       
-      const res = await fetch('http://localhost:3000/api/simulation/run', {
+      const res = await fetch('/api/simulation/run', {
         method: 'POST',
         headers,
         body: JSON.stringify({ sipAmount, duration, returnRate })

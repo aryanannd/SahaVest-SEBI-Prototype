@@ -93,7 +93,7 @@ export function AIExplainability() {
       const { data: { session } } = await supabase.auth.getSession();
       const headers: HeadersInit = {};
       if (session) headers['Authorization'] = `Bearer ${session.access_token}`;
-      const res = await fetch('http://localhost:3000/api/agent-logs/me?limit=15', { headers });
+      const res = await fetch('/api/agent-logs/me?limit=15', { headers });
       const data = await res.json();
       if (data.logs) {
         setLogs(data.logs);

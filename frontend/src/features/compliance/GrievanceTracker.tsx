@@ -17,7 +17,7 @@ export function GrievanceTracker() {
         const headers: HeadersInit = { 'Content-Type': 'application/json' };
         if (session) headers['Authorization'] = `Bearer ${session.access_token}`;
         
-        const res = await fetch('http://localhost:3000/api/compliance/grievances/me', { headers });
+        const res = await fetch('/api/compliance/grievances/me', { headers });
         const data = await res.json();
         if (data.grievances) {
           setGrievances(data.grievances);

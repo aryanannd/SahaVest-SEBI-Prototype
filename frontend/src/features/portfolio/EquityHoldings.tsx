@@ -133,7 +133,11 @@ export function EquityHoldings() {
           {displayHoldings.map((h, i) => {
             const isPositive = (h.day_change_val || 0) >= 0;
             return (
-              <div key={h.id || i} className="group border-b border-outline-variant/30 last:border-0 hover:bg-surface-container-low transition-colors cursor-pointer">
+              <div 
+                key={h.id || i} 
+                onClick={() => navigate(`/portfolio/holding/${h.symbol || (h.instrument_name === 'Reliance Industries Ltd.' ? 'RELIANCE' : h.instrument_name === 'Infosys Ltd.' ? 'INFY' : 'HDFCBANK')}`)}
+                className="group border-b border-outline-variant/30 last:border-0 hover:bg-surface-container-low transition-colors cursor-pointer"
+              >
                 <div className="p-4 flex flex-col md:grid md:grid-cols-12 gap-3 md:gap-4 md:items-center">
                   <div className="md:col-span-5 flex items-center justify-between md:justify-start">
                     <div className="flex items-center gap-3">

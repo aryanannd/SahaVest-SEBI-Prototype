@@ -50,7 +50,7 @@ export function OtpVerification() {
       const isMock = import.meta.env.VITE_MOCK_OTP === 'true';
       try {
         if (isMock && otpValue === '123456') {
-          const res = await fetch(`${import.meta.env.VITE_API_BASE_URL || 'http://localhost:3000/api'}/auth/demo-login`, { method: 'POST' });
+          const res = await fetch(`${import.meta.env.VITE_API_BASE_URL || '/api'}/auth/demo-login`, { method: 'POST' });
           const data = await res.json();
           if (data.session) {
             await supabase.auth.setSession({
@@ -68,7 +68,7 @@ export function OtpVerification() {
             sessionData = res.data?.session;
             authError = res.error;
           } else {
-            const res = await fetch(`${import.meta.env.VITE_API_BASE_URL || 'http://localhost:3000/api'}/auth/verify`, {
+            const res = await fetch(`${import.meta.env.VITE_API_BASE_URL || '/api'}/auth/verify`, {
               method: 'POST',
               headers: { 'Content-Type': 'application/json' },
               body: JSON.stringify({ mobile: phone, otp: otpValue })

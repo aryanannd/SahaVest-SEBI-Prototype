@@ -25,7 +25,7 @@ export function OrderIntent() {
       const headers: HeadersInit = { 'Content-Type': 'application/json' };
       if (session) headers['Authorization'] = `Bearer ${session.access_token}`;
       
-      const res = await fetch('http://localhost:3000/api/trade/intent', {
+      const res = await fetch('/api/trade/intent', {
         method: 'POST',
         headers,
         body: JSON.stringify({
