@@ -163,6 +163,13 @@ export function OtpVerification() {
             </div>
           )}
 
+          {import.meta.env.VITE_MOCK_OTP === 'true' && (
+            <div className="flex items-center gap-1.5 text-xs font-medium text-warning justify-center">
+              <div className="w-1.5 h-1.5 rounded-full bg-warning animate-pulse"></div>
+              Demo Mode Active: Enter any 6 digits
+            </div>
+          )}
+
           {/* Auto-read hint & Timer */}
           <div className="flex flex-col items-center gap-1">
             <div className="flex items-center gap-2 text-on-surface-variant font-body-md">

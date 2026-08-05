@@ -31,11 +31,22 @@ export function AiChatAssistant() {
     if (SpeechRecognition) {
       setVoiceSupported(true);
       recognitionRef.current = new SpeechRecognition();
-      recognitionRef.current.continuous = false;
+      recognitionRef.current.continuous = true;
       recognitionRef.current.interimResults = true;
       recognitionRef.current.lang = 'hi-IN,en-IN,en-US'; // Support Hindi + English
       
       recognitionRef.current.onresult = (event: any) => {
+        let finalTranscript = '';
+        let interimTranscript = '';
+        for (let i = event.resultIndex; i < event.results.length; ++i) {
+          if (event.results[i].isFinal) {
+            finalTranscript += event.results[i][0].transcript;
+          } else {
+            interimTranscript += event.results[i][0].transcript;
+          }
+        }
+        // Update input with both final and interim text (append to existing input to avoid overwriting)
+        // Wait, if it's continuous, we probably just want to set the whole transcript
         const transcript = Array.from(event.results)
           .map((result: any) => result[0].transcript)
           .join('');
