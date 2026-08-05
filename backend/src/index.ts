@@ -6,8 +6,8 @@ import cors from 'cors';
 import crypto from 'crypto';
 import { supabase } from './lib/supabase';
 import { generateAIResponse, type Message } from './lib/llm';
-import { createSetuConsent, getSetuConsentStatus } from './lib/setu';
-import { portfolioSyncQueue } from './lib/queue';
+import { createSetuConsentRequest, getSetuConsentStatus, verifySetuWebhook } from './lib/setuAA';
+import { enqueuePortfolioSync } from './lib/queue';
 import multer from 'multer';
 import fs from 'fs';
 import path from 'path';
@@ -26,7 +26,11 @@ const app = express();
 const PORT = process.env.PORT || 3000;
 
 app.use(cors());
-app.use(express.json());
+app.use(express.json({
+  verify: (req: any, _res, buf) => {
+    req.rawBody = buf.toString('utf8');
+  }
+}));
 
 const upload = multer({ dest: 'uploads/' });
 
@@ -133,7 +137,7 @@ app.post('/api/users/me/risk-profile', async (req: Request, res: Response) => {
 
 app.post('/api/aa/consent', async (req: Request, res: Response) => {
   try {
-    const { fip_list, data_types, purpose, duration_days } = req.body;
+    const { fip_list, data_types, purpose, duration_days, redirect_url } = req.body;
     const authHeader = req.headers.authorization;
     if (!authHeader) return res.status(401).json({ error: 'Missing authorization header' });
     const token = authHeader.replace('Bearer ', '');
@@ -146,63 +150,81 @@ app.post('/api/aa/consent', async (req: Request, res: Response) => {
 
     if (isLive) {
       try {
-        const setuRes = await createSetuConsent({ fip_list, data_types, purpose });
+        const setuRes = await createSetuConsentRequest({
+          user_id: user.id,
+          fip_list,
+          data_types,
+          purpose,
+          redirect_url,
+        });
         consentId = setuRes.consentId;
         redirectUrl = setuRes.url;
       } catch (err: any) {
-        console.error("Setu API error, falling back to mock:", err.message);
-        return res.status(500).json({ error: 'Failed to create AA consent with provider' });
+        console.error('[Setu AA] Consent creation error:', err.message);
+        return res.status(500).json({ error: 'Failed to create AA consent with Setu provider' });
       }
     } else {
       consentId = `cst_${crypto.randomBytes(8).toString('hex')}`;
       redirectUrl = `https://sandbox.setu.co/consent/${consentId}`;
     }
-    
-    const { error } = await supabase.from('aa_consents').insert({
+
+    const { data: insertedConsent, error } = await supabase.from('aa_consents').insert({
       user_id: user.id,
       aa_provider: isLive ? 'Setu_Live' : 'Setu_Mock',
       consent_id: consentId,
       status: 'PENDING',
       fip_list: fip_list || ['HDFC', 'Zerodha'],
-      data_requested: data_types || ['holdings'],
-      purpose: purpose || 'portfolio_consolidation'
-    });
+      data_types: data_types || ['DEPOSIT', 'MUTUAL_FUNDS'],
+      purpose: purpose || 'Wealth management and portfolio consolidation',
+      valid_from: new Date().toISOString(),
+      valid_till: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toISOString(),
+    }).select('id').single();
 
     if (error) {
-      console.error("Failed to create consent:", error);
-      return res.status(500).json({ error: 'Database error' });
+      console.error('[Setu AA] Failed to store consent in DB:', error);
+      return res.status(500).json({ error: 'Database error storing consent' });
+    }
+
+    // Record initial PENDING event in aa_consent_events
+    if (insertedConsent?.id) {
+      await supabase.from('aa_consent_events').insert({
+        user_id: user.id,
+        consent_id: insertedConsent.id,
+        event_type: 'CONSENT_CREATED',
+        previous_status: null,
+        new_status: 'PENDING',
+        aa_provider: isLive ? 'Setu_Live' : 'Setu_Mock',
+        reason: 'Initial consent creation',
+        metadata: { redirect_url: redirectUrl },
+      });
     }
 
     res.json({ consent_id: consentId, aa_redirect_url: redirectUrl });
   } catch (err) {
+    console.error('[Setu AA] Internal error in /api/aa/consent:', err);
     res.status(500).json({ error: 'Internal server error' });
   }
 });
 
+// Real-time polling reads directly from our DB (which is updated via Setu webhook)
 app.get('/api/aa/consent/:id/status', async (req: Request, res: Response) => {
   try {
     const id = typeof req.params.id === 'string' ? req.params.id : '';
-    if (!id) return res.status(400).json({ error: 'Missing id' });
-    const { data, error } = await supabase.from('aa_consents').select('status, aa_provider').eq('consent_id', id).single();
-    if (error || !data) return res.status(404).json({ error: 'Consent not found' });
-    
-    let status = data.status;
-    const isLive = process.env.AA_LIVE === 'true' && data.aa_provider === 'Setu_Live';
-    
-    if (isLive) {
-      try {
-        status = await getSetuConsentStatus(id);
-        // Sync status back to DB if it changed
-        if (status !== data.status) {
-          await supabase.from('aa_consents').update({ status }).eq('consent_id', id);
-        }
-      } catch (err: any) {
-        console.error("Error fetching live status:", err.message);
-      }
+    if (!id) return res.status(400).json({ error: 'Missing consent id' });
+
+    const { data, error } = await supabase
+      .from('aa_consents')
+      .select('status, aa_provider')
+      .eq('consent_id', id)
+      .single();
+
+    if (error || !data) {
+      return res.status(404).json({ error: 'Consent not found' });
     }
 
-    res.json({ status });
+    res.json({ status: data.status });
   } catch (err) {
+    console.error('[Setu AA] Status fetch error:', err);
     res.status(500).json({ error: 'Internal server error' });
   }
 });
@@ -211,22 +233,120 @@ app.post('/api/aa/fetch', async (req: Request, res: Response) => {
   try {
     const { consent_id } = req.body;
     const { data, error } = await supabase.from('aa_consents').select().eq('consent_id', consent_id);
-    
+
     if (error || !data || data.length === 0) return res.status(404).json({ error: 'Consent not found' });
-    
-    // Enqueue the background job instead of processing synchronously
+
     const user_id = data[0].user_id;
     const fip_list = data[0].fip_list;
+    const isLive = data[0].aa_provider === 'Setu_Live';
 
-    await portfolioSyncQueue.add('sync', {
+    await enqueuePortfolioSync({
       consent_id,
       user_id,
-      fip_list
+      fip_list,
+      is_live: isLive,
     });
 
     res.status(202).json({ success: true, message: 'Data fetch background job queued' });
   } catch (err) {
     res.status(500).json({ error: 'Internal server error' });
+  }
+});
+
+/**
+ * Real Setu AA Webhook endpoint
+ * Handles HMAC-SHA256 signature verification and idempotent state updates.
+ */
+app.post('/api/webhooks/setu-aa', async (req: any, res: Response) => {
+  try {
+    const signature = req.headers['x-setu-signature'] as string || req.headers['authorization'] as string;
+    const rawBody = req.rawBody || JSON.stringify(req.body);
+
+    console.log('[Setu AA Webhook] Incoming webhook notification received');
+
+    // 1. Signature Verification
+    // In live mode with credentials configured, enforce signature check
+    const isLive = process.env.AA_LIVE === 'true';
+    if (isLive) {
+      const isValid = verifySetuWebhook(rawBody, signature);
+      if (!isValid) {
+        console.warn('[Setu AA Webhook] Signature verification failed');
+        return res.status(401).json({ error: 'Invalid webhook signature' });
+      }
+    }
+
+    const payload = req.body;
+    const consentId = payload?.data?.consentId || payload?.consentId || payload?.Detail?.consentId || payload?.id;
+    const incomingStatus = (payload?.data?.status || payload?.status || '').toUpperCase();
+
+    if (!consentId || !incomingStatus) {
+      console.warn('[Setu AA Webhook] Missing consentId or status in payload:', payload);
+      return res.status(400).json({ error: 'Invalid payload structure' });
+    }
+
+    console.log(`[Setu AA Webhook] Processing update for consent ${consentId} -> ${incomingStatus}`);
+
+    // 2. Fetch existing DB consent record
+    const { data: consentRecord, error: consentErr } = await supabase
+      .from('aa_consents')
+      .select('id, user_id, status, fip_list')
+      .eq('consent_id', consentId)
+      .maybeSingle();
+
+    if (consentErr || !consentRecord) {
+      console.warn(`[Setu AA Webhook] Consent record ${consentId} not found in DB`);
+      return res.status(404).json({ error: 'Consent not found' });
+    }
+
+    // 3. Idempotency Check: Check if this state transition was already processed
+    const eventType = `CONSENT_${incomingStatus}`;
+    const { data: existingEvent } = await supabase
+      .from('aa_consent_events')
+      .select('id')
+      .eq('consent_id', consentRecord.id)
+      .eq('new_status', incomingStatus)
+      .gte('created_at', new Date(Date.now() - 10 * 60 * 1000).toISOString())
+      .maybeSingle();
+
+    if (existingEvent) {
+      console.log(`[Setu AA Webhook] Duplicate event for consent ${consentId} (${incomingStatus}) ignored`);
+      return res.status(200).json({ success: true, message: 'Event already processed' });
+    }
+
+    // 4. Update aa_consents table
+    const updatePayload: Record<string, any> = { status: incomingStatus };
+    if (incomingStatus === 'REVOKED' || incomingStatus === 'REJECTED') {
+      updatePayload.revoked_at = new Date().toISOString();
+    }
+    await supabase.from('aa_consents').update(updatePayload).eq('id', consentRecord.id);
+
+    // 5. Append-only audit record in aa_consent_events
+    await supabase.from('aa_consent_events').insert({
+      user_id: consentRecord.user_id,
+      consent_id: consentRecord.id,
+      event_type: eventType,
+      previous_status: consentRecord.status,
+      new_status: incomingStatus,
+      aa_provider: 'Setu_Live',
+      reason: payload?.reason || `Setu Webhook notification: ${incomingStatus}`,
+      metadata: payload,
+    });
+
+    // 6. If ACTIVE or APPROVED, trigger FI data sync queue job
+    if (incomingStatus === 'ACTIVE' || incomingStatus === 'APPROVED') {
+      console.log(`[Setu AA Webhook] Consent is ${incomingStatus}. Enqueueing portfolio sync job...`);
+      await enqueuePortfolioSync({
+        consent_id: consentId,
+        user_id: consentRecord.user_id,
+        fip_list: consentRecord.fip_list,
+        is_live: isLive,
+      });
+    }
+
+    res.status(200).json({ success: true, message: `Webhook processed for status ${incomingStatus}` });
+  } catch (err: any) {
+    console.error('[Setu AA Webhook] Internal webhook error:', err);
+    res.status(500).json({ error: 'Internal server error processing webhook' });
   }
 });
 

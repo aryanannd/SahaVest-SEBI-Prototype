@@ -151,15 +151,28 @@ export function ApproveDataSharing() {
               try {
                 const { data: { session } } = await supabase.auth.getSession();
                 if (session) {
+                  const currentOrigin = window.location.origin;
                   const res = await fetch(`${import.meta.env.VITE_API_BASE_URL || 'http://localhost:3000/api'}/aa/consent`, {
                     method: 'POST',
                     headers: { 
                       'Content-Type': 'application/json',
                       'Authorization': `Bearer ${session.access_token}`
                     },
-                    body: JSON.stringify({ fip_list: ['HDFC', 'Zerodha'] })
+                    body: JSON.stringify({ 
+                      fip_list: ['HDFC', 'Zerodha'],
+                      redirect_url: `${currentOrigin}/onboarding/linking`
+                    })
                   });
                   const data = await res.json();
+                  if (data.aa_redirect_url && (data.aa_redirect_url.startsWith('https://') || data.aa_redirect_url.startsWith('http://'))) {
+                    // If real Setu webview URL, redirect there directly
+                    if (data.aa_redirect_url.includes('setu.co') && !data.aa_redirect_url.includes('localhost')) {
+                      window.location.href = data.aa_redirect_url;
+                      return;
+                    }
+                    navigate('/onboarding/linking', { state: { consent_id: data.consent_id } });
+                    return;
+                  }
                   if (data.consent_id) {
                     navigate('/onboarding/linking', { state: { consent_id: data.consent_id } });
                     return;
