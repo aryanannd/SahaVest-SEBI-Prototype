@@ -35,9 +35,15 @@ export function ApproveDataSharing() {
           <h1 className="font-display-lg-mobile md:font-display-lg text-on-background mb-2">
             Data Consent Request
           </h1>
-          <p className="font-body-md text-on-surface-variant">
+          <p className="font-body-md text-on-surface-variant mb-4">
             Review the details below to authorize data sharing via Account Aggregator.
           </p>
+          <div className="flex items-center space-x-2 text-warning bg-warning-container/20 py-2 px-3 rounded-lg border border-warning/30 md:max-w-md md:mx-0 mx-auto text-left">
+            <Shield size={16} className="text-warning flex-shrink-0" />
+            <span className="font-label-sm text-on-warning-container leading-tight">
+              <b>Sandbox Mode:</b> This connects to mock data providers. No real financial credentials are required.
+            </span>
+          </div>
         </div>
 
         {/* Consent Card */}

@@ -79,7 +79,14 @@ export function SelectInstitutions() {
       <main className="w-full max-w-3xl flex-grow px-4 py-6 pb-[120px]">
         <div className="mb-6">
           <h1 className="font-headline-md text-on-surface mb-2">Link Financial Providers</h1>
-          <p className="font-body-md text-on-surface-variant">Select the institutions you want to connect via Account Aggregator to consolidate your portfolio view.</p>
+          <p className="font-body-md text-on-surface-variant mb-4">Select the institutions you want to connect via Account Aggregator to consolidate your portfolio view.</p>
+          
+          <div className="flex items-center space-x-2 text-warning bg-warning-container/20 py-2 px-3 rounded-lg border border-warning/30">
+            <Shield size={16} className="text-warning flex-shrink-0" />
+            <span className="font-label-sm text-on-warning-container leading-tight">
+              <b>Sandbox Mode:</b> This connects to mock data providers. No real financial credentials are required.
+            </span>
+          </div>
         </div>
 
         <div className="space-y-6">
