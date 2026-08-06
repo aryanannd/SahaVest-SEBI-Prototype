@@ -37,6 +37,7 @@ import { getCandles, getQuote, resolveYahooSymbol } from './lib/marketData';
 import { getCompanyNews } from './lib/newsService';
 import { generateContextSummary, scanForProhibitedLanguage } from './lib/aiContextSummary';
 import { getPortfolioPerformance } from './lib/portfolioPerformance';
+import { syncUserHoldingsValues } from './lib/holdingsSync';
 dotenv.config();
 
 Sentry.init({
@@ -1005,6 +1006,8 @@ app.get('/api/portfolio/exposure/:userId', async (req: Request, res: Response) =
       if (user) activeUserId = user.id;
     }
 
+    await syncUserHoldingsValues(activeUserId);
+
     const { data: holdings, error } = await supabase
       .from('holdings')
       .select('id, instrument_name, asset_class, current_value, sector, quantity')
@@ -1108,6 +1111,27 @@ app.get('/api/portfolio/tax-summary/:userId', async (req: Request, res: Response
 });
 
 // Performance History Endpoint
+app.get('/api/portfolio/performance/me', async (req: Request, res: Response) => {
+  try {
+    const range = ((req.query.range as string)?.toUpperCase() || '1Y') as '1M' | '3M' | '6M' | '1Y' | 'ALL';
+    let activeUserId = '716691b9-939e-4118-aafb-9246a3923250';
+    const authHeader = req.headers.authorization;
+    if (authHeader) {
+      const token = authHeader.replace('Bearer ', '');
+      const { data: { user } } = await supabase.auth.getUser(token);
+      if (user) activeUserId = user.id;
+    }
+
+    await syncUserHoldingsValues(activeUserId);
+
+    const performance = await getPortfolioPerformance(activeUserId, range);
+    return res.status(200).json(performance);
+  } catch (err: any) {
+    console.error('Performance /me error:', err);
+    return res.status(500).json({ error: 'Internal server error fetching performance' });
+  }
+});
+
 app.get('/api/portfolio/performance/:userId', async (req: Request, res: Response) => {
   try {
     const { userId } = req.params;
@@ -1242,31 +1266,76 @@ app.get('/api/alerts/behavioral/:userId', async (req: Request, res: Response) =>
 app.get('/api/portfolio/exposure/me', async (req: Request, res: Response) => {
   try {
     const authHeader = req.headers.authorization;
-    let userId = '716691b9-939e-4118-aafb-9246a3923250';
+    let activeUserId = '716691b9-939e-4118-aafb-9246a3923250';
     if (authHeader) {
       const token = authHeader.replace('Bearer ', '');
       const { data: { user } } = await supabase.auth.getUser(token);
-      if (user) userId = user.id;
+      if (user) activeUserId = user.id;
     }
 
-    // Mock data for prototype
-    res.json({
-      totalValue: 1450000,
-      flags: ["High concentration (45%) in IT Sector"],
-      assetClassBreakdown: [
-        { name: "Equity", value: 1000000 },
-        { name: "Debt", value: 450000 }
-      ],
-      sectorBreakdown: [
-        { name: "IT", value: 45 },
-        { name: "Financials", value: 30 },
-        { name: "Consumer", value: 25 }
-      ]
+    // Sync live prices before computing exposure
+    await syncUserHoldingsValues(activeUserId);
+
+    const { data: holdings, error } = await supabase
+      .from('holdings')
+      .select('id, instrument_name, asset_class, current_value, sector, quantity')
+      .eq('user_id', activeUserId);
+
+    if (error) {
+      console.error('[Exposure /me] Supabase error:', error);
+      return res.status(500).json({ error: 'Failed to fetch holdings' });
+    }
+
+    if (!holdings || holdings.length === 0) {
+      return res.json({ totalValue: 0, sectorBreakdown: [], assetClassBreakdown: [], flags: [] });
+    }
+
+    let totalValue = 0;
+    const sectorTotals: Record<string, number> = {};
+    const assetClassTotals: Record<string, number> = {};
+
+    holdings.forEach((holding: any) => {
+      const val = Number(holding.current_value) || 0;
+      totalValue += val;
+      const sec = holding.sector || 'Unclassified';
+      sectorTotals[sec] = (sectorTotals[sec] || 0) + val;
+      const ac = holding.asset_class || 'Other';
+      assetClassTotals[ac] = (assetClassTotals[ac] || 0) + val;
     });
+
+    const sectorBreakdown = Object.entries(sectorTotals).map(([sector, value]) => ({
+      sector,
+      value,
+      percentage: totalValue > 0 ? (value / totalValue) * 100 : 0
+    })).sort((a, b) => b.value - a.value);
+
+    const assetClassBreakdown = Object.entries(assetClassTotals).map(([assetClass, value]) => ({
+      assetClass,
+      value,
+      percentage: totalValue > 0 ? (value / totalValue) * 100 : 0
+    })).sort((a, b) => b.value - a.value);
+
+    const flags: string[] = [];
+    sectorBreakdown.forEach(s => {
+      if (s.percentage > 30 && s.sector !== 'Unclassified') {
+        flags.push(`High Sector Concentration: ${s.sector} makes up ${s.percentage.toFixed(1)}% of your portfolio.`);
+      }
+    });
+    holdings.forEach((holding: any) => {
+      const val = Number(holding.current_value) || 0;
+      const percentage = totalValue > 0 ? (val / totalValue) * 100 : 0;
+      if (percentage > 20) {
+        flags.push(`High Holding Concentration: ${holding.instrument_name} makes up ${percentage.toFixed(1)}% of your portfolio.`);
+      }
+    });
+
+    res.json({ totalValue, sectorBreakdown, assetClassBreakdown, flags });
   } catch (err) {
+    console.error('[Exposure /me] Unexpected error:', err);
     res.status(500).json({ error: 'Internal server error' });
   }
 });
+
 
 app.post('/api/trade/intent', async (req: Request, res: Response) => {
   try {
@@ -1339,25 +1408,6 @@ app.get('/api/portfolio/tax-summary/me', async (req: Request, res: Response) => 
   }
 });
 
-app.get('/api/portfolio/performance/me', async (req: Request, res: Response) => {
-  try {
-    const range = ((req.query.range as string)?.toUpperCase() || '1Y') as '1M' | '3M' | '6M' | '1Y' | 'ALL';
-    let activeUserId = '716691b9-939e-4118-aafb-9246a3923250';
-    const authHeader = req.headers.authorization;
-    if (authHeader) {
-      const token = authHeader.replace('Bearer ', '');
-      const { data: { user } } = await supabase.auth.getUser(token);
-      if (user) activeUserId = user.id;
-    }
-
-    const performance = await getPortfolioPerformance(activeUserId, range);
-    return res.status(200).json(performance);
-  } catch (err: any) {
-    console.error('Performance /me error:', err);
-    return res.status(500).json({ error: 'Internal server error fetching performance' });
-  }
-});
-
 app.get('/api/portfolio/holdings/me', async (req: Request, res: Response) => {
   try {
     const type = req.query.type as string;
@@ -1371,6 +1421,8 @@ app.get('/api/portfolio/holdings/me', async (req: Request, res: Response) => {
       const { data: { user } } = await supabase.auth.getUser(token);
       if (user) activeUserId = user.id;
     }
+
+    await syncUserHoldingsValues(activeUserId);
 
     let query = supabase.from('holdings').select('*').eq('user_id', activeUserId);
     
