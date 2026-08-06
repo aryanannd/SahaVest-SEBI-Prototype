@@ -169,6 +169,16 @@ export async function executePortfolioSync(data: {
       // 4. Update consent status to ACTIVE
       await supabase.from('aa_consents').update({ status: 'ACTIVE' }).eq('consent_id', consent_id);
 
+      await supabase.from('sync_attempts').insert({
+        user_id,
+        sync_status: 'SUCCESS',
+        records_fetched: linkedAccountsCount + holdingsCount,
+        records_inserted: linkedAccountsCount + holdingsCount,
+        records_updated: 0,
+        initiated_by: 'USER',
+        metadata: { consent_id, is_live }
+      });
+
       console.log(
         `[Queue] Successfully synced Setu AA portfolio: ${linkedAccountsCount} accounts, ${holdingsCount} holdings.`
       );
@@ -221,9 +231,25 @@ export async function executePortfolioSync(data: {
       }
 
       console.log(`[Queue] Finished simulated portfolio sync for consent ${consent_id}`);
+      
+      await supabase.from('sync_attempts').insert({
+        user_id,
+        sync_status: 'SUCCESS',
+        records_fetched: institutions.length * 11,
+        records_inserted: institutions.length * 11,
+        initiated_by: 'USER',
+        metadata: { consent_id, is_live }
+      });
     }
   } catch (err: any) {
     console.error(`[Queue] Portfolio sync failed for consent ${consent_id}:`, err);
+    await supabase.from('sync_attempts').insert({
+      user_id,
+      sync_status: 'FAILED',
+      error_message: err.message || 'Unknown error',
+      initiated_by: 'USER',
+      metadata: { consent_id, is_live }
+    });
     throw err;
   }
 }

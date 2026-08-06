@@ -2825,6 +2825,18 @@ app.patch('/api/compliance/consents/:consentId/revoke', async (req: Request, res
       blockchain_tx_id: null
     });
 
+    // Write to aa_consent_events
+    await supabase.from('aa_consent_events').insert({
+      user_id: userId,
+      consent_id: data.id,
+      event_type: 'CONSENT_REVOKED_LOCALLY',
+      previous_status: 'ACTIVE',
+      new_status: 'REVOKED',
+      aa_provider: data.aa_provider || 'Setu_Live',
+      reason: 'User revoked consent from UI',
+      metadata: { consent_id: consentId }
+    });
+
     res.json({ success: true, consent_id: consentId, status: 'Revoked', revoked_at: data.revoked_at });
   } catch (err) {
     res.status(500).json({ error: 'Internal server error' });
