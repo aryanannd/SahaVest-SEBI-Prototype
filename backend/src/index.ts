@@ -1288,122 +1288,6 @@ app.get('/api/market/ai-summary/:symbol', async (req: Request, res: Response) =>
 });
 
 // Exposure / Concentration Analytics
-app.get('/api/portfolio/exposure/:userId', async (req: Request, res: Response) => {
-  try {
-    const { userId } = req.params;
-    
-    // Use demo user ID if 'me'
-    let activeUserId = userId === 'me' ? '716691b9-939e-4118-aafb-9246a3923250' : userId;
-    
-    // If request has auth token, use that
-    const authHeader = req.headers.authorization;
-    if (authHeader) {
-      const token = authHeader.replace('Bearer ', '');
-      const { data: { user } } = await supabase.auth.getUser(token);
-      if (user) activeUserId = user.id;
-    }
-
-    await syncUserHoldingsValues(activeUserId);
-
-    const { data: holdings, error } = await supabase
-      .from('holdings')
-      .select('id, instrument_name, asset_class, current_value, sector, quantity')
-      .eq('user_id', activeUserId);
-
-    if (error) {
-      console.error("Supabase error:", error);
-      return res.status(500).json({ error: 'Failed to fetch holdings' });
-    }
-
-    if (!holdings || holdings.length === 0) {
-      return res.json({
-        totalValue: 0,
-        sectorBreakdown: [],
-        flags: []
-      });
-    }
-
-    let totalValue = 0;
-    const sectorTotals: Record<string, number> = {};
-    const assetClassTotals: Record<string, number> = {};
-
-    holdings.forEach((holding: any) => {
-      const val = Number(holding.current_value) || 0;
-      totalValue += val;
-      const sec = holding.sector || 'Unclassified';
-      sectorTotals[sec] = (sectorTotals[sec] || 0) + val;
-      
-      const ac = holding.asset_class || 'Other';
-      assetClassTotals[ac] = (assetClassTotals[ac] || 0) + val;
-    });
-
-    const sectorBreakdown = Object.entries(sectorTotals).map(([sector, value]) => ({
-      sector,
-      value,
-      percentage: totalValue > 0 ? (value / totalValue) * 100 : 0
-    })).sort((a, b) => b.value - a.value);
-
-    const assetClassBreakdown = Object.entries(assetClassTotals).map(([assetClass, value]) => ({
-      assetClass,
-      value,
-      percentage: totalValue > 0 ? (value / totalValue) * 100 : 0
-    })).sort((a, b) => b.value - a.value);
-
-    const flags: string[] = [];
-
-    // Check sector concentration (> 30%)
-    sectorBreakdown.forEach(s => {
-      if (s.percentage > 30 && s.sector !== 'Unclassified') {
-        flags.push(`High Sector Concentration: ${s.sector} makes up ${s.percentage.toFixed(1)}% of your portfolio.`);
-      }
-    });
-
-    // Check individual holding concentration (> 20%)
-    holdings.forEach((holding: any) => {
-      const val = Number(holding.current_value) || 0;
-      const percentage = totalValue > 0 ? (val / totalValue) * 100 : 0;
-      if (percentage > 20) {
-        flags.push(`High Holding Concentration: ${holding.instrument_name} makes up ${percentage.toFixed(1)}% of your portfolio.`);
-      }
-    });
-
-    res.json({
-      totalValue,
-      sectorBreakdown,
-      assetClassBreakdown,
-      flags
-    });
-
-  } catch (error) {
-    console.error("Exposure calculation error:", error);
-    res.status(500).json({ error: 'Internal server error calculating exposure' });
-  }
-});
-
-
-
-
-// Tax Summary Endpoint (Mocked dynamically for prototype)
-app.get('/api/portfolio/tax-summary/:userId', async (req: Request, res: Response) => {
-  try {
-    const { userId } = req.params;
-    let activeUserId = userId === 'me' ? '716691b9-939e-4118-aafb-9246a3923250' : userId;
-    const authHeader = req.headers.authorization;
-    if (authHeader) {
-      const token = authHeader.replace('Bearer ', '');
-      const { data: { user } } = await supabase.auth.getUser(token);
-      if (user) activeUserId = user.id;
-    }
-
-    const taxData = await computeTaxSummary(activeUserId);
-    res.status(200).json(taxData);
-  } catch (error) {
-    console.error('[Tax Summary] Error:', error);
-    res.status(500).json({ error: 'Internal server error calculating tax summary' });
-  }
-});
-
-
 // Performance History Endpoint
 app.get('/api/portfolio/performance/me', async (req: Request, res: Response) => {
   try {
@@ -1426,25 +1310,6 @@ app.get('/api/portfolio/performance/me', async (req: Request, res: Response) => 
   }
 });
 
-app.get('/api/portfolio/performance/:userId', async (req: Request, res: Response) => {
-  try {
-    const { userId } = req.params;
-    const range = ((req.query.range as string)?.toUpperCase() || '1Y') as '1M' | '3M' | '6M' | '1Y' | 'ALL';
-    let activeUserId = userId === 'me' ? '716691b9-939e-4118-aafb-9246a3923250' : userId;
-    const authHeader = req.headers.authorization;
-    if (authHeader) {
-      const token = authHeader.replace('Bearer ', '');
-      const { data: { user } } = await supabase.auth.getUser(token);
-      if (user) activeUserId = user.id;
-    }
-
-    const performance = await getPortfolioPerformance(activeUserId, range);
-    return res.status(200).json(performance);
-  } catch (error) {
-    console.error("Performance history error:", error);
-    return res.status(500).json({ error: 'Internal server error fetching performance' });
-  }
-});
 
 // Quantified Cost Analysis (TER)
 app.get('/api/portfolio/cost-analysis/:userId', async (req: Request, res: Response) => {
@@ -1929,6 +1794,7 @@ app.get('/api/compliance/grievances/me', async (req: Request, res: Response) => 
 
 app.post('/api/trust/scam-check', rateLimiter({ limit: 20, windowSeconds: 60, prefix: 'rl:scam_check' }), async (req: Request, res: Response) => {
   try {
+    const startTime = Date.now();
     const { content, input_type = 'text', image, type } = req.body;
     let userId = '716691b9-939e-4118-aafb-9246a3923250';
     const authHeader = req.headers.authorization;
@@ -2001,6 +1867,20 @@ app.post('/api/trust/scam-check', rateLimiter({ limit: 20, windowSeconds: 60, pr
       blockchain_tx_id: null
     });
     if (auditError) console.error('Failed to write scam check audit log:', auditError);
+
+    // Write to agent_execution_logs
+    const latency = Date.now() - startTime;
+    const pipelineRunId = crypto.randomUUID();
+    await supabase.from('agent_execution_logs').insert({
+      user_id: userId,
+      pipeline_run_id: pipelineRunId,
+      agent_name: 'ScamDetectionAgent',
+      input_ref: { content, type: image ? 'image' : (type || input_type || 'sms') },
+      output_ref: { result: aiResult },
+      confidence: aiResult?.confidence || 0.0,
+      latency_ms: latency,
+      status: 'success'
+    });
 
     res.json(aiResult);
   } catch (err) {
@@ -2239,7 +2119,16 @@ FORMAT: Keep answers clear, helpful, and under 3-4 paragraphs. Use bullet points
 
 app.post('/api/ai/explain', async (req: Request, res: Response) => {
   try {
+    const startTime = Date.now();
     const { topic, context } = req.body;
+    let userId = '716691b9-939e-4118-aafb-9246a3923250';
+    const authHeader = req.headers.authorization;
+    if (authHeader) {
+      const token = authHeader.replace('Bearer ', '');
+      const { data: { user } } = await supabase.auth.getUser(token);
+      if (user) userId = user.id;
+    }
+
     let aiResponse;
     try {
       const prompt = `Explain the financial concept "${topic}" in simple terms, assuming the user is looking at context: "${context}". Keep it under 50 words.`;
@@ -2252,6 +2141,21 @@ app.post('/api/ai/explain', async (req: Request, res: Response) => {
       });
       return res.status(503).json({ error: true, message: "AI service temporarily unavailable" });
     }
+
+    // Write to agent_execution_logs
+    const latency = Date.now() - startTime;
+    const pipelineRunId = crypto.randomUUID();
+    await supabase.from('agent_execution_logs').insert({
+      user_id: userId,
+      pipeline_run_id: pipelineRunId,
+      agent_name: 'ConceptExplanationAgent',
+      input_ref: { topic, context },
+      output_ref: { explanation: aiResponse },
+      confidence: 0.9,
+      latency_ms: latency,
+      status: 'success'
+    });
+
     res.json({ explanation: aiResponse });
   } catch (err) {
     res.status(500).json({ error: 'Internal server error' });
