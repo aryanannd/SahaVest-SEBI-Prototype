@@ -271,6 +271,139 @@ async function enrichAuditLogs(rows: any[], userId: string): Promise<any[]> {
 }
 
 // ==========================================
+// Shared helper: Compute tax summary from real holdings + transactions.
+// Unrealized P&L: computed from current_value vs (avg_cost × quantity) — REAL.
+// Realized P&L: computed from SELL transactions (currently 0 in DB) — REAL.
+// FY classification: <12 months = STCG, >=12 months = LTCG.
+// Returns realized_is_illustrative=true if no sell transactions exist, to
+// allow the frontend to label that section appropriately.
+// ==========================================
+async function computeTaxSummary(userId: string): Promise<any> {
+  const currentFY = '2025-2026';
+  const now = new Date();
+
+  // --- Fetch holdings (sync live prices first) ---
+  await syncUserHoldingsValues(userId);
+  const { data: holdings } = await supabase
+    .from('holdings')
+    .select('id, instrument_name, avg_cost, quantity, current_value, created_at')
+    .eq('user_id', userId)
+    .neq('data_source', 'SETU_MOCK')
+    .gt('quantity', 0);
+
+  // --- Fetch earliest transaction date per holding (for holding period) ---
+  const { data: earliestTxns } = await supabase
+    .from('transactions')
+    .select('holding_id, txn_date')
+    .eq('user_id', userId)
+    .in('txn_type', ['buy', 'cas_import'])
+    .order('txn_date', { ascending: true });
+
+  // Build map: holding_id -> earliest buy date
+  const holdingBuyDate: Record<string, Date> = {};
+  if (earliestTxns) {
+    for (const txn of earliestTxns) {
+      if (txn.holding_id && !holdingBuyDate[txn.holding_id]) {
+        holdingBuyDate[txn.holding_id] = new Date(txn.txn_date);
+      }
+    }
+  }
+
+  // --- Compute unrealized P&L ---
+  let unrealizedTotal = 0;
+  let unrealizedSTCG = 0;
+  let unrealizedLTCG = 0;
+  let taxLossHarvestingOpportunity = 0;
+
+  for (const h of (holdings || [])) {
+    const costBasis = Number(h.avg_cost) * Number(h.quantity);
+    const currentVal = Number(h.current_value);
+    const gain = currentVal - costBasis;
+    unrealizedTotal += gain;
+
+    // Determine holding period: use earliest txn date or holding.created_at
+    const buyDate = holdingBuyDate[h.id] || new Date(h.created_at);
+    const holdingMonths = (now.getTime() - buyDate.getTime()) / (1000 * 60 * 60 * 24 * 30);
+
+    if (holdingMonths >= 12) {
+      unrealizedLTCG += gain;
+    } else {
+      unrealizedSTCG += gain;
+    }
+
+    // Tax loss harvesting: holdings currently at a loss that could offset gains
+    if (gain < 0) {
+      taxLossHarvestingOpportunity += Math.abs(gain);
+    }
+  }
+
+  // --- Compute realized P&L from SELL transactions ---
+  const { data: sellTxns } = await supabase
+    .from('transactions')
+    .select('amount, units, holding_id, txn_date')
+    .eq('user_id', userId)
+    .eq('txn_type', 'sell')
+    .gte('txn_date', `${currentFY.split('-')[0]}-04-01`); // FY start
+
+  let realizedTotal = 0;
+  let realizedSTCG = 0;
+  let realizedLTCG = 0;
+
+  for (const sell of (sellTxns || [])) {
+    // Find corresponding holding for cost basis
+    const { data: h } = await supabase
+      .from('holdings')
+      .select('avg_cost')
+      .eq('id', sell.holding_id)
+      .single();
+
+    if (h) {
+      const saleProceeds = Number(sell.amount);
+      const costBasis = Number(h.avg_cost) * Number(sell.units);
+      const gain = saleProceeds - costBasis;
+      realizedTotal += gain;
+
+      const buyDate = holdingBuyDate[sell.holding_id] || new Date();
+      const sellDate = new Date(sell.txn_date);
+      const holdingMonths = (sellDate.getTime() - buyDate.getTime()) / (1000 * 60 * 60 * 24 * 30);
+      if (holdingMonths >= 12) {
+        realizedLTCG += gain;
+      } else {
+        realizedSTCG += gain;
+      }
+    }
+  }
+
+  const hasSellTransactions = (sellTxns?.length || 0) > 0;
+
+  return {
+    financialYear: currentFY,
+    // Unrealized gains from current holdings — REAL DATA
+    unrealized: {
+      total: Math.round(unrealizedTotal),
+      shortTerm: Math.round(unrealizedSTCG),
+      longTerm: Math.round(unrealizedLTCG),
+      is_real: true,
+      note: 'Computed from your actual holdings: current market value vs acquisition cost'
+    },
+    // Realized gains from sell transactions — REAL DATA (₹0 if no sells yet)
+    realized: {
+      total: Math.round(realizedTotal),
+      stcg: Math.round(realizedSTCG),
+      ltcg: Math.round(realizedLTCG),
+      is_real: true,
+      is_illustrative: !hasSellTransactions,
+      note: hasSellTransactions
+        ? 'Computed from your sell transactions this FY'
+        : 'No sell transactions recorded yet — realized gains will appear when you sell holdings'
+    },
+    taxLossHarvestingOpportunity: Math.round(taxLossHarvestingOpportunity),
+    holdingsAnalyzed: (holdings || []).length,
+    sellTransactionsThisFY: (sellTxns || []).length
+  };
+}
+
+// ==========================================
 // 1. Authentication Endpoints
 // ==========================================
 
@@ -1262,17 +1395,14 @@ app.get('/api/portfolio/tax-summary/:userId', async (req: Request, res: Response
       if (user) activeUserId = user.id;
     }
 
-    // In a real app, calculate from transactions and holdings
-    // For prototype, return structured mock data
-    res.status(200).json({
-      realized: { total: 142500, stcg: 35000, ltcg: 107500 },
-      unrealized: { total: 315200, shortTerm: 110000, longTerm: 205200 }
-    });
+    const taxData = await computeTaxSummary(activeUserId);
+    res.status(200).json(taxData);
   } catch (error) {
-    console.error("Tax summary error:", error);
+    console.error('[Tax Summary] Error:', error);
     res.status(500).json({ error: 'Internal server error calculating tax summary' });
   }
 });
+
 
 // Performance History Endpoint
 app.get('/api/portfolio/performance/me', async (req: Request, res: Response) => {
@@ -1538,19 +1668,22 @@ app.post('/api/trade/intent', async (req: Request, res: Response) => {
 
 app.get('/api/portfolio/tax-summary/me', async (req: Request, res: Response) => {
   try {
-    // Mock data for prototype
-    res.json({
-      financialYear: '2025-2026',
-      totalRealizedGains: 45000,
-      shortTermGains: 15000,
-      longTermGains: 30000,
-      taxLiabilityEstimate: 4500,
-      taxLossHarvestingOpportunity: 12000
-    });
+    let activeUserId = '716691b9-939e-4118-aafb-9246a3923250';
+    const authHeader = req.headers.authorization;
+    if (authHeader) {
+      const token = authHeader.replace('Bearer ', '');
+      const { data: { user } } = await supabase.auth.getUser(token);
+      if (user) activeUserId = user.id;
+    }
+
+    const taxData = await computeTaxSummary(activeUserId);
+    res.json(taxData);
   } catch (err) {
+    console.error('[Tax Summary /me] Error:', err);
     res.status(500).json({ error: 'Internal server error' });
   }
 });
+
 
 app.get('/api/portfolio/holdings/me', async (req: Request, res: Response) => {
   try {

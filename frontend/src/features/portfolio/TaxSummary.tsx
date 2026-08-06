@@ -51,20 +51,15 @@ export function TaxSummary() {
         {/* Header Section */}
         <section className="flex flex-col gap-3 md:flex-row md:items-end justify-between">
           <div>
-            <h2 className="font-display-lg-mobile md:font-display-lg text-on-surface">Tax Summary FY 23-24</h2>
-            <p className="font-body-md text-on-surface-variant mt-1">Estimated capital gains liability across your portfolio.</p>
+            <h2 className="font-display-lg-mobile md:font-display-lg text-on-surface">
+              Tax Summary FY {data?.financialYear || '2025-2026'}
+            </h2>
+            <p className="font-body-md text-on-surface-variant mt-1">Capital gains overview based on your actual portfolio holdings and transactions.</p>
           </div>
           <div className="flex gap-3 mt-3 md:mt-0">
             <button className="flex-1 md:flex-none h-[48px] px-6 rounded-lg bg-surface-container border border-outline-variant font-label-md text-on-surface flex items-center justify-center gap-2 hover:bg-surface-container-highest transition-colors min-w-[120px]">
               <Download size={18} /> Download
             </button>
-            <div className="relative w-full md:w-auto">
-              <select className="w-full h-[48px] pl-4 pr-10 rounded-lg bg-surface-container border border-outline-variant font-label-md text-on-surface appearance-none focus:border-primary focus:ring-1 focus:ring-primary outline-none">
-                <option>FY 2023-24</option>
-                <option>FY 2022-23</option>
-              </select>
-              <ChevronDown className="absolute right-4 top-1/2 -translate-y-1/2 pointer-events-none text-on-surface-variant" size={20} />
-            </div>
           </div>
         </section>
 
@@ -72,7 +67,11 @@ export function TaxSummary() {
         <div className="bg-surface-container-low border border-outline-variant rounded-lg p-4 flex items-start gap-3">
           <Info className="text-outline mt-1 shrink-0" size={20} />
           <p className="font-body-md text-on-surface-variant">
-            <strong>Illustrative estimate — consult a CA for accurate tax filing.</strong> Realized gains denote actual booked profits/losses, while unrealized represents current market estimates.
+            <strong>Unrealized gains are computed from your live portfolio.</strong>{' '}
+            {data?.realized?.is_illustrative
+              ? <span className="text-warning font-medium">Realized gains will appear here once you record sell transactions — no sell transactions found this FY.</span>
+              : 'Realized gains are computed from your actual sell transactions this FY.'}{' '}
+            Always consult a CA for accurate tax filing.
           </p>
         </div>
 
@@ -85,10 +84,18 @@ export function TaxSummary() {
           {/* Total Realized Gains */}
           <div className="bg-surface-container-lowest border border-outline-variant rounded-xl p-4 shadow-sm col-span-1 md:col-span-2 flex flex-col justify-between">
             <div>
-              <h3 className="font-label-md text-on-surface-variant uppercase tracking-wider">Total Realized Capital Gains</h3>
+              <div className="flex items-center gap-2">
+                <h3 className="font-label-md text-on-surface-variant uppercase tracking-wider">Total Realized Capital Gains</h3>
+                {data?.realized?.is_illustrative && (
+                  <span className="px-2 py-0.5 rounded-full text-[10px] font-bold bg-outline/20 text-on-surface-variant">No sells yet</span>
+                )}
+              </div>
               <div className="flex items-baseline gap-2 mt-2">
                 <span className="font-display-lg-mobile md:font-display-lg text-on-surface">₹ {(data?.realized?.total || 0).toLocaleString('en-IN')}</span>
               </div>
+              {data?.realized?.note && (
+                <p className="font-label-sm text-outline mt-1">{data.realized.note}</p>
+              )}
             </div>
             <div className="mt-4 pt-3 border-t border-outline-variant grid grid-cols-2 gap-3">
               <div>
@@ -105,102 +112,72 @@ export function TaxSummary() {
           {/* Total Unrealized Gains */}
           <div className="bg-surface-container-lowest border border-outline-variant rounded-xl p-4 shadow-sm col-span-1 md:col-span-2 flex flex-col justify-between">
             <div>
-              <h3 className="font-label-md text-on-surface-variant uppercase tracking-wider">Total Unrealized Gains</h3>
-              <div className="flex items-baseline gap-2 mt-2">
-                <span className="font-display-lg-mobile md:font-display-lg text-on-surface">₹ {(data?.unrealized?.total || 0).toLocaleString('en-IN')}</span>
+              <div className="flex items-center gap-2">
+                <h3 className="font-label-md text-on-surface-variant uppercase tracking-wider">Total Unrealized Gains</h3>
+                <span className="px-2 py-0.5 rounded-full text-[10px] font-bold bg-primary-container text-on-primary-container">Live Prices</span>
               </div>
+              <div className="flex items-baseline gap-2 mt-2">
+                <span className={`font-display-lg-mobile md:font-display-lg ${(data?.unrealized?.total || 0) >= 0 ? 'text-on-surface' : 'text-error'}`}>
+                  {(data?.unrealized?.total || 0) >= 0 ? '' : '−'}₹ {Math.abs(data?.unrealized?.total || 0).toLocaleString('en-IN')}
+                </span>
+              </div>
+              {data?.unrealized?.note && (
+                <p className="font-label-sm text-outline mt-1">{data.unrealized.note}</p>
+              )}
             </div>
             <div className="mt-4 pt-3 border-t border-outline-variant grid grid-cols-2 gap-3">
               <div>
-                <span className="font-label-sm text-on-surface-variant block">Short Term Estimate</span>
-                <span className="font-body-md text-on-surface font-semibold">₹ {(data?.unrealized?.shortTerm || 0).toLocaleString('en-IN')}</span>
+                <span className="font-label-sm text-on-surface-variant block">Short Term (&lt;12 mo)</span>
+                <span className="font-body-md text-on-surface font-semibold">₹ {Math.abs(data?.unrealized?.shortTerm || 0).toLocaleString('en-IN')}</span>
               </div>
               <div>
-                <span className="font-label-sm text-on-surface-variant block">Long Term Estimate</span>
-                <span className="font-body-md text-on-surface font-semibold">₹ {(data?.unrealized?.longTerm || 0).toLocaleString('en-IN')}</span>
+                <span className="font-label-sm text-on-surface-variant block">Long Term (&gt;12 mo)</span>
+                <span className="font-body-md text-on-surface font-semibold">₹ {Math.abs(data?.unrealized?.longTerm || 0).toLocaleString('en-IN')}</span>
               </div>
             </div>
           </div>
+
+          {/* Tax Loss Harvesting Opportunity */}
+          {(data?.taxLossHarvestingOpportunity || 0) > 0 && (
+            <div className="bg-surface-container-lowest border border-secondary/30 rounded-xl p-4 shadow-sm col-span-1 md:col-span-4 flex items-start gap-3">
+              <Info size={20} className="text-secondary mt-1 shrink-0" />
+              <div>
+                <p className="font-label-md text-secondary font-semibold">Tax Loss Harvesting Opportunity</p>
+                <p className="font-body-md text-on-surface-variant mt-1">
+                  You have <strong>₹ {(data.taxLossHarvestingOpportunity).toLocaleString('en-IN')}</strong> in unrealized losses that could offset capital gains if you sell those holdings this FY.
+                </p>
+              </div>
+            </div>
+          )}
 
         </section>
         )}
 
-        {/* Detailed Breakdown */}
+        {/* Asset Class breakdown note */}
         <section className="space-y-4">
           <div className="flex items-center justify-between border-b border-outline-variant pb-2">
-            <h3 className="font-headline-sm text-on-surface">Asset Class Breakdown</h3>
-            <div className="flex gap-2">
-              <button className="px-3 py-1.5 rounded-full bg-primary-container text-on-primary-container font-label-md">Realized</button>
-              <button className="px-3 py-1.5 rounded-full border border-outline-variant text-on-surface-variant font-label-md hover:bg-surface-container-low transition-colors">Unrealized</button>
-            </div>
+            <h3 className="font-headline-sm text-on-surface">Portfolio Summary</h3>
           </div>
-          
-          {/* Table Container (Responsive) */}
-          <div className="bg-surface-container-lowest border border-outline-variant rounded-xl overflow-hidden shadow-sm">
-            <div className="overflow-x-auto">
-              <table className="w-full text-left border-collapse">
-                <thead>
-                  <tr className="bg-surface-container-low border-b border-outline-variant">
-                    <th className="p-4 font-label-md text-on-surface-variant font-semibold whitespace-nowrap">Asset Class</th>
-                    <th className="p-4 font-label-md text-on-surface-variant font-semibold text-right whitespace-nowrap">STCG (15%)</th>
-                    <th className="p-4 font-label-md text-on-surface-variant font-semibold text-right whitespace-nowrap">LTCG (10%)</th>
-                    <th className="p-4 font-label-md text-on-surface-variant font-semibold text-right whitespace-nowrap">Total Taxable</th>
-                  </tr>
-                </thead>
-                <tbody className="divide-y divide-outline-variant">
-                  {/* Row 1 */}
-                  <tr className="hover:bg-surface-bright transition-colors group">
-                    <td className="p-4">
-                      <div className="flex items-center gap-3">
-                        <div className="w-8 h-8 rounded bg-primary-fixed flex items-center justify-center text-primary">
-                          <Activity size={20} />
-                        </div>
-                        <span className="font-body-md text-on-surface font-medium">Domestic Equity</span>
-                      </div>
-                    </td>
-                    <td className="p-4 font-body-md text-on-surface text-right group-hover:text-primary transition-colors">₹ 25,000</td>
-                    <td className="p-4 font-body-md text-on-surface text-right group-hover:text-primary transition-colors">₹ 85,000</td>
-                    <td className="p-4 font-body-md text-on-surface font-semibold text-right">₹ 1,10,000</td>
-                  </tr>
-                  {/* Row 2 */}
-                  <tr className="hover:bg-surface-bright transition-colors group">
-                    <td className="p-4">
-                      <div className="flex items-center gap-3">
-                        <div className="w-8 h-8 rounded bg-secondary-fixed flex items-center justify-center text-secondary">
-                          <Globe size={20} />
-                        </div>
-                        <span className="font-body-md text-on-surface font-medium">International Equity</span>
-                      </div>
-                    </td>
-                    <td className="p-4 font-body-md text-on-surface text-right group-hover:text-primary transition-colors">₹ 10,000</td>
-                    <td className="p-4 font-body-md text-on-surface text-right group-hover:text-primary transition-colors">₹ 15,000</td>
-                    <td className="p-4 font-body-md text-on-surface font-semibold text-right">₹ 25,000</td>
-                  </tr>
-                  {/* Row 3 */}
-                  <tr className="hover:bg-surface-bright transition-colors group">
-                    <td className="p-4">
-                      <div className="flex items-center gap-3">
-                        <div className="w-8 h-8 rounded bg-tertiary-fixed flex items-center justify-center text-tertiary">
-                          <Coins size={20} />
-                        </div>
-                        <span className="font-body-md text-on-surface font-medium">Gold / Debt</span>
-                      </div>
-                    </td>
-                    <td className="p-4 font-body-md text-on-surface text-right group-hover:text-primary transition-colors">₹ 0</td>
-                    <td className="p-4 font-body-md text-on-surface text-right group-hover:text-primary transition-colors">₹ 7,500</td>
-                    <td className="p-4 font-body-md text-on-surface font-semibold text-right">₹ 7,500</td>
-                  </tr>
-                </tbody>
-                <tfoot>
-                  <tr className="bg-surface-container border-t-2 border-outline">
-                    <td className="p-4 font-body-md text-on-surface font-bold">Total</td>
-                    <td className="p-4 font-body-md text-on-surface font-bold text-right">₹ 35,000</td>
-                    <td className="p-4 font-body-md text-on-surface font-bold text-right">₹ 1,07,500</td>
-                    <td className="p-4 font-body-md text-primary font-bold text-right text-lg">₹ 1,42,500</td>
-                  </tr>
-                </tfoot>
-              </table>
+          <div className="bg-surface-container-lowest border border-outline-variant rounded-xl p-4 shadow-sm">
+            <div className="grid grid-cols-2 gap-4">
+              <div>
+                <span className="font-label-sm text-on-surface-variant">Holdings Analysed</span>
+                <p className="font-headline-sm text-primary mt-1">{data?.holdingsAnalyzed || 0}</p>
+              </div>
+              <div>
+                <span className="font-label-sm text-on-surface-variant">Sell Transactions (FY)</span>
+                <p className="font-headline-sm text-primary mt-1">{data?.sellTransactionsThisFY || 0}</p>
+              </div>
+              <div>
+                <span className="font-label-sm text-on-surface-variant">Unrealized STCG (est. tax @15%)</span>
+                <p className="font-headline-sm text-on-surface mt-1">₹ {Math.round(Math.max(0, data?.unrealized?.shortTerm || 0) * 0.15).toLocaleString('en-IN')}</p>
+              </div>
+              <div>
+                <span className="font-label-sm text-on-surface-variant">Unrealized LTCG (est. tax @10%)</span>
+                <p className="font-headline-sm text-on-surface mt-1">₹ {Math.round(Math.max(0, data?.unrealized?.longTerm || 0) * 0.10).toLocaleString('en-IN')}</p>
+              </div>
             </div>
+            <p className="font-label-sm text-outline mt-4">* Estimated taxes assume flat STCG (15%) and LTCG (10%) rates on equity. Consult a CA for accurate filing.</p>
           </div>
         </section>
 
