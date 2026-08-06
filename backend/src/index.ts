@@ -108,8 +108,87 @@ app.get('/api/debug-sentry', function mainHandler(req, res) {
 });
 
 // ==========================================
+// Shared helper: Compute SEBI-mandated behavioral alerts from real DB data.
+// Called by both /api/alerts/behavioral/:userId and /api/trust/alerts.
+// Returns an empty array if no real signals exist — never fabricates alerts.
+// ==========================================
+async function computeBehavioralAlerts(userId: string): Promise<any[]> {
+  const alerts: any[] = [];
+
+  // --- Signal 1: Overtrading — ≥3 user-initiated trades in the last 24 hours ---
+  const since24h = new Date(Date.now() - 24 * 60 * 60 * 1000).toISOString();
+  const { data: recentTrades } = await supabase
+    .from('transactions')
+    .select('id, txn_type, txn_date, amount, created_at')
+    .eq('user_id', userId)
+    .neq('source', 'SYSTEM_BACKFILL')  // Exclude seed data — only real user actions
+    .neq('source', 'CAS')              // Exclude CAS imports — not live trades
+    .gte('created_at', since24h)
+    .order('created_at', { ascending: false });
+
+  const tradeCount = recentTrades?.length || 0;
+  if (tradeCount >= 3) {
+    alerts.push({
+      id: `alert_overtrading_${Date.now()}`,
+      type: 'overtrading',
+      severity: 'high',
+      title: 'High Trading Velocity Detected',
+      message: `You have executed ${tradeCount} trade${tradeCount > 1 ? 's' : ''} in the last 24 hours. High-frequency trading often leads to sub-optimal returns due to compounded transaction costs and emotional bias. SEBI research shows retail overtrading is a leading cause of portfolio underperformance.`,
+      timestamp: new Date().toISOString(),
+      actionUrl: '/learn',
+      data: { trade_count_24h: tradeCount }
+    });
+  }
+
+  // --- Signal 2: Holdings at unrealized loss (panic-sell risk signal) ---
+  const { data: lossHoldings } = await supabase
+    .from('holdings')
+    .select('instrument_name, current_value, avg_cost, quantity, sector')
+    .eq('user_id', userId)
+    .neq('data_source', 'SETU_MOCK')  // Exclude mock data
+    .gt('quantity', 0);
+
+  if (lossHoldings && lossHoldings.length > 0) {
+    const atLoss = lossHoldings.filter((h: any) => {
+      const costBasis = Number(h.avg_cost) * Number(h.quantity);
+      const currentVal = Number(h.current_value);
+      const lossPercent = costBasis > 0 ? ((currentVal - costBasis) / costBasis) * 100 : 0;
+      return lossPercent < -8; // Flag holdings down more than 8% from cost basis
+    });
+
+    if (atLoss.length > 0) {
+      const worst = atLoss.sort((a: any, b: any) => {
+        const lossA = Number(a.current_value) - Number(a.avg_cost) * Number(a.quantity);
+        const lossB = Number(b.current_value) - Number(b.avg_cost) * Number(b.quantity);
+        return lossA - lossB; // Most negative first
+      })[0];
+      const costBasis = Number(worst.avg_cost) * Number(worst.quantity);
+      const lossPercent = costBasis > 0 ? ((Number(worst.current_value) - costBasis) / costBasis) * 100 : 0;
+
+      alerts.push({
+        id: `alert_loss_${Date.now()}`,
+        type: 'panic_sell',
+        severity: 'medium',
+        title: 'Holdings at Unrealized Loss',
+        message: `${worst.instrument_name} is currently at ${lossPercent.toFixed(1)}% unrealized loss from your cost basis. Historically, markets recover from corrections. Consider whether your investment thesis has changed before selling at a loss.`,
+        timestamp: new Date().toISOString(),
+        actionUrl: '/twin/simulator',
+        data: {
+          instrument: worst.instrument_name,
+          loss_percent: lossPercent.toFixed(1),
+          holdings_at_loss: atLoss.length
+        }
+      });
+    }
+  }
+
+  return alerts;
+}
+
+// ==========================================
 // 1. Authentication Endpoints
 // ==========================================
+
 
 app.post('/api/auth/otp', rateLimiter({ limit: 5, windowSeconds: 60, prefix: 'rl:otp' }), async (req: Request, res: Response) => {
   try {
@@ -1225,42 +1304,22 @@ app.get('/api/portfolio/cost-analysis/:userId', async (req: Request, res: Respon
 app.get('/api/alerts/behavioral/:userId', async (req: Request, res: Response) => {
   try {
     const { userId } = req.params;
-    
-    // In a real app we'd query the 'transactions' table to calculate velocity and 'holdings' to check drop.
-    // For this prototype, we'll mock the SEBI-priority logic (Overtrading and Panic-Sell).
-    const alerts = [];
+    let activeUserId = userId === 'me' ? '716691b9-939e-4118-aafb-9246a3923250' : userId;
+    const authHeader = req.headers.authorization;
+    if (authHeader) {
+      const token = authHeader.replace('Bearer ', '');
+      const { data: { user } } = await supabase.auth.getUser(token);
+      if (user) activeUserId = user.id;
+    }
 
-    // Mock heuristic: If user has > 3 trades in last 24 hours in a volatile sector
-    alerts.push({
-      id: 'alert_1',
-      type: 'overtrading',
-      severity: 'high',
-      title: 'High Trading Velocity Detected',
-      message: 'You have executed 4 trades in the Options segment within the last 24 hours. High-frequency trading often leads to sub-optimal returns due to compounded fees and emotional bias.',
-      timestamp: new Date().toISOString(),
-      actionUrl: '/learning/overtrading-risks'
-    });
-
-    // Mock heuristic: If user is selling an asset that dropped > 10% recently
-    alerts.push({
-      id: 'alert_2',
-      type: 'panic_sell',
-      severity: 'medium',
-      title: 'Potential Panic Sell',
-      message: 'You are attempting to sell "Tech Growth Fund" which is down 12% this week. Historically, markets recover. Consider holding unless your fundamental thesis has changed.',
-      timestamp: new Date().toISOString(),
-      actionUrl: '/simulation/recovery'
-    });
-
-    res.json({
-      alerts
-    });
-
+    const alerts = await computeBehavioralAlerts(activeUserId);
+    res.json({ alerts });
   } catch (error) {
-    console.error("Behavioral alerts error:", error);
+    console.error('[Behavioral Alerts] Error:', error);
     res.status(500).json({ error: 'Internal server error calculating behavioral alerts' });
   }
 });
+
 
 // ==========================================
 app.get('/api/portfolio/exposure/me', async (req: Request, res: Response) => {
@@ -2519,16 +2578,23 @@ app.get('/api/trust/score', async (req: Request, res: Response) => {
 
 app.get('/api/trust/alerts', async (req: Request, res: Response) => {
   try {
-    res.json({
-      alerts: [
-        { id: 1, type: 'overtrading', message: 'You have executed 4 trades in the Options segment within the last 24 hours. High-frequency trading often leads to sub-optimal returns due to compounded fees and emotional bias.', severity: 'high', title: 'High Trading Velocity Detected', timestamp: new Date().toISOString() },
-        { id: 2, type: 'panic_sell', message: 'You are attempting to sell "Tech Growth Fund" which is down 12% this week. Historically, markets recover. Consider holding unless your fundamental thesis has changed.', severity: 'medium', title: 'Potential Panic Sell', timestamp: new Date().toISOString() }
-      ]
-    });
+    // Auth: identify user
+    let activeUserId = '716691b9-939e-4118-aafb-9246a3923250';
+    const authHeader = req.headers.authorization;
+    if (authHeader) {
+      const token = authHeader.replace('Bearer ', '');
+      const { data: { user } } = await supabase.auth.getUser(token);
+      if (user) activeUserId = user.id;
+    }
+
+    const alerts = await computeBehavioralAlerts(activeUserId);
+    res.json({ alerts });
   } catch (err) {
+    console.error('[Trust Alerts] Error:', err);
     res.status(500).json({ error: 'Internal server error' });
   }
 });
+
 
 // ==========================================
 // 7. Compliance & Grievances Endpoints
