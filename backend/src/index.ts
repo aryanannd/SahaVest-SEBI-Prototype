@@ -186,6 +186,91 @@ async function computeBehavioralAlerts(userId: string): Promise<any[]> {
 }
 
 // ==========================================
+// Shared helper: Enrich audit_log rows with human-readable descriptions.
+// The audit_log table stores ref_type + ref_id. This joins to related tables
+// to produce meaningful labels for the Audit Trail screen.
+// ==========================================
+async function enrichAuditLogs(rows: any[], userId: string): Promise<any[]> {
+  return Promise.all(rows.map(async (row: any) => {
+    let title = row.ref_type;
+    let summary = `Event recorded in immutable audit log`;
+    let type: 'scam_check' | 'rebalance' | 'verification' | 'grievance' | 'consent' | 'general' = 'general';
+
+    switch (row.ref_type) {
+      case 'SCAM_CHECK': {
+        type = 'scam_check';
+        title = 'Scam / Trust Check';
+        // Try to enrich from scam_checks table if ref_id available
+        if (row.ref_id) {
+          const { data: sc } = await supabase.from('scam_checks').select('input_text, verdict').eq('id', row.ref_id).single();
+          if (sc) {
+            summary = `Analyzed: "${(sc.input_text || '').slice(0, 80)}..." — Verdict: ${sc.verdict || 'N/A'}`;
+          }
+        } else {
+          summary = 'A scam or trust verification check was completed and logged.';
+        }
+        break;
+      }
+      case 'GRIEVANCE': {
+        type = 'grievance';
+        title = 'Grievance Filed';
+        if (row.ref_id) {
+          const { data: g } = await supabase.from('grievances').select('title, status').eq('id', row.ref_id).single();
+          if (g) {
+            summary = `Grievance: "${g.title || 'Untitled'}" — Status: ${g.status || 'Pending'}`;
+          }
+        } else {
+          summary = 'A grievance was filed and logged.';
+        }
+        break;
+      }
+      case 'AA_CONSENT_REVOKE': {
+        type = 'consent';
+        title = 'Account Aggregator Consent Revoked';
+        summary = 'Consent revocation recorded for Account Aggregator data sharing.';
+        if (row.ref_id) {
+          const { data: c } = await supabase.from('aa_consents').select('aa_provider, fip_list').eq('id', row.ref_id).single();
+          if (c) {
+            summary = `Revoked ${c.aa_provider || 'AA'} consent for FIPs: ${(c.fip_list || []).join(', ') || 'all linked accounts'}`;
+          }
+        }
+        break;
+      }
+      case 'AI_NUDGE':
+      case 'AI_RECOMMENDATION': {
+        type = 'rebalance';
+        title = 'AI Portfolio Recommendation';
+        summary = 'An AI-generated portfolio recommendation was logged with hash for auditability.';
+        break;
+      }
+      case 'ADVISOR_VERIFICATION': {
+        type = 'verification';
+        title = 'Advisor Verification';
+        summary = 'SEBI registry advisor verification was completed and logged.';
+        break;
+      }
+      default: {
+        title = row.ref_type?.replace(/_/g, ' ') || 'System Event';
+        summary = `A ${row.ref_type || 'system'} event was recorded in the immutable audit trail.`;
+      }
+    }
+
+    return {
+      id: row.id,
+      type,
+      ref_type: row.ref_type,
+      ref_id: row.ref_id,
+      title,
+      summary,
+      date: new Date(row.created_at).toLocaleString('en-IN', { timeZone: 'Asia/Kolkata' }),
+      created_at: row.created_at,
+      hash: row.content_hash,
+      blockchain_tx_id: row.blockchain_tx_id || null,
+    };
+  }));
+}
+
+// ==========================================
 // 1. Authentication Endpoints
 // ==========================================
 
@@ -2096,33 +2181,20 @@ app.get('/api/compliance/audit-trail/:userId', async (req: Request, res: Respons
       .eq('user_id', activeUserId)
       .order('created_at', { ascending: false });
 
-    if (error || !data || data.length === 0) {
-      // Return generated mock data with real crypto hashes
-      const mockPayloads = [
-        { action: 'Generated Concentration Alert', sector: 'Banking', threshold: '30%' },
-        { action: 'AI Chat Response', intent: 'Tax Planning', recommendations_given: false },
-        { action: 'Executed Pre-trade Suitability Check', risk_profile: 'Moderate', outcome: 'Passed' }
-      ];
-
-      const mockLogs = mockPayloads.map((payload, idx) => {
-        const hash = generateHash(payload);
-        return {
-          id: `audit_mock_${idx}`,
-          created_at: new Date(Date.now() - idx * 86400000).toISOString(),
-          ref_type: 'AI_NUDGE',
-          content_hash: hash,
-          payload
-        };
-      });
-      return res.json({ logs: mockLogs });
+    if (error) {
+      console.error('[Audit Trail] Supabase error:', error);
+      return res.status(500).json({ error: 'Failed to fetch audit trail' });
     }
 
-    res.json({ logs: data });
+    // Enrich with human-readable descriptions based on ref_type
+    const enriched = await enrichAuditLogs(data || [], activeUserId);
+    res.json({ logs: enriched });
   } catch (error) {
-    console.error("Audit trail error:", error);
+    console.error('[Audit Trail] Unexpected error:', error);
     res.status(500).json({ error: 'Internal server error' });
   }
 });
+
 
 app.get('/api/compliance/grievance/:userId', async (req: Request, res: Response) => {
   try {
@@ -2602,17 +2674,35 @@ app.get('/api/trust/alerts', async (req: Request, res: Response) => {
 
 app.get('/api/compliance/audit/me', async (req: Request, res: Response) => {
   try {
-    res.json({
-      events: [
-        { id: 'evt-1', ref_type: 'AUTH', payload: { action: 'LOGIN', status: 'SUCCESS', ip: '192.168.1.1' }, created_at: new Date().toISOString() },
-        { id: 'evt-2', ref_type: 'TRADE', payload: { action: 'TRADE_EXECUTED', details: 'Bought 25 HDFCBANK' }, created_at: new Date(Date.now() - 86400000).toISOString() },
-        { id: 'evt-3', ref_type: 'AI_NUDGE', payload: { action: 'Scam Detection', status: 'Blocked' }, created_at: new Date(Date.now() - 86400000 * 2).toISOString() }
-      ]
-    });
+    let activeUserId = '716691b9-939e-4118-aafb-9246a3923250';
+    const authHeader = req.headers.authorization;
+    if (authHeader) {
+      const token = authHeader.replace('Bearer ', '');
+      const { data: { user } } = await supabase.auth.getUser(token);
+      if (user) activeUserId = user.id;
+    }
+
+    const { data, error } = await supabase
+      .from('audit_log')
+      .select('*')
+      .eq('user_id', activeUserId)
+      .order('created_at', { ascending: false })
+      .limit(50);
+
+    if (error) {
+      console.error('[Audit /me] Supabase error:', error);
+      return res.status(500).json({ error: 'Failed to fetch audit log' });
+    }
+
+    // Enrich with human-readable descriptions based on ref_type
+    const enriched = await enrichAuditLogs(data || [], activeUserId);
+    res.json({ events: enriched });
   } catch (err) {
+    console.error('[Audit /me] Unexpected error:', err);
     res.status(500).json({ error: 'Internal server error' });
   }
 });
+
 
 
 
