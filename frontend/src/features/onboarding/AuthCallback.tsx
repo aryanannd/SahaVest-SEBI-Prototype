@@ -13,6 +13,8 @@ export function AuthCallback() {
     const { data: authListener } = supabase.auth.onAuthStateChange(async (event, session) => {
       if (event === 'SIGNED_IN' && session) {
         setStatus('success');
+        localStorage.setItem('sahavest_demo_session', JSON.stringify(session));
+        if (session.user) localStorage.setItem('sahavest_user', JSON.stringify(session.user));
         
         // Wait a moment so the user sees the success state before redirecting
         setTimeout(async () => {

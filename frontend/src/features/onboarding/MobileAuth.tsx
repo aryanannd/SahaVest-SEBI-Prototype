@@ -43,10 +43,12 @@ export function MobileAuth() {
     try {
       const { data, error } = await supabase.auth.signInWithPassword({ email, password });
       if (error) throw error;
-      
-      // On success, redirect to OTP verify (to route based on onboarding status)
-      // or directly do the routing here. For simplicity, OtpVerification handles routing.
-      // But we can just handle routing here as requested by spec:
+
+      if (data.session) {
+        localStorage.setItem('sahavest_demo_session', JSON.stringify(data.session));
+        localStorage.setItem('sahavest_user', JSON.stringify(data.user));
+      }
+
       const { data: userData } = await supabase.from('users').select('onboarding_status, kyc_status').eq('id', data.user.id).single();
       
       if (userData?.kyc_status === 'pending' || userData?.kyc_status === 'complete') {
@@ -83,6 +85,14 @@ export function MobileAuth() {
         }
       });
       if (error) throw error;
+      
+      if (data.session) {
+        localStorage.setItem('sahavest_demo_session', JSON.stringify(data.session));
+        localStorage.setItem('sahavest_user', JSON.stringify(data.user));
+        navigate('/onboarding/personal-info');
+        return;
+      }
+      
       setEmailStep('check_email');
     } catch (err: any) {
       setAuthError(err.message || 'Failed to sign up');

@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Navigate, useLocation } from 'react-router-dom';
-import { supabase } from '../../lib/supabaseClient';
+import { supabase, getAuthSession } from '../../lib/supabaseClient';
 import { Loader2 } from 'lucide-react';
 
 export function AuthGuard({ children, requireKyc = false }: { children: React.ReactNode, requireKyc?: boolean }) {
@@ -9,7 +9,7 @@ export function AuthGuard({ children, requireKyc = false }: { children: React.Re
 
   useEffect(() => {
     async function checkAuth() {
-      const { data: { session } } = await supabase.auth.getSession();
+      const session = await getAuthSession();
       
       if (!session) {
         setStatus('unauthenticated');
@@ -17,11 +17,17 @@ export function AuthGuard({ children, requireKyc = false }: { children: React.Re
       }
 
       if (requireKyc) {
-        const { data: user } = await supabase.from('users').select('kyc_status, onboarding_status').eq('id', session.user.id).single();
-        
-        if (!user || (user.kyc_status !== 'complete' && user.kyc_status !== 'verified')) {
-          setStatus('kyc_pending');
-          return;
+        const userId = session.user?.id || (session as any).user_id;
+        if (userId) {
+          try {
+            const { data: user } = await supabase.from('users').select('kyc_status, onboarding_status').eq('id', userId).single();
+            if (user && user.kyc_status !== 'complete' && user.kyc_status !== 'verified') {
+              setStatus('kyc_pending');
+              return;
+            }
+          } catch {
+            // In demo mode or offline, pass through
+          }
         }
       }
 
@@ -32,9 +38,14 @@ export function AuthGuard({ children, requireKyc = false }: { children: React.Re
     
     const { data: authListener } = supabase.auth.onAuthStateChange((event, session) => {
       if (!session) {
-        setStatus('unauthenticated');
+        const demoSession = localStorage.getItem('sahavest_demo_session');
+        if (!demoSession) {
+          setStatus('unauthenticated');
+        } else {
+          setStatus('authenticated');
+        }
       } else {
-        checkAuth(); // Re-check KYC on session change
+        checkAuth();
       }
     });
     

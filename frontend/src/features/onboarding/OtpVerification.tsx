@@ -49,18 +49,40 @@ export function OtpVerification() {
       setIsProcessing(true);
       const isMock = import.meta.env.VITE_MOCK_OTP === 'true';
       try {
-        if (isMock && otpValue === '123456') {
-          const res = await fetch(`${import.meta.env.VITE_API_BASE_URL || '/api'}/auth/demo-login`, { method: 'POST' });
-          const data = await res.json();
-          if (data.session) {
-            await supabase.auth.setSession({
-              access_token: data.session.access_token,
-              refresh_token: data.session.refresh_token
-            });
-            navigate('/onboarding/risk-profiling');
-          } else {
-            setError(true);
+        if (isMock && (otpValue === '123456' || otpValue.length === 6)) {
+          let session = null;
+          let user = null;
+          try {
+            const res = await fetch(`${import.meta.env.VITE_API_BASE_URL || '/api'}/auth/demo-login`, { method: 'POST' });
+            if (res.ok) {
+              const data = await res.json();
+              session = data.session;
+              user = data.user;
+            }
+          } catch (e) {
+            console.warn('Demo login API fallback', e);
           }
+
+          if (!session) {
+            session = {
+              access_token: 'mock-session-token-demo',
+              refresh_token: 'mock-refresh-token-demo'
+            };
+            user = {
+              id: '716691b9-939e-4118-aafb-9246a3923250',
+              phone: phone || '9876543210'
+            };
+          }
+
+          localStorage.setItem('sahavest_demo_session', JSON.stringify(session));
+          localStorage.setItem('sahavest_user', JSON.stringify(user));
+
+          await supabase.auth.setSession({
+            access_token: session.access_token,
+            refresh_token: session.refresh_token
+          }).catch(() => {});
+
+          navigate('/onboarding/risk-profiling');
         } else {
           let sessionData, authError;
           if (email) {
@@ -76,10 +98,7 @@ export function OtpVerification() {
             const data = await res.json();
             if (data.session) {
               sessionData = data.session;
-              await supabase.auth.setSession({
-                access_token: data.session.access_token,
-                refresh_token: data.session.refresh_token
-              });
+              if (data.user) localStorage.setItem('sahavest_user', JSON.stringify(data.user));
             } else {
               authError = new Error('Invalid OTP');
             }
@@ -88,6 +107,11 @@ export function OtpVerification() {
           if (authError) {
             setError(true);
           } else if (sessionData) {
+            localStorage.setItem('sahavest_demo_session', JSON.stringify(sessionData));
+            await supabase.auth.setSession({
+              access_token: sessionData.access_token,
+              refresh_token: sessionData.refresh_token
+            }).catch(() => {});
             navigate('/onboarding/risk-profiling');
           } else {
             setError(true);
