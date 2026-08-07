@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { ArrowLeft, ArrowRight, Landmark, TrendingUp, PieChart, PiggyBank, UploadCloud, Loader2, CheckCircle2 } from 'lucide-react';
+import { ArrowLeft, ArrowRight, Landmark, TrendingUp, PieChart, PiggyBank, UploadCloud, Loader2, CheckCircle2, Shield } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { Header } from '../../components/common/Header';
 

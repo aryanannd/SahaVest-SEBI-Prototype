@@ -16,6 +16,7 @@ export function Dashboard() {
     sectorBreakdown: any[];
     assetClassBreakdown?: any[];
     flags: string[];
+    dayChangePercent?: number;
   } | null>(null);
 
   useEffect(() => {

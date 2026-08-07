@@ -331,10 +331,10 @@ export function HoldingDetail() {
                     contentStyle={{ backgroundColor: 'var(--tw-colors-surface-container-highest)', borderColor: 'var(--tw-colors-outline-variant)', borderRadius: '8px', color: 'var(--tw-colors-on-surface)' }}
                     itemStyle={{ color: 'var(--tw-colors-on-surface)' }}
                     labelStyle={{ color: 'var(--tw-colors-on-surface-variant)', marginBottom: '4px' }}
-                    formatter={(value: number) => [`₹${value.toLocaleString('en-IN', {minimumFractionDigits: 2})}`, 'Close Price']}
-                    labelFormatter={(label) => new Date(label).toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' })}
+                    formatter={(value: any) => [`₹${Number(value || 0).toLocaleString('en-IN', {minimumFractionDigits: 2})}`, 'Close Price']}
+                    labelFormatter={(label: any) => new Date(label).toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' })}
                   />
-                  {avgCost > 0 && avgCost >= minChartPrice && avgCost <= maxChartPrice && (
+                  {avgCost > 0 && avgCost >= minChartPrice && (typeof maxChartPrice === 'number' ? avgCost <= maxChartPrice : true) && (
                     <ReferenceLine y={avgCost} stroke="var(--tw-colors-outline-variant)" strokeDasharray="3 3" label={{ position: 'insideTopLeft', value: 'Avg Cost', fill: 'var(--tw-colors-on-surface-variant)', fontSize: 10 }} />
                   )}
                   <Area 
