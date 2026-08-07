@@ -98,7 +98,7 @@ export function calculateExactXIRR(cashFlows: CashFlow[], maxIterations = 100, t
 /**
  * Maps frontend timeframe range to Yahoo Finance candle range string.
  */
-function mapRangeToYahoo(range: '1M' | '3M' | '6M' | '1Y' | 'ALL'): string {
+function mapRangeToYahoo(range: '1M' | '3M' | '6M' | '1Y' | 'ALL'): '1mo' | '3mo' | '6mo' | '1y' | '5y' {
   switch (range) {
     case '1M': return '1mo';
     case '3M': return '3mo';
@@ -134,6 +134,7 @@ export async function getPortfolioPerformance(
   range: '1M' | '3M' | '6M' | '1Y' | 'ALL' = '1Y'
 ): Promise<PortfolioPerformanceResponse> {
   const effectiveUserId = userId || '716691b9-939e-4118-aafb-9246a3923250';
+  console.log('getPortfolioPerformance called for:', effectiveUserId, 'range:', range);
 
   // 1. Fetch user transaction records with joined holding data
   const { data: rawTransactions, error: txError } = await supabase
@@ -156,18 +157,30 @@ export async function getPortfolioPerformance(
   if (holdings && holdings.length > 0) {
     currentNetWorth = holdings.reduce((sum, h) => sum + (Number(h.current_value) || 0), 0);
     totalInvested = holdings.reduce((sum, h) => sum + ((Number(h.avg_cost) || 0) * (Number(h.quantity) || 0)), 0);
-  } else if (transactions.length > 0) {
+  } 
+  
+  // Pre-calculate holdings avg_cost map for consistent fallbacks
+  const holdingsAvgCost: Record<string, number> = {};
+  if (holdings) {
+    for (const h of holdings) {
+      if (h.instrument_name) {
+        holdingsAvgCost[h.instrument_name] = Number(h.avg_cost) || 100;
+      }
+    }
+  }
+
+  if (transactions.length > 0 && totalInvested === 0) {
     totalInvested = transactions.reduce((sum, t) => sum + (t.txn_type?.toLowerCase() === 'buy' || t.txn_type?.toLowerCase() === 'cas_import' ? Number(t.amount) : -Number(t.amount)), 0);
     currentNetWorth = totalInvested * 1.135; // Default modest gain if no live holdings valuation exists
-  } else {
+  } else if (transactions.length === 0 && !holdings) {
     currentNetWorth = 0;
     totalInvested = 0;
   }
 
-  // 2. Fetch real NIFTY 50 benchmark candles from Stage B marketData service
+  // 2. Fetch NIFTY 50 benchmark performance over the period
   const yahooRange = mapRangeToYahoo(range);
-  const benchmarkResult = await getCandles('^NSEI', yahooRange, '1d');
-  const benchmarkCandles = benchmarkResult.candles && benchmarkResult.candles.length > 0 ? benchmarkResult.candles : [];
+  const benchmarkResult = await getCandles('^NSEI', '1d', yahooRange);
+  const benchmarkCandles = benchmarkResult?.candles && benchmarkResult.candles.length > 0 ? benchmarkResult.candles : [];
 
   // 3. Fetch real daily closing prices for all distinct symbols in transactions
   const distinctSymbols = [...new Set(transactions.map(t => t.holdings?.instrument_name).filter(Boolean))];
@@ -175,7 +188,7 @@ export async function getPortfolioPerformance(
 
   for (const sym of distinctSymbols) {
     try {
-      const symCandlesRes = await getCandles(sym, yahooRange, '1d');
+      const symCandlesRes = await getCandles(sym, '1d', yahooRange);
       const dateMap = new Map<string, number>();
       if (symCandlesRes && symCandlesRes.candles) {
         for (const c of symCandlesRes.candles) {
@@ -206,6 +219,7 @@ export async function getPortfolioPerformance(
 
     // Filter transactions occurring on or before dateStr
     const pastTxs = transactions.filter(t => new Date(t.txn_date) <= dateObj);
+    if (i === timelineDates.length - 1) console.log(`Date: ${dateStr}, txns: ${transactions.length}, pastTxs: ${pastTxs.length}`);
 
     let dailyInvested = 0;
     let dailyPortfolioValue = 0;
@@ -241,9 +255,8 @@ export async function getPortfolioPerformance(
         }
       }
 
-      // If symbol is non-equity (e.g. MF / Bond without direct yahoo candle), use purchase price scaled to holding returns
       if (!closePrice) {
-        closePrice = acquisitionPrices[sym] || 100;
+        closePrice = holdingsAvgCost[sym] || acquisitionPrices[sym] || 100;
       }
 
       dailyPortfolioValue += qty * closePrice;

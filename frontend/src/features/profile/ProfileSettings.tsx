@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { User, Bell, Shield, Wallet, FileText, ChevronRight, HelpCircle, ShieldCheck, CreditCard, Banknote, Smartphone, Moon, LogOut, CheckCircle, SmartphoneNfc, Fingerprint, Lock, ShieldAlert, Mail, MapPin, Edit3, Camera, FileCheck, Share2, Users, Edit2, Landmark, Utensils, LineChart, CheckSquare, Settings, Trash2 } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { supabase } from '../../lib/supabaseClient';
+import { KycBadge } from '../../components/common/KycBadge';
 
 export function ProfileSettings() {
   const navigate = useNavigate();
@@ -293,17 +294,7 @@ export function ProfileSettings() {
           <div className="flex-grow">
             <div className="flex items-center gap-3 mb-1">
               <h2 className="font-headline-md text-on-surface">{profileData?.profile?.name || 'Rahul Sharma'}</h2>
-              {profileData?.profile?.kyc_status === 'verified' ? (
-                <div className="flex items-center gap-1 bg-secondary-container text-on-secondary-container px-2 py-0.5 rounded-full">
-                  <ShieldCheck size={14} className="fill-current text-secondary" />
-                  <span className="font-label-sm">KYC Verified</span>
-                </div>
-              ) : (
-                <button onClick={() => navigate('/onboarding/kyc')} className="flex items-center gap-1 bg-error-container text-on-error-container px-3 py-1 rounded-full hover:bg-error hover:text-on-error transition-colors">
-                  <ShieldAlert size={14} className="fill-current" />
-                  <span className="font-label-sm">Complete KYC</span>
-                </button>
-              )}
+              <KycBadge />
             </div>
             <p className="font-body-md text-on-surface-variant mb-3">{profileData?.profile?.email || 'rahul@example.com'} • {profileData?.profile?.phone || '+91 98765 43210'}</p>
             <div className="flex gap-2">

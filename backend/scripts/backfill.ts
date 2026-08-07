@@ -1,5 +1,8 @@
 import { supabase } from '../src/lib/supabase';
-import { getCandles, resolveYahooSymbol } from '../src/lib/marketData';
+import { resolveYahooSymbol } from '../src/lib/marketData';
+import YahooFinance from 'yahoo-finance2';
+
+const yahooFinance = new YahooFinance();
 
 async function run() {
   const userId = '716691b9-939e-4118-aafb-9246a3923250';
@@ -21,21 +24,38 @@ async function run() {
       let targetCurrentValue = Number(h.current_value) || 0;
 
       if (!qty || !avgCost) {
-        let currentPrice = 100;
+        let historicalPrice = 100;
         try {
           const sym = resolveYahooSymbol(h.instrument_name || h.symbol || '');
-          const res = await getCandles(sym, '1d', '1d');
-          if (res && res.candles && res.candles.length > 0) {
-            currentPrice = res.candles[res.candles.length - 1].close;
+          if (sym) {
+            const startDate = new Date(datePointer);
+            startDate.setDate(startDate.getDate() - 5); // Look back up to 5 days in case of weekend/holiday
+            const endDate = new Date(datePointer);
+            endDate.setDate(endDate.getDate() + 1);
+            
+            const chartData = await yahooFinance.chart(sym, {
+              period1: Math.floor(startDate.getTime() / 1000),
+              period2: Math.floor(endDate.getTime() / 1000),
+              interval: '1d'
+            });
+
+            if (chartData && chartData.quotes && chartData.quotes.length > 0) {
+              const validQuotes = chartData.quotes.filter(q => q.close !== null);
+              if (validQuotes.length > 0) {
+                historicalPrice = validQuotes[validQuotes.length - 1].close;
+              }
+            }
           }
-        } catch(e) {}
+        } catch(e) {
+          console.warn(`Could not fetch historical price for ${h.instrument_name} on ${datePointer.toISOString()}`);
+        }
         
         if (targetCurrentValue > 0) {
-          qty = targetCurrentValue / currentPrice;
-          avgCost = currentPrice * 0.9;
+          qty = targetCurrentValue / historicalPrice;
+          avgCost = historicalPrice;
         } else {
           qty = 10;
-          avgCost = currentPrice;
+          avgCost = historicalPrice;
         }
       }
 
