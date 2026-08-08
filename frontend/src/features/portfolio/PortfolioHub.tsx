@@ -21,10 +21,16 @@ const ASSET_CONFIG: Record<string, { icon: React.ElementType; color: string; rou
 };
 
 function getAssetConfig(assetClass: string) {
-  for (const [key, val] of Object.entries(ASSET_CONFIG)) {
-    if (assetClass.includes(key)) return val;
-  }
-  return ASSET_CONFIG['Other'];
+  const norm = assetClass.toUpperCase();
+  if (norm.includes('EQUITY')) return { icon: TrendingUp, color: '#002653', route: '/fund/equity', subtitle: 'Direct Stocks' };
+  if (norm.includes('MUTUAL_FUND') || norm.includes('MUTUAL FUND')) return { icon: PieChart, color: '#006d42', route: '/fund/mf', subtitle: 'SIPs & Lumpsum' };
+  if (norm.includes('FIXED_INCOME') || norm.includes('BOND') || norm.includes('DEBT')) return { icon: Landmark, color: '#ffb95f', route: '/fund/bonds', subtitle: 'Corporate & Gov' };
+  if (norm.includes('CASH')) return { icon: PiggyBank, color: '#6b7280', route: '/fund/cash', subtitle: 'Savings & Deposits' };
+  if (norm.includes('NPS')) return { icon: PiggyBank, color: '#405e92', route: '/fund/nps', subtitle: 'Retirement' };
+  if (norm.includes('GOLD') || norm.includes('SGB')) return { icon: Gem, color: '#e89500', route: '/fund/sgb', subtitle: 'Sovereign Gold Bonds' };
+  if (norm.includes('REIT')) return { icon: Building2, color: '#573500', route: '/fund/reit', subtitle: 'Real Estate & Infra' };
+  
+  return { icon: ChevronRight, color: '#7b828a', route: '/portfolio', subtitle: 'Other Assets' };
 }
 
 export function PortfolioHub() {

@@ -1569,12 +1569,13 @@ app.get('/api/portfolio/holdings/me', async (req: Request, res: Response) => {
     let query = supabase.from('holdings').select('*').eq('user_id', activeUserId);
     
     if (type) {
-      if (type.toLowerCase() === 'equity') query = query.ilike('asset_class', '%equity%');
-      else if (type.toLowerCase() === 'mf') query = query.ilike('asset_class', '%mutual fund%');
-      else if (type.toLowerCase() === 'bonds') query = query.ilike('asset_class', '%bond%');
-      else if (type.toLowerCase() === 'nps') query = query.ilike('asset_class', '%nps%');
-      else if (type.toLowerCase() === 'sgb') query = query.ilike('asset_class', '%sgb%');
-      else if (type.toLowerCase() === 'reit') query = query.ilike('asset_class', '%reit%');
+      if (type.toLowerCase() === 'equity') query = query.ilike('asset_class', '%EQUITY%');
+      else if (type.toLowerCase() === 'mf') query = query.ilike('asset_class', '%MUTUAL_FUND%');
+      else if (type.toLowerCase() === 'bonds') query = query.ilike('asset_class', '%FIXED_INCOME%');
+      else if (type.toLowerCase() === 'cash') query = query.ilike('asset_class', '%CASH_EQUIVALENT%');
+      else if (type.toLowerCase() === 'nps') query = query.ilike('asset_class', '%NPS%');
+      else if (type.toLowerCase() === 'sgb') query = query.ilike('asset_class', '%SGB%');
+      else if (type.toLowerCase() === 'reit') query = query.ilike('asset_class', '%REIT%');
       else query = query.eq('asset_class', type);
     }
 
