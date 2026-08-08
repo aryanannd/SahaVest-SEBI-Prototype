@@ -213,20 +213,60 @@ export async function executePortfolioSync(data: {
           .single();
 
         if (acc) {
-          await supabase.from('holdings').insert({
-            user_id,
-            linked_account_id: acc.id,
-            asset_class: inst.toLowerCase().includes('bank') ? 'CASH_EQUIVALENT' : 'EQUITY',
-            instrument_name: `${inst} Primary Holdings`,
-            isin_or_scheme_code: `MOCK_${maskedRef.slice(-4)}`,
-            quantity: 10,
-            avg_cost: 1500,
-            current_value: 17500,
-            currency: 'INR',
-            data_source: 'SETU_MOCK',
-            last_updated: new Date().toISOString(),
-            sector: 'Diversified',
-          });
+          const isBank = inst.toLowerCase().includes('bank');
+          const isDemat = inst.toLowerCase().includes('zerodha') || inst.toLowerCase().includes('groww');
+          
+          let mockHoldings = [];
+          
+          if (isBank) {
+            mockHoldings.push({
+              user_id, linked_account_id: acc.id,
+              asset_class: 'CASH_EQUIVALENT', instrument_name: `${inst} Savings A/C`,
+              isin_or_scheme_code: `SAV_${maskedRef}`, quantity: 1, avg_cost: 125000, current_value: 125000,
+              currency: 'INR', data_source: 'SETU_MOCK', last_updated: new Date().toISOString(), sector: 'Cash'
+            });
+            mockHoldings.push({
+              user_id, linked_account_id: acc.id,
+              asset_class: 'FIXED_INCOME', instrument_name: `${inst} 5-Yr Fixed Deposit`,
+              isin_or_scheme_code: `FD_${maskedRef}`, quantity: 1, avg_cost: 300000, current_value: 345000,
+              currency: 'INR', data_source: 'SETU_MOCK', last_updated: new Date().toISOString(), sector: 'Debt'
+            });
+          } else if (isDemat) {
+            mockHoldings.push({
+              user_id, linked_account_id: acc.id,
+              asset_class: 'EQUITY', instrument_name: `Reliance Industries Ltd.`,
+              isin_or_scheme_code: `INE002A01018`, quantity: 50, avg_cost: 120000, current_value: 148500,
+              currency: 'INR', data_source: 'SETU_MOCK', last_updated: new Date().toISOString(), sector: 'Energy'
+            });
+            mockHoldings.push({
+              user_id, linked_account_id: acc.id,
+              asset_class: 'EQUITY', instrument_name: `Tata Consultancy Services`,
+              isin_or_scheme_code: `INE467B01029`, quantity: 30, avg_cost: 105000, current_value: 121000,
+              currency: 'INR', data_source: 'SETU_MOCK', last_updated: new Date().toISOString(), sector: 'Technology'
+            });
+            mockHoldings.push({
+              user_id, linked_account_id: acc.id,
+              asset_class: 'EQUITY', instrument_name: `HDFC Bank Ltd.`,
+              isin_or_scheme_code: `INE040A01034`, quantity: 100, avg_cost: 155000, current_value: 164000,
+              currency: 'INR', data_source: 'SETU_MOCK', last_updated: new Date().toISOString(), sector: 'Finance'
+            });
+          } else {
+            // Assume Mutual Fund
+            mockHoldings.push({
+              user_id, linked_account_id: acc.id,
+              asset_class: 'MUTUAL_FUND', instrument_name: `Parag Parikh Flexi Cap Fund`,
+              isin_or_scheme_code: `INF846K01243`, quantity: 2500, avg_cost: 95000, current_value: 142000,
+              currency: 'INR', data_source: 'SETU_MOCK', last_updated: new Date().toISOString(), sector: 'Diversified'
+            });
+            mockHoldings.push({
+              user_id, linked_account_id: acc.id,
+              asset_class: 'MUTUAL_FUND', instrument_name: `SBI Small Cap Fund`,
+              isin_or_scheme_code: `INF200K01T28`, quantity: 1200, avg_cost: 60000, current_value: 98000,
+              currency: 'INR', data_source: 'SETU_MOCK', last_updated: new Date().toISOString(), sector: 'Small Cap'
+            });
+          }
+          
+          await supabase.from('holdings').insert(mockHoldings);
         }
       }
 
