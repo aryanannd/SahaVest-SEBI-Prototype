@@ -5,16 +5,6 @@ import './index.css';
 import App from './App.tsx';
 import { ErrorBoundary } from './components/layout/ErrorBoundary.tsx';
 
-const originalFetch = window.fetch;
-window.fetch = async (...args) => {
-  let [resource, config] = args;
-  const baseUrl = import.meta.env.VITE_API_BASE_URL || 'https://sahavest-backend.onrender.com';
-  if (baseUrl && typeof resource === 'string' && resource.startsWith('/api')) {
-    resource = `${baseUrl}${resource}`;
-  }
-  return originalFetch(resource, config);
-};
-
 const sentryDsn = import.meta.env.VITE_SENTRY_DSN;
 if (sentryDsn && !sentryDsn.includes('your_sentry_dsn')) {
   try {
